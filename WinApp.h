@@ -10,7 +10,7 @@ class WinApp
 
 public:
 
-	void Initialize();
+	void Initialize(const int32_t kClientWidth, const int32_t kClientHeight, const wchar_t* title);
 
 	static LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
