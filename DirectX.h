@@ -15,18 +15,23 @@
 #pragma comment(lib,"dxguid.lib")
 #pragma comment(lib,"dxcompiler.lib")
 
-class DX
+class DirectX
 {
 public:
 
-	void Initialize();
+	void Initialize(const int32_t kClientWidth, const int32_t kClientHeight, HWND hwnd);
 
-	void Update();
+	void Update(HRESULT hr, ID3D12GraphicsCommandList* commandList);
 
 	void Draw();
 
-private:
-	WinApp* newApp = nullptr;
+public:
+
+	ID3D12Debug1* debugController = nullptr;
+	ID3D12InfoQueue* infoQueue = nullptr;
+
+	//関数が成功したかどうかをSUCCEEDEDマクロで判定できる
+	HRESULT hr;
 
 	//DXGIファクトリーの生成
 	IDXGIFactory7* dxgiFactory = nullptr;
@@ -49,6 +54,20 @@ private:
 	//スワップチェーンを生成する
 	IDXGISwapChain4* swapChain = nullptr;
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
+
+	//ディスクリプタヒープの生成
+	ID3D12DescriptorHeap* rtvDescriptorHeap = nullptr;
+	D3D12_DESCRIPTOR_HEAP_DESC rtvDescriptorHeapDesc{};
+
+	//SwapChainからResourceを引っ張ってくる
+	ID3D12Resource* swapChainResources[2] = { nullptr };
+
+	//RTVの設定
+	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
+
+	//RTVを2つ作るのでディスクリプタを2つ用意
+	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles[2];
+
 
 };
 

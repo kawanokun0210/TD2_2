@@ -1,7 +1,7 @@
 #include <Windows.h>
 #include <cstdint>
 #include "WinApp.h"
-#include "DX.h"
+#include "DirectX.h"
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
@@ -11,8 +11,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	WinApp* winApp = new WinApp;
 	winApp->Initialize(kWindowWidth, kWindowHeight, L"LE2B_09_カワノ_ユウキ");
 
-	DX* DirectX = new DX;
-	DirectX->Initialize();
+	DirectX* DirectX_ = new DirectX;
+	DirectX_->Initialize(kWindowWidth, kWindowHeight, winApp->hwnd);
 
 	MSG msg{};
 	//ウィンドウのxボタンが押されるまでループ
@@ -23,6 +23,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			DispatchMessage(&msg);
 		} else {
 			//ゲームの処理
+			DirectX_->Update(DirectX_->hr, DirectX_->commandList);
 		}
 
 	}

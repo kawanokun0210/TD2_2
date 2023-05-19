@@ -20,7 +20,6 @@ public:
 
 	WNDCLASS wc{};
 
-	HWND hwnd;
-
+	HWND hwnd = nullptr;
 };
 
