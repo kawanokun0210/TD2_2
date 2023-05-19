@@ -20,5 +20,7 @@ public:
 
 	WNDCLASS wc{};
 
+	HWND hwnd;
+
 };
 

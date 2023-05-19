@@ -1,8 +1,7 @@
 #include <Windows.h>
 #include <cstdint>
-#include <string>
-#include <format>
 #include "WinApp.h"
+#include "DX.h"
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
@@ -11,6 +10,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	WinApp* winApp = new WinApp;
 	winApp->Initialize(kWindowWidth, kWindowHeight, L"LE2B_09_カワノ_ユウキ");
+
+	DX* DirectX = new DX;
+	DirectX->Initialize();
 
 	MSG msg{};
 	//ウィンドウのxボタンが押されるまでループ
