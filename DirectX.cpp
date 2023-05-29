@@ -107,8 +107,7 @@ void DirectX::Initialize(const int32_t kClientWidth, const int32_t kClientHeight
 		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, true);
 		//警告時に止まる
 		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, true);
-		//解放
-		infoQueue->Release();
+
 		//抑制するメッセージのID
 		D3D12_MESSAGE_ID denyIds[] = {
 			D3D12_MESSAGE_ID_RESOURCE_BARRIER_MISMATCHING_COMMAND_LIST_TYPE
@@ -122,6 +121,8 @@ void DirectX::Initialize(const int32_t kClientWidth, const int32_t kClientHeight
 		filter.DenyList.pSeverityList = severities;
 		//指定したメッセージの表示を抑制する
 		infoQueue->PushStorageFilter(&filter);
+		//解放
+		infoQueue->Release();
 	}
 
 #endif // _DEBUG
@@ -222,8 +223,14 @@ void DirectX::Update(ID3D12GraphicsCommandList* commandList) {
 	float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };
 	commandList->ClearRenderTargetView(rtvHandles[backBufferIndex], clearColor, 0, nullptr);
 
+	//今回はRenderTarGetからPresentにする
+	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
+	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
+	//TransitionBarrierを張る
+	commandList->ResourceBarrier(1, &barrier);
 	//コマンドリストの内容を確定させる。
 	hr = commandList->Close();
+
 	assert(SUCCEEDED(hr));
 
 	//GPUにコマンドリストの実行を行わせる
