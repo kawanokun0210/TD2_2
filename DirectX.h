@@ -21,17 +21,16 @@ public:
 
 	void Initialize(const int32_t kClientWidth, const int32_t kClientHeight, HWND hwnd);
 
-	void Update(HRESULT hr, ID3D12GraphicsCommandList* commandList);
+	void Update(ID3D12GraphicsCommandList* commandList);
 
 	void Draw();
+
+	void Release();
 
 public:
 
 	ID3D12Debug1* debugController = nullptr;
 	ID3D12InfoQueue* infoQueue = nullptr;
-
-	//関数が成功したかどうかをSUCCEEDEDマクロで判定できる
-	HRESULT hr;
 
 	//DXGIファクトリーの生成
 	IDXGIFactory7* dxgiFactory = nullptr;
@@ -68,6 +67,15 @@ public:
 	//RTVを2つ作るのでディスクリプタを2つ用意
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles[2];
 
+	//TransitionBarrierの設定
+	D3D12_RESOURCE_BARRIER barrier{};
+
+	//初期値0でFenceを作る
+	ID3D12Fence* fence = nullptr;
+	uint64_t fanceValue;
+	HANDLE fenceEvent = nullptr;
+
+	IDXGIDebug1* debug;
 
 };
 

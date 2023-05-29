@@ -8,10 +8,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	const int kWindowWidth = 1280;
 	const int kWindowHeight = 720;
 
-	WinApp* winApp = new WinApp;
+	WinApp* winApp = new WinApp();
 	winApp->Initialize(kWindowWidth, kWindowHeight, L"LE2B_09_カワノ_ユウキ");
 
-	DirectX* DirectX_ = new DirectX;
+	DirectX* DirectX_ = new DirectX();
 	DirectX_->Initialize(kWindowWidth, kWindowHeight, winApp->hwnd);
 
 	MSG msg{};
@@ -23,9 +23,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			DispatchMessage(&msg);
 		} else {
 			//ゲームの処理
-			DirectX_->Update(DirectX_->hr, DirectX_->commandList);
+			DirectX_->Update(DirectX_->commandList);
 		}
 
 	}
+
+	DirectX_->Release();
+
 	return 0;
 }
