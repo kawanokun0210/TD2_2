@@ -2,6 +2,7 @@
 #include <cstdint>
 #include "WinApp.h"
 #include "DirectX.h"
+#include "Triangle.h"
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
@@ -14,6 +15,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	DirectX* DirectX_ = new DirectX();
 	DirectX_->Initialize(kWindowWidth, kWindowHeight, winApp->hwnd);
 
+	Triangle* triangle = new Triangle();
+	triangle->Initialize();
+
 	MSG msg{};
 	//ウィンドウのxボタンが押されるまでループ
 	while (msg.message != WM_QUIT){
@@ -24,11 +28,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		} else {
 			//ゲームの処理
 			DirectX_->Update(DirectX_->commandList);
+
+			triangle->Update();
 		}
 
 	}
 
 	DirectX_->Release();
+
+	triangle->Release();
 
 	return 0;
 }
