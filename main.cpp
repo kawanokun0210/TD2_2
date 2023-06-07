@@ -1,22 +1,29 @@
-#include <Windows.h>
-#include <cstdint>
-#include "WinApp.h"
-#include "DirectX.h"
+#include "Engine.h"
 #include "Triangle.h"
+
+const wchar_t kWindowTitle[] = { L"CG2_WinMain" };
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
-	const int kWindowWidth = 1280;
-	const int kWindowHeight = 720;
+	//初期化
+	WinApp* win_ = nullptr;
+	CreateEngine* Engine = new CreateEngine;
+	Engine->Initialization(win_, kWindowTitle, 1280, 720);
 
-	WinApp* winApp = new WinApp();
-	winApp->Initialize(kWindowWidth, kWindowHeight, L"LE2B_09_カワノ_ユウキ");
+	Engine->Initialize();
 
-	DirectX* DirectX_ = new DirectX();
-	DirectX_->Initialize(kWindowWidth, kWindowHeight, winApp->hwnd);
+	Vector4 data1 = { -0.4f,0.5f,0.0f,2.0f };
+	Vector4 data2 = { 0.0f,0.8f,0.0f,2.0f };
+	Vector4 data3 = { 0.4f,0.5f,0.0f,2.0f };
 
-	Triangle* triangle = new Triangle();
-	triangle->Initialize();
+	Vector4 data4 = { -0.8f,-0.9f,0.0f,1.0f };
+	Vector4 data5 = { -0.6f,-0.6f,0.0f,1.0f };
+	Vector4 data6 = { -0.4f,-0.9f,0.0f,1.0f };
+
+	Vector4 data7 = { 0.4f,-0.7f,0.0f,1.0f };
+	Vector4 data8 = { 0.6f,-0.4f,0.0f,1.0f };
+	Vector4 data9 = { 0.8f,-0.8f,0.0f,1.0f };
+	
 
 	MSG msg{};
 	//ウィンドウのxボタンが押されるまでループ
@@ -26,17 +33,28 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		} else {
-			//ゲームの処理
-			DirectX_->Update(DirectX_->commandList);
 
-			triangle->Update();
+			//ゲームの処理
+			Engine->Update();
+			Engine->BeginFrame();
+
+
+			//三角形描画
+			Engine->DrawTriangle(data1, data2, data3);
+
+			Engine->DrawTriangle(data4, data5, data6);
+
+			Engine->DrawTriangle(data7, data8, data9);
+
+
+
+			Engine->EndFrame();
+			
 		}
 
 	}
 
-	DirectX_->Release();
-
-	triangle->Release();
+	Engine->Finalize();
 
 	return 0;
 }
