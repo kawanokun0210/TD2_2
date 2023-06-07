@@ -7,7 +7,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//初期化
 	WinApp* win_ = nullptr;
+
 	CreateEngine* Engine = new CreateEngine;
+
 	Engine->Initialization(win_, kWindowTitle, 1280, 720);
 
 	Engine->Initialize();

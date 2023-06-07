@@ -8,8 +8,8 @@ void Triangle::Initialize(DirectX* dxCommon)
 	SettingVertex();
 }
 
-void Triangle::Draw(const Vector4& a, const Vector4& b, const Vector4& c)
-{
+void Triangle::Draw(const Vector4& a, const Vector4& b, const Vector4& c){
+
 	//左下
 	vertexData_[0] = a;
 	//上
@@ -23,6 +23,7 @@ void Triangle::Draw(const Vector4& a, const Vector4& b, const Vector4& c)
 	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	//描画
 	dxCommon_->GetCommandList()->DrawInstanced(3, 1, 0, 0);
+
 }
 
 void Triangle::Finalize()

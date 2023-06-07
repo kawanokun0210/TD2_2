@@ -2,6 +2,7 @@
 
 //ウィンドウプロシージャ
 LRESULT CALLBACK WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
+
 	//メッセージに応じてゲーム固有の処理を行う
 	switch (msg) {
 		//ウィンドウが破棄された
@@ -13,9 +14,11 @@ LRESULT CALLBACK WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
 
 	// 標準のメッセージ処理を行う
 	return DefWindowProc(hwnd, msg, wparam, lparam);
+	
 }
 
 void WinApp::CreateWindowView(const wchar_t* title, int32_t clientWidth, int32_t clientheight) {
+
 	//ウィンドウプロシージャ
 	wc_.lpfnWndProc = WindowProc;
 	//クラス名
@@ -61,9 +64,11 @@ void WinApp::CreateWindowView(const wchar_t* title, int32_t clientWidth, int32_t
 
 	//ウィンドウ表示
 	ShowWindow(hwnd_, SW_SHOW);
+
 }
 
 bool WinApp::Procesmessage() {
+
 	MSG msg{};
 
 	if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
@@ -78,6 +83,7 @@ bool WinApp::Procesmessage() {
 	}
 
 	return false;
+
 }
 
 void WinApp::Finalize()

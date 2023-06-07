@@ -218,8 +218,8 @@ void CreateEngine::ScissorRect()
 	scissorRect_.bottom = WinApp::kClientHeight;
 }
 
-void CreateEngine::Initialize()
-{
+void CreateEngine::Initialize(){
+
 	for (int i = 0; i < 11; i++)
 	{
 		triangle_[i] = new Triangle();
@@ -286,6 +286,7 @@ void CreateEngine::Finalize()
 
 void CreateEngine::Update()
 {
+
 }
 
 void CreateEngine::DrawTriangle(const Vector4& a, const Vector4& b, const Vector4& c)

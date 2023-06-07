@@ -15,6 +15,7 @@ public:
 	HINSTANCE GetHInstance()const { return wc_.hInstance; }
 
 	static	bool Procesmessage();
+
 	static void Finalize();
 
 	static LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);

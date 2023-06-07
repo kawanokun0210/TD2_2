@@ -61,7 +61,9 @@ private:
 
 	//Fence
 	static ID3D12Fence* fence_;
+
 	static UINT64 fenceValue_;
+
 	static HANDLE fenceEvent_;
 
 	//buffer
