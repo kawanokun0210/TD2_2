@@ -36,5 +36,6 @@ private:
 	static inline	WNDCLASS wc_{};
 
 	static	HWND hwnd_;
+
 };
 

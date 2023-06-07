@@ -8,6 +8,7 @@
 class DirectX
 {
 public:
+
 	void Initialize(WinApp* win, const wchar_t* title, int32_t backBufferWidth = WinApp::kClientWidth, int32_t backBufferHeight = WinApp::kClientHeight);
 
 	void PreDraw();
@@ -27,6 +28,7 @@ public:
 	ID3D12GraphicsCommandList* GetCommandList() { return commandList_; }
 
 private:
+
 	static WinApp* winApp_;
 
 	//DXGIファクトリーの生成
@@ -74,6 +76,7 @@ private:
 
 
 private:
+
 	void InitializeDXGIDevice();
 
 	void CreateSwapChain();
@@ -83,5 +86,6 @@ private:
 	void CreateFinalRenderTargets();
 
 	void CreateFence();
+
 };
 
