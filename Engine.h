@@ -8,6 +8,7 @@
 class CreateEngine
 {
 public:
+
 	void Initialize();
 
 	void Initialization(WinApp* win, const wchar_t* title, int32_t width, int32_t height);

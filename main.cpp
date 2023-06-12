@@ -26,6 +26,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Vector4 data8 = { 0.6f,-0.4f,0.0f,1.0f };
 	Vector4 data9 = { 0.8f,-0.8f,0.0f,1.0f };
 	
+	Vector4 data10 = { -0.5f,-0.4f,0.0f,3.0f };
+	Vector4 data11 = { 0.0f,0.0f,0.0f,3.0f };
+	Vector4 data12 = { 0.5f,-0.4f,0.0f,3.0f };
 
 	MSG msg{};
 	//ウィンドウのxボタンが押されるまでループ
@@ -47,6 +50,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			Engine->DrawTriangle(data4, data5, data6);
 
 			Engine->DrawTriangle(data7, data8, data9);
+
+			Engine->DrawTriangle(data10, data11, data12);
 
 			Engine->EndFrame();
 			
