@@ -1,8 +1,11 @@
 #pragma once
 #include "DirectX.h"
 #include <dxcapi.h>
-#include"Vector4.h"
+#include "Vector3.h"
+#include "Vector4.h"
 #include "Triangle.h"
+#include "MatrixCalculation.h"
+
 #pragma comment(lib,"dxcompiler.lib")
 
 class CreateEngine
@@ -65,6 +68,9 @@ private:
 	Vector4 leftBottom[11];
 	Vector4 top[11];
 	Vector4 rightBottom[11];
+
+	Transform transform_;
+	Matrix4x4 worldMatrix_;
 
 	IDxcBlob* CompileShader(
 		//CompileShaderするShaderファイルへのパス

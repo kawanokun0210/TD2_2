@@ -83,10 +83,14 @@ void CreateEngine::CreateRootSignature()
 		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
 
 	//RootParameter作成、複数設定可能な為、配列に
-	D3D12_ROOT_PARAMETER rootParameters[1] = {};
+	D3D12_ROOT_PARAMETER rootParameters[2] = {};
 	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
 	rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PixelShaderで使う
 	rootParameters[0].Descriptor.ShaderRegister = 0;//レジスタ番号0とバインド
+
+	rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
+	rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;//VertexShaderで使う
+	rootParameters[1].Descriptor.ShaderRegister = 0;//レジスタ番号0とバインド
 	descriptionRootSignature.pParameters = rootParameters;//ルートパラメータ配列へのポインタ
 	descriptionRootSignature.NumParameters = _countof(rootParameters);//配列の長さ
 
@@ -227,8 +231,8 @@ void CreateEngine::ScissorRect()
 	scissorRect_.bottom = WinApp::kClientHeight;
 }
 
-void CreateEngine::Initialize(){
-
+void CreateEngine::Initialize() {
+	transform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 	for (int i = 0; i < 11; i++)
 	{
 		triangle_[i] = new Triangle();
@@ -297,12 +301,15 @@ void CreateEngine::Finalize()
 void CreateEngine::Update()
 {
 
+	transform_.rotate.y += 0.03f;
+	worldMatrix_ = MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
+
 }
 
 void CreateEngine::DrawTriangle(const Vector4& a, const Vector4& b, const Vector4& c, const Vector4& material)
 {
 	triangleCount_++;
-	triangle_[triangleCount_]->Draw(a, b, c, material);
+	triangle_[triangleCount_]->Draw(a, b, c, material, worldMatrix_);
 }
 
 WinApp* CreateEngine::win_;
