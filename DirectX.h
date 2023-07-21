@@ -54,6 +54,7 @@ private:
 
 	//ディスクリプタヒープの生成
 	static ID3D12DescriptorHeap* rtvDescriptorHeap_;
+	static ID3D12DescriptorHeap* srvDescriptorHeap_;
 
 	//RTVを２つ作るのでディスクリプタを２つ用意
 	static	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles_[2];

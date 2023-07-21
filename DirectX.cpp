@@ -11,6 +11,12 @@
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "Winmm.lib")
 
+#include "externals/imgui/imgui.h"
+#include "externals/imgui/imgui_impl_dx12.h"
+#include "externals/imgui/imgui_impl_win32.h"
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+
 WinApp* DirectX::winApp_;
 
 //DXGIファクトリーの生成
@@ -36,6 +42,7 @@ IDXGISwapChain4* DirectX::swapChain_;
 
 //ディスクリプタヒープの生成
 ID3D12DescriptorHeap* DirectX::rtvDescriptorHeap_;
+ID3D12DescriptorHeap* DirectX::srvDescriptorHeap_;
 
 //RTVを２つ作るのでディスクリプタを２つ用意
 D3D12_CPU_DESCRIPTOR_HANDLE DirectX::rtvHandles_[2];
@@ -183,6 +190,21 @@ void DirectX::InitializeCommand()
 	assert(SUCCEEDED(hr_));
 }
 
+ID3D12DescriptorHeap* CreateDescriptorHeap(
+	ID3D12Device* device, D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisible) {
+
+	//ディスクリプタヒープの生成
+	ID3D12DescriptorHeap* descriptorHeap = nullptr;
+	D3D12_DESCRIPTOR_HEAP_DESC descriptorHeapDesc{};
+	descriptorHeapDesc.Type = heapType;	//レンダーターゲットビュー用
+	descriptorHeapDesc.NumDescriptors = numDescriptors;					//ダブルバッファ用に二つ。多くても別にかまわない
+	descriptorHeapDesc.Flags = shaderVisible ? D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE : D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+	HRESULT hr = device->CreateDescriptorHeap(&descriptorHeapDesc, IID_PPV_ARGS(&descriptorHeap));
+	//ディスクリプタヒープが作れなかったので起動できない
+	assert(SUCCEEDED(hr));
+	return descriptorHeap;
+}
+
 void DirectX::CreateSwapChain()
 {
 	//スワップチェーン
@@ -200,14 +222,13 @@ void DirectX::CreateSwapChain()
 	hr_ = dxgiFactory_->CreateSwapChainForHwnd(commandQueue_, winApp_->GetHwnd(), &swapChainDesc, nullptr, nullptr, reinterpret_cast<IDXGISwapChain1**>(&swapChain_));
 	assert(SUCCEEDED(hr_));
 
-	//ディスクリプタヒープの生成
-	rtvDescriptorHeap_ = nullptr;
-	D3D12_DESCRIPTOR_HEAP_DESC rtvDescriptorHeapDesc{};
-	rtvDescriptorHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;//レンダーターゲットビュー用
-	rtvDescriptorHeapDesc.NumDescriptors = 2;//ダブルバッファ用に２つ　多くても構わない
-	hr_ = device_->CreateDescriptorHeap(&rtvDescriptorHeapDesc, IID_PPV_ARGS(&rtvDescriptorHeap_));
-	//ディスクリプタヒープが生成失敗の為、起動しない
-	assert(SUCCEEDED(hr_));
+#pragma region rtvDescriptorHeap
+	rtvDescriptorHeap_ = CreateDescriptorHeap(device_, D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 2, false);
+#pragma endregion
+
+#pragma region srvDescriptorHeap
+	srvDescriptorHeap_ = CreateDescriptorHeap(device_, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 128, true);
+#pragma endregion
 
 	//SwapChainからResourceを引っ張ってくる
 	swapChainResources_[0] = { nullptr };
@@ -327,6 +348,7 @@ void DirectX::Finalize()
 	CloseHandle(fenceEvent_);
 	fence_->Release();
 
+	srvDescriptorHeap_->Release();
 	rtvDescriptorHeap_->Release();
 	swapChainResources_[0]->Release();
 	swapChainResources_[1]->Release();
