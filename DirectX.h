@@ -25,6 +25,11 @@ public:
 
 	ID3D12Device* GetDevice() { return device_; }
 
+	static inline DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
+	static inline D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
+
+	ID3D12DescriptorHeap* GetsrvDescriptorHeap() { return srvDescriptorHeap_; }
+
 	ID3D12GraphicsCommandList* GetCommandList() { return commandList_; }
 
 private:
@@ -51,8 +56,10 @@ private:
 
 	//スワップチェーン
 	static IDXGISwapChain4* swapChain_;
+	//static inline DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
 
 	//ディスクリプタヒープの生成
+	//static inline D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
 	static ID3D12DescriptorHeap* rtvDescriptorHeap_;
 	static ID3D12DescriptorHeap* srvDescriptorHeap_;
 
@@ -90,5 +97,6 @@ private:
 
 	void CreateFence();
 
+	void InitialzeImGui();
 };
 

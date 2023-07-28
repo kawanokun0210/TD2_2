@@ -1,5 +1,9 @@
 #include "Engine.h"
 #include "Triangle.h"
+#include "DirectX.h"
+#include "externals/imgui/imgui.h"
+#include "externals/imgui/imgui_impl_dx12.h"
+#include "externals/imgui/imgui_impl_win32.h"
 
 const wchar_t kWindowTitle[] = { L"CG2_WinMain" };
 
@@ -7,6 +11,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//初期化
 	WinApp* win_ = nullptr;
+
+	DirectX* dxCommon = new DirectX;
 
 	CreateEngine* Engine = new CreateEngine;
 
@@ -35,7 +41,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Vector4 data12 = { 0.5f,-0.4f,0.0f,3.0f };
 	Vector4 material4 = { 1.0f,0.0f,1.0f,1.0f };
 
-
 	MSG msg{};
 	//ウィンドウのxボタンが押されるまでループ
 	while (msg.message != WM_QUIT) {
@@ -45,11 +50,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			DispatchMessage(&msg);
 		}
 		else {
-
+			
 			//ゲームの処理
-			Engine->Update();
 			Engine->BeginFrame();
+			ImGui::ShowDemoWindow();
 
+			Engine->Update();
+
+			ImGui::Render();
+
+			ImGui::Begin("ww ");
+			ImGui::End();
 
 			//三角形描画
 			Engine->DrawTriangle(data1, data2, data3, material1);
@@ -60,6 +71,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			Engine->DrawTriangle(data10, data11, data12, material4);
 
+		
+			
 			Engine->EndFrame();
 
 		}
