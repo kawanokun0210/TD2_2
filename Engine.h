@@ -6,12 +6,16 @@
 #include "Triangle.h"
 #include "MatrixCalculation.h"
 
+#include "externals/imgui/imgui.h"
+#include "externals/imgui/imgui_impl_dx12.h"
+#include "externals/imgui/imgui_impl_win32.h"
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 #pragma comment(lib,"dxcompiler.lib")
 
 class CreateEngine
 {
 public:
-
 	void Initialize();
 
 	void Initialization(WinApp* win, const wchar_t* title, int32_t width, int32_t height);
@@ -24,13 +28,17 @@ public:
 
 	void Update();
 
+	void Draw();
+
+	void VariableInialize();
+
 	void DrawTriangle(const Vector4& a, const Vector4& b, const Vector4& c, const Vector4& material);
 
 private:
 	static WinApp* win_;
-	static	DirectX* dxCommon_;
+	static	DirectXCommon* dxCommon_;
 
-	Triangle* triangle_[11];
+	CreateTriangle* triangle_[3];
 
 	int triangleCount_;
 
@@ -55,7 +63,6 @@ private:
 
 	ID3D12PipelineState* graphicsPipelineState_;
 
-	ID3D12Resource* vertexResource_;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
 
 	D3D12_VIEWPORT viewport_{};
@@ -64,13 +71,7 @@ private:
 	D3D12_INPUT_ELEMENT_DESC inputElementDescs_[1];
 
 	//頂点リソースにデータを書き込む
-	Vector4* vertexData_;
-	Vector4 leftBottom[11];
-	Vector4 top[11];
-	Vector4 rightBottom[11];
-
-	Transform transform_;
-	Matrix4x4 worldMatrix_;
+	/*Vector4 vertexData_;*/
 
 	IDxcBlob* CompileShader(
 		//CompileShaderするShaderファイルへのパス
@@ -89,9 +90,6 @@ private:
 	void BlendState();
 	void RasterizerState();
 	void InitializePSO();
-	void VertexResource();
 	void ViewPort();
 	void ScissorRect();
-
 };
-

@@ -5,18 +5,23 @@ IDxcBlob* CreateEngine::CompileShader(const std::wstring& filePath, const wchar_
 {
 	//これからシェーダーをコンパイルする旨をログに出す
 	Log(ConvertString(std::format(L"Begin CompileShader, path:{},profile:{}\n", filePath, profile)));
+
+	/************************************************************************
+	hlsl(High-Level Shader Language)はDirectX12の各種Shaderを記述するための言語
+	************************************************************************/
 	//hlslファイルを読む
 	IDxcBlobEncoding* shaderSource = nullptr;
 	dxCommon_->SetHr(dxcUtils->LoadFile(filePath.c_str(), nullptr, &shaderSource));
-	//嫁なかったら決める
+
+	//読めなかったら決める
 	assert(SUCCEEDED(dxCommon_->GetHr()));
+
 	//読み込んだファイルの内容を設定する
 	DxcBuffer shaderSourceBuffer;
 	shaderSourceBuffer.Ptr = shaderSource->GetBufferPointer();
 	shaderSourceBuffer.Size = shaderSource->GetBufferSize();
 	shaderSourceBuffer.Encoding = DXC_CP_UTF8;
-	LPCWSTR arguments[] =
-	{
+	LPCWSTR arguments[] = {
 		filePath.c_str(),//コンパイル対象のhlslファイル名
 		L"-E",L"main",//エントリーポイントの指定。基本的にmain以外にはしない
 		L"-T",profile,//ShaderProflieの設定
@@ -34,6 +39,7 @@ IDxcBlob* CreateEngine::CompileShader(const std::wstring& filePath, const wchar_
 		includeHandler, // includeが含まれた諸々
 		IID_PPV_ARGS(&shaderResult)//コンパイル結果
 	));
+
 	//コンパイルエラーではなくdxcが起動できないなど致命的な状況
 	assert(SUCCEEDED(dxCommon_->GetHr()));
 
@@ -51,11 +57,14 @@ IDxcBlob* CreateEngine::CompileShader(const std::wstring& filePath, const wchar_
 	IDxcBlob* shaderBlob = nullptr;
 	dxCommon_->SetHr(shaderResult->GetOutput(DXC_OUT_OBJECT, IID_PPV_ARGS(&shaderBlob), nullptr));
 	assert(SUCCEEDED(dxCommon_->GetHr()));
+
 	//成功したログを出す
 	Log(ConvertString(std::format(L"Compile Succeeded, path:{},profile:{}\n", filePath, profile)));
+
 	//もう使わないリソースを開放
 	shaderSource->Release();
 	shaderResult->Release();
+
 	//実行用のバイナリを返却
 	return shaderBlob;
 }
@@ -65,10 +74,12 @@ void CreateEngine::InitializeDxcCompiler()
 	HRESULT hr;
 	dxcUtils_ = nullptr;
 	dxcCompiler_ = nullptr;
+
 	hr = DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(&dxcUtils_));
 	assert(SUCCEEDED(hr));
 	hr = DxcCreateInstance(CLSID_DxcCompiler, IID_PPV_ARGS(&dxcCompiler_));
 	assert(SUCCEEDED(hr));
+
 	//現時点でincludeはしないが、includeに対応するための設定を行っていく
 	includeHandler_ = nullptr;
 	hr = dxcUtils_->CreateDefaultIncludeHandler(&includeHandler_);
@@ -77,23 +88,24 @@ void CreateEngine::InitializeDxcCompiler()
 
 void CreateEngine::CreateRootSignature()
 {
+	/****************************************************************
 	//RootSignature作成
+	//ShaderとResourceをどのように関連付けるかを示したオブジェクト
+	****************************************************************/
 	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
 	descriptionRootSignature.Flags =
 		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
 
-	//RootParameter作成、複数設定可能な為、配列に
-	D3D12_ROOT_PARAMETER rootParameters[2] = {};
+	/*********************************************
+	//RootParameter作成、複数設定できるので配列。
+	//データそれぞれのBind情報である
+	*********************************************/
+	D3D12_ROOT_PARAMETER rootParameters[1] = {};
 	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
 	rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PixelShaderで使う
 	rootParameters[0].Descriptor.ShaderRegister = 0;//レジスタ番号0とバインド
-
-	rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
-	rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;//VertexShaderで使う
-	rootParameters[1].Descriptor.ShaderRegister = 0;//レジスタ番号0とバインド
 	descriptionRootSignature.pParameters = rootParameters;//ルートパラメータ配列へのポインタ
 	descriptionRootSignature.NumParameters = _countof(rootParameters);//配列の長さ
-
 
 	//シリアライズしてバイナリにする
 	signatureBlob_ = nullptr;
@@ -101,11 +113,13 @@ void CreateEngine::CreateRootSignature()
 	HRESULT hr;
 	hr = D3D12SerializeRootSignature(&descriptionRootSignature,
 		D3D_ROOT_SIGNATURE_VERSION_1, &signatureBlob_, &errorBlob_);
+
 	if (FAILED(dxCommon_->GetHr()))
 	{
 		Log(reinterpret_cast<char*>(errorBlob_->GetBufferPointer()));
 		assert(false);
 	}
+
 	//バイナリを元に生成
 	rootSignature_ = nullptr;
 	hr = dxCommon_->GetDevice()->CreateRootSignature(0, signatureBlob_->GetBufferPointer(),
@@ -127,14 +141,23 @@ void CreateEngine::CreateInputlayOut()
 void CreateEngine::BlendState()
 {
 	//すべての色要素を書き込む
-	blendDesc_.RenderTarget[0].RenderTargetWriteMask =
-		D3D12_COLOR_WRITE_ENABLE_ALL;
+	blendDesc_.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+
+	//透明度
+	blendDesc_.RenderTarget[0].BlendEnable = true;
+	blendDesc_.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
+	blendDesc_.RenderTarget[0].DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
+	blendDesc_.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
+	blendDesc_.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
+	blendDesc_.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
+	blendDesc_.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
 }
 
 void CreateEngine::RasterizerState()
 {
 	//裏面（時計回り）を表示しない
 	rasterizerDesc_.CullMode = D3D12_CULL_MODE_BACK;
+
 	//三角形の中を塗りつぶす
 	rasterizerDesc_.FillMode = D3D12_FILL_MODE_SOLID;
 
@@ -143,32 +166,61 @@ void CreateEngine::RasterizerState()
 		L"vs_6_0", dxcUtils_, dxcCompiler_, includeHandler_);
 	assert(vertexShaderBlob_ != nullptr);
 
-
 	pixelShaderBlob_ = CompileShader(L"Object3d.PS.hlsl",
 		L"ps_6_0", dxcUtils_, dxcCompiler_, includeHandler_);
 	assert(pixelShaderBlob_ != nullptr);
 }
 
+/*********************************************************************
+RenderingPipelineはモデルデータの入力から出力までのレンダリングのための加工手順
+PipelineStateObject(PSO)は描画に関する設定が大量に詰め込まれたオブジェクト
+*********************************************************************/
+
 void CreateEngine::InitializePSO()
 {
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDesc{};
-	graphicsPipelineStateDesc.pRootSignature = rootSignature_;//RootSignature
-	graphicsPipelineStateDesc.InputLayout = inputLayoutDesc_;//Inputlayout
+
+	//RootSignature
+	graphicsPipelineStateDesc.pRootSignature = rootSignature_;
+
+	/**********************************************************************
+	InputlayoutはVertexShaderへ渡す頂点データがどのようなものかを指定するオブジェクト
+	**********************************************************************/
+	//Inputlayout
+	graphicsPipelineStateDesc.InputLayout = inputLayoutDesc_;
+
+	//vertexShader
 	graphicsPipelineStateDesc.VS = { vertexShaderBlob_->GetBufferPointer(),
-		vertexShaderBlob_->GetBufferSize() };//vertexShader
+		vertexShaderBlob_->GetBufferSize() };
+
+	//pixcelShader
 	graphicsPipelineStateDesc.PS = { pixelShaderBlob_->GetBufferPointer(),
-		pixelShaderBlob_->GetBufferSize() };//pixcelShader
-	graphicsPipelineStateDesc.BlendState = blendDesc_;//BlendState
-	graphicsPipelineStateDesc.RasterizerState = rasterizerDesc_;//rasterizerState
+		pixelShaderBlob_->GetBufferSize() };
+
+	/********************************************************************
+	BlendStateとはPixelShaderからの出力を画面にどのように書き込むかを設定する項目
+	********************************************************************/
+	//BlendState
+	graphicsPipelineStateDesc.BlendState = blendDesc_;
+
+	/********************************************************************
+	Rasterrizerは頂点のピクセル化
+	RasterrizerStateはRasterrizerに対する設定
+	********************************************************************/
+	//rasterizerState
+	graphicsPipelineStateDesc.RasterizerState = rasterizerDesc_;
+
 	//書き込むRTVの情報
 	graphicsPipelineStateDesc.NumRenderTargets = 1;
 	graphicsPipelineStateDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+
 	//利用するトポロジ（形状）のタイプ。三角形
-	graphicsPipelineStateDesc.PrimitiveTopologyType =
-		D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+	graphicsPipelineStateDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+
 	//どのように画面に色を打ち込むのかの設定（気にしなく良い）
 	graphicsPipelineStateDesc.SampleDesc.Count = 1;
 	graphicsPipelineStateDesc.SampleMask = D3D12_DEFAULT_SAMPLE_MASK;
+
 	//実際に生成
 	graphicsPipelineState_ = nullptr;
 	HRESULT hr = dxCommon_->GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc,
@@ -176,41 +228,9 @@ void CreateEngine::InitializePSO()
 	assert(SUCCEEDED(hr));
 }
 
-//void CreateEngine::VertexResource()
-//{
-//	//頂点リソース用のヒープの設定
-//	D3D12_HEAP_PROPERTIES uplodeHeapProperties{};
-//	uplodeHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;//UploadHeapを使う
-//	//頂点リソースの設定
-//	D3D12_RESOURCE_DESC vertexResourceDesc{};
-//	//バッファリソース。テクスチャの場合はまた別の設定をする
-//	vertexResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-//	vertexResourceDesc.Width = sizeof(Vector4) * 3;//リソースサイズ　今回はvector4を四分割
-//	//バッファの場合はこれらは１にする決まり
-//	vertexResourceDesc.Height = 1;
-//	vertexResourceDesc.DepthOrArraySize = 1;
-//	vertexResourceDesc.MipLevels = 1;
-//	vertexResourceDesc.SampleDesc.Count = 1;
-//	//バッファの場合はこれにする決まり
-//	vertexResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-//	HRESULT hr;
-//
-//	//実際に頂点リソースを作る
-//	hr = dxCommon_->GetDevice()->CreateCommittedResource(&uplodeHeapProperties, D3D12_HEAP_FLAG_NONE,
-//		&vertexResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
-//		IID_PPV_ARGS(&vertexResource_));
-//	assert(SUCCEEDED(hr));
-//	//リソースの先頭のアドレスから使う
-//	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
-//	//使用するリソースのサイズは頂点3つ分のサイズ
-//	vertexBufferView_.SizeInBytes = sizeof(Vector4) * 3;
-//	//1頂点当たりのサイズ
-//	vertexBufferView_.StrideInBytes = sizeof(Vector4);
-//	//書き込むためのアドレスを取得
-//	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
-//
-//}
-
+/*******************************
+Viewportは表示領域
+*******************************/
 void CreateEngine::ViewPort()
 {
 	//クライアント領域のサイズと一緒にして画面全体に表示
@@ -231,18 +251,16 @@ void CreateEngine::ScissorRect()
 	scissorRect_.bottom = WinApp::kClientHeight;
 }
 
-void CreateEngine::Initialize() {
-	transform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
-	for (int i = 0; i < 11; i++)
-	{
-		triangle_[i] = new Triangle();
-		triangle_[i]->Initialize(dxCommon_);
-	}
+void CreateEngine::Initialize()
+{
+
 }
 
 void CreateEngine::Initialization(WinApp* win, const wchar_t* title, int32_t width, int32_t height)
 {
-	dxCommon_->Initialize(win, title, win->kClientWidth, win->kClientHeight);
+	dxCommon_ = new DirectXCommon;
+
+	dxCommon_->Initialization(win, title, win->kClientWidth, win->kClientHeight);
 
 	InitializeDxcCompiler();
 
@@ -259,20 +277,31 @@ void CreateEngine::Initialization(WinApp* win, const wchar_t* title, int32_t wid
 	ViewPort();
 
 	ScissorRect();
-}
 
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGui::StyleColorsDark();
+	ImGui_ImplWin32_Init(win_->GetHwnd());
+	ImGui_ImplDX12_Init(dxCommon_->device_,
+		dxCommon_->GetSwapChainDesc().BufferCount,
+		dxCommon_->GetRTVDesc().Format,
+		dxCommon_->srvDescriptorHeap_,
+		dxCommon_->srvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart(),
+		dxCommon_->srvDescriptorHeap_->GetGPUDescriptorHandleForHeapStart()
+	);
+}
 
 void CreateEngine::BeginFrame()
 {
-	triangleCount_ = 0;
+
 	dxCommon_->PreDraw();
 	//viewportを設定
 	dxCommon_->GetCommandList()->RSSetViewports(1, &viewport_);
 	//scirssorを設定
 	dxCommon_->GetCommandList()->RSSetScissorRects(1, &scissorRect_);
-	//RootSignatureを設定。PSOとは別途
+	//RootSignatureを設定。PS0とは別途設定が必要
 	dxCommon_->GetCommandList()->SetGraphicsRootSignature(rootSignature_);
-	//PSOを設定
+	//PS0を設定
 	dxCommon_->GetCommandList()->SetPipelineState(graphicsPipelineState_);
 }
 
@@ -283,34 +312,67 @@ void CreateEngine::EndFrame()
 
 void CreateEngine::Finalize()
 {
-	for (int i = 0; i < 11; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		triangle_[i]->Finalize();
 	}
+
 	graphicsPipelineState_->Release();
 	signatureBlob_->Release();
-	if (errorBlob_) {
+
+	if (errorBlob_)
+	{
 		errorBlob_->Release();
 	}
+
 	rootSignature_->Release();
 	pixelShaderBlob_->Release();
 	vertexShaderBlob_->Release();
 	dxCommon_->Finalize();
 }
 
-void CreateEngine::Update()
-{
-
-	transform_.rotate.y += 0.03f;
-	worldMatrix_ = MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
+void CreateEngine::Update() {
 
 }
 
-void CreateEngine::DrawTriangle(const Vector4& a, const Vector4& b, const Vector4& c, const Vector4& material)
-{
-	triangleCount_++;
-	triangle_[triangleCount_]->Draw(a, b, c, material, worldMatrix_);
+void CreateEngine::Draw() {
+	Vector4 color = *triangle_[0]->materialData_;
+	ImGui::Begin("Triangle");
+	ImGui::ColorPicker4("color", &color.x);
+	ImGui::End();
+	*triangle_[0]->materialData_ = color;
+	for (int i = 0; i < 3; i++) {
+		triangle_[i]->Draw();
+	}
 }
+
+void CreateEngine::VariableInialize() {
+
+	Triangle tri[3] = {};
+
+	tri[0].v1 = { -0.4f,0.5f,0.0f,2.0f };
+	tri[0].v2 = { 0.0f,0.8f,0.0f,2.0f };
+	tri[0].v3 = { 0.4f,0.5f,0.0f,2.0f };
+	tri[0].material = { 1.0f,0.0f,0.0f,1.0f };
+
+	tri[1].v1 = { -0.8f,-0.9f,0.0f,1.0f };
+	tri[1].v2 = { -0.6f,-0.6f,0.0f,1.0f };
+	tri[1].v3 = { -0.4f,-0.9f,0.0f,1.0f };
+	tri[1].material = { 0.0f,1.0f,0.0f,1.0f };
+
+	tri[2].v1 = { 0.4f,-0.7f,0.0f,1.0f };
+	tri[2].v2 = { 0.6f,-0.4f,0.0f,1.0f };
+	tri[2].v3 = { 0.8f,-0.8f,0.0f,1.0f };
+	tri[2].material = { 0.0f,0.0f,1.0f,1.0f };
+
+	for (int i = 0; i < 3; i++)
+	{
+		triangle_[i] = new CreateTriangle();
+		triangle_[i]->Initialize(dxCommon_, tri[i].v1, tri[i].v2, tri[i].v3, tri[i].material);
+	}
+}
+
+
 
 WinApp* CreateEngine::win_;
-DirectX* CreateEngine::dxCommon_;
+DirectXCommon* CreateEngine::dxCommon_;
