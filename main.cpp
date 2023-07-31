@@ -9,12 +9,20 @@ const wchar_t kWindowTitle[] = { L"CG2_WinMain" };
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
+	CoInitializeEx(0, COINIT_MULTITHREADED);
+
 	//初期化
 	WinApp* win_ = nullptr;
 	CreateEngine* Engine = new CreateEngine;
+	DirectXCommon* dxCommon = new DirectXCommon;
 	Engine->Initialization(win_, kWindowTitle, 1280, 720);
 
 	Engine->VariableInialize();
+
+	DirectX::ScratchImage mipImages = Engine->LoadTexture("Resource/uvChecker.png");
+	const DirectX::TexMetadata& metaData = mipImages.GetMetadata();
+	ID3D12Resource* textureResource = Engine->CreateTextureResource(dxCommon->GetDevice(), metaData);
+	Engine->UploadTextureData(textureResource, mipImages);
 
 #pragma region ゲームループ
 
@@ -51,6 +59,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma endregion
 
 	OutputDebugStringA("Hello,DirectX!\n");
+
+	CoUninitialize();
 
 	Engine->Finalize();
 	return 0;

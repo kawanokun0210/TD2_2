@@ -9,6 +9,7 @@
 #include "externals/imgui/imgui.h"
 #include "externals/imgui/imgui_impl_dx12.h"
 #include "externals/imgui/imgui_impl_win32.h"
+#include "externals/DirectXTex/DirectXTex.h"
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 #pragma comment(lib,"dxcompiler.lib")
@@ -34,6 +35,12 @@ public:
 
 	void DrawTriangle(const Vector4& a, const Vector4& b, const Vector4& c, const Vector4& material);
 
+	static DirectX::ScratchImage LoadTexture(const std::string& filePath);
+
+	static ID3D12Resource* CreateTextureResource(ID3D12Device* device, const DirectX::TexMetadata& metaData);
+
+	static void UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages);
+ 
 private:
 	static WinApp* win_;
 	static	DirectXCommon* dxCommon_;
