@@ -1,4 +1,4 @@
-﻿#include "Engine.h"
+#include "Engine.h"
 #include <assert.h>
 
 IDxcBlob* MyEngine::CompileShader(const std::wstring& filePath, const wchar_t* profile, IDxcUtils* dxcUtils, IDxcCompiler3* dxcCompiler, IDxcIncludeHandler* includeHandler)
@@ -335,6 +335,19 @@ void MyEngine::DrawTriangle(const Vector4& a, const Vector4& b, const Vector4& c
 {
 	triangleCount_++;
 	triangle_[triangleCount_]->Draw(a, b, c, material, worldMatrix_);
+}
+
+void MyEngine::DrawSprite(const Vector4& LeftTop, const Vector4& LeftBottom, const Vector4& RightTop, const Vector4& RightBottom) {
+
+	vertexResourceSprite = triangle_[triangleCount_]->CreateBufferResource(dxCommon_->GetDevice(), sizeof(VertexData) * 6);
+
+	//リソースの先頭のアドレスから使う
+	vertexBufferViewSprite.BufferLocation = vertexResourceSprite->GetGPUVirtualAddress();
+	//使用するリソースのサイズは頂点６つ分
+	vertexBufferViewSprite.SizeInBytes = sizeof(VertexData) * 6;
+	//1頂点当たりのサイズ
+	vertexBufferViewSprite.StrideInBytes = sizeof(VertexData);
+
 }
 
 DirectX::ScratchImage MyEngine::LoadTexture(const std::string& filePath)

@@ -27,7 +27,11 @@ public:
 
 	void Update();
 
+public:
+
 	void DrawTriangle(const Vector4& a, const Vector4& b, const Vector4& c, const Vector4& material);
+
+	void DrawSprite(const Vector4& LeftTop, const Vector4& LeftBottom, const Vector4& RightTop, const Vector4& RightBottom);
 
 	DirectX::ScratchImage LoadTexture(const std::string& filePath);
 
@@ -42,6 +46,9 @@ private:
 	int triangleCount_;
 
 	const int kMaxTriangle = 5;
+
+	ID3D12Resource* vertexResourceSprite;
+	D3D12_VERTEX_BUFFER_VIEW vertexBufferViewSprite{};
 
 	IDxcUtils* dxcUtils_;
 	IDxcCompiler3* dxcCompiler_;
