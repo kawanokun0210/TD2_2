@@ -45,6 +45,8 @@ private:
 
 	int triangleCount_;
 
+	ID3D12Resource* CreateBufferResource(ID3D12Device* device, size_t sizeInBytes);
+
 	const int kMaxTriangle = 5;
 
 	ID3D12Resource* vertexResourceSprite;

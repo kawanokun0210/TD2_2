@@ -265,7 +265,7 @@ void MyEngine::Initialize()
 	vertexBufferViewSprite.SizeInBytes = sizeof(VertexData) * 6;
 	//1頂点当たりのサイズ
 	vertexBufferViewSprite.StrideInBytes = sizeof(VertexData);
-	vertexResourceSprite->Map(0, nullptr, reinterpret_cast<void**>(&vertexDataSprite));
+	
 
 	transformationMatrixResourceSprite = triangle_[triangleCount_]->CreateBufferResource(dxCommon_->GetDevice(), sizeof(Matrix4x4));
 	transformationMatrixResourceSprite->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixDataSprite));
@@ -357,7 +357,7 @@ void MyEngine::DrawTriangle(const Vector4& a, const Vector4& b, const Vector4& c
 }
 
 void MyEngine::DrawSprite(const Vector4& LeftTop, const Vector4& LeftBottom, const Vector4& RightTop, const Vector4& RightBottom) {
-
+	vertexResourceSprite->Map(0, nullptr, reinterpret_cast<void**>(&vertexDataSprite));
 	//1枚目の三角形
 	vertexDataSprite[0].position = LeftBottom;
 	vertexDataSprite[0].texcoord = { 0.0f,1.0f };
@@ -368,11 +368,11 @@ void MyEngine::DrawSprite(const Vector4& LeftTop, const Vector4& LeftBottom, con
 
 	//2枚目の三角形
 	vertexDataSprite[3].position = LeftTop;
-	vertexDataSprite[3].texcoord = { 0.0f,1.0f };
+	vertexDataSprite[3].texcoord = { 0.0f,0.0f };
 	vertexDataSprite[4].position = RightTop;
-	vertexDataSprite[4].texcoord = { 0.0f,1.0f };
+	vertexDataSprite[4].texcoord = { 1.0f,0.0f };
 	vertexDataSprite[5].position = RightBottom;
-	vertexDataSprite[5].texcoord = { 0.0f,1.0f };
+	vertexDataSprite[5].texcoord = { 1.0f,1.0f };
 
 	Matrix4x4 worldMatrixSprite = MakeAffineMatrix(transformSprite.scale, transformSprite.rotate, transformSprite.translate);
 	Matrix4x4 viewMatrixSprite = MakeIdentity4x4();
@@ -388,9 +388,8 @@ void MyEngine::DrawSprite(const Vector4& LeftTop, const Vector4& LeftBottom, con
 
 	// マテリアルCBufferの場所を設定
 	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(
-		0, transformationMatrixResourceSprite->GetGPUVirtualAddress());
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(
 		1, transformationMatrixResourceSprite->GetGPUVirtualAddress());
+	
 
 	// SRVのDescriptorTableの先頭を設定。2はrootPrameter[2]である。
 	dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(2, GetTextureHandleGPU());
