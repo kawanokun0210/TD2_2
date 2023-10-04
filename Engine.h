@@ -49,6 +49,10 @@ private:
 
 	ID3D12Resource* vertexResourceSprite;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferViewSprite{};
+	VertexData* vertexDataSprite = nullptr;
+
+	ID3D12Resource* transformationMatrixResourceSprite;
+	Matrix4x4* transformationMatrixDataSprite;
 
 	IDxcUtils* dxcUtils_;
 	IDxcCompiler3* dxcCompiler_;
@@ -82,6 +86,8 @@ private:
 	Vector4* vertexData_;
 
 	Transform transform_;
+	Transform transformSprite;
+
 	Matrix4x4 worldMatrix_;
 
 	IDxcBlob* CompileShader(

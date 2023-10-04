@@ -250,11 +250,27 @@ void MyEngine::ScissorRect()
 void MyEngine::Initialize()
 {
 	transform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
+	transformSprite = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
+
 	for (int i = 0; i < 5; i++)
 	{
 		triangle_[i] = new Triangle();
 		triangle_[i]->Initialize(dxCommon_, this);
 	}
+
+	vertexResourceSprite = triangle_[triangleCount_]->CreateBufferResource(dxCommon_->GetDevice(), sizeof(VertexData) * 6);
+	//リソースの先頭のアドレスから使う
+	vertexBufferViewSprite.BufferLocation = vertexResourceSprite->GetGPUVirtualAddress();
+	//使用するリソースのサイズは頂点６つ分
+	vertexBufferViewSprite.SizeInBytes = sizeof(VertexData) * 6;
+	//1頂点当たりのサイズ
+	vertexBufferViewSprite.StrideInBytes = sizeof(VertexData);
+	vertexResourceSprite->Map(0, nullptr, reinterpret_cast<void**>(&vertexDataSprite));
+
+	transformationMatrixResourceSprite = triangle_[triangleCount_]->CreateBufferResource(dxCommon_->GetDevice(), sizeof(Matrix4x4));
+	transformationMatrixResourceSprite->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixDataSprite));
+	*transformationMatrixDataSprite = MakeIdentity4x4();
+
 }
 
 void MyEngine::Initialization(WinApp* win, const wchar_t* title, int32_t width, int32_t height)
@@ -323,6 +339,9 @@ void MyEngine::Release()
 	pixelShaderBlob_->Release();
 	vertexShaderBlob_->Release();
 	dxCommon_->Release();
+	vertexResourceSprite->Release();
+	transformationMatrixResourceSprite->Release();
+
 }
 
 void MyEngine::Update()
@@ -339,14 +358,45 @@ void MyEngine::DrawTriangle(const Vector4& a, const Vector4& b, const Vector4& c
 
 void MyEngine::DrawSprite(const Vector4& LeftTop, const Vector4& LeftBottom, const Vector4& RightTop, const Vector4& RightBottom) {
 
-	vertexResourceSprite = triangle_[triangleCount_]->CreateBufferResource(dxCommon_->GetDevice(), sizeof(VertexData) * 6);
+	//1枚目の三角形
+	vertexDataSprite[0].position = LeftBottom;
+	vertexDataSprite[0].texcoord = { 0.0f,1.0f };
+	vertexDataSprite[1].position = LeftTop;
+	vertexDataSprite[1].texcoord = { 0.0f,0.0f };
+	vertexDataSprite[2].position = RightBottom;
+	vertexDataSprite[2].texcoord = { 1.0f,1.0f };
 
-	//リソースの先頭のアドレスから使う
-	vertexBufferViewSprite.BufferLocation = vertexResourceSprite->GetGPUVirtualAddress();
-	//使用するリソースのサイズは頂点６つ分
-	vertexBufferViewSprite.SizeInBytes = sizeof(VertexData) * 6;
-	//1頂点当たりのサイズ
-	vertexBufferViewSprite.StrideInBytes = sizeof(VertexData);
+	//2枚目の三角形
+	vertexDataSprite[3].position = LeftTop;
+	vertexDataSprite[3].texcoord = { 0.0f,1.0f };
+	vertexDataSprite[4].position = RightTop;
+	vertexDataSprite[4].texcoord = { 0.0f,1.0f };
+	vertexDataSprite[5].position = RightBottom;
+	vertexDataSprite[5].texcoord = { 0.0f,1.0f };
+
+	Matrix4x4 worldMatrixSprite = MakeAffineMatrix(transformSprite.scale, transformSprite.rotate, transformSprite.translate);
+	Matrix4x4 viewMatrixSprite = MakeIdentity4x4();
+	Matrix4x4 projectionMatrixSprite = MakeOrthographicMatrix(0.0f, 0.0f, float(winApp_->GetKClientWidth()), float(winApp_->GetKClientHeight()), 0.0f, 100.0f);
+	Matrix4x4 worldViewProjectionMatrixSprite = Multiply(worldMatrixSprite, Multiply(viewMatrixSprite, projectionMatrixSprite));
+	*transformationMatrixDataSprite = worldViewProjectionMatrixSprite;
+
+	// VBVを設定
+	dxCommon_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferViewSprite);
+
+	// 形状を設定。PS0に設定しているものとはまた別。同じものを設定する
+	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	// マテリアルCBufferの場所を設定
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(
+		0, transformationMatrixResourceSprite->GetGPUVirtualAddress());
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(
+		1, transformationMatrixResourceSprite->GetGPUVirtualAddress());
+
+	// SRVのDescriptorTableの先頭を設定。2はrootPrameter[2]である。
+	dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(2, GetTextureHandleGPU());
+
+	// 描画
+	dxCommon_->GetCommandList()->DrawInstanced(6, 1, 0, 0);
 
 }
 
