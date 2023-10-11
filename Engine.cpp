@@ -1,8 +1,7 @@
 #include "Engine.h"
 #include <assert.h>
 
-IDxcBlob* MyEngine::CompileShader(const std::wstring& filePath, const wchar_t* profile, IDxcUtils* dxcUtils, IDxcCompiler3* dxcCompiler, IDxcIncludeHandler* includeHandler)
-{
+IDxcBlob* MyEngine::CompileShader(const std::wstring& filePath, const wchar_t* profile, IDxcUtils* dxcUtils, IDxcCompiler3* dxcCompiler, IDxcIncludeHandler* includeHandler) {
 	//これからシェーダーをコンパイルする旨をログに出す
 	Log(ConvertString(std::format(L"Begin CompileShader, path:{},profile:{}\n", filePath, profile)));
 
@@ -92,7 +91,7 @@ void MyEngine::CreateRootSignature()
 		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
 
 	//RootParameter作成、複数設定可能な為、配列に
-	D3D12_ROOT_PARAMETER rootParameters[3] = {};
+	D3D12_ROOT_PARAMETER rootParameters[4] = {};
 	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
 	rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PixelShaderで使う
 	rootParameters[0].Descriptor.ShaderRegister = 0;//レジスタ番号0とバインド
@@ -109,6 +108,10 @@ void MyEngine::CreateRootSignature()
 	rootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PixcelShaderを使う
 	rootParameters[2].DescriptorTable.pDescriptorRanges = descriptoraRange;//tableの中身の配列を指定
 	rootParameters[2].DescriptorTable.NumDescriptorRanges = _countof(descriptoraRange);//Tableで利用する数
+
+	rootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
+	rootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL; //PixcelShaderで使う
+	rootParameters[3].Descriptor.ShaderRegister = 1;//レジスタ番号1を使う
 
 	D3D12_STATIC_SAMPLER_DESC staticSamplers[1] = {};//Samplerの設定
 	staticSamplers[0].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;//バイリニアフィルタ
@@ -133,7 +136,8 @@ void MyEngine::CreateRootSignature()
 	hr = D3D12SerializeRootSignature(&descriptionRootSignature,
 		D3D_ROOT_SIGNATURE_VERSION_1, &signatureBlob_, &errorBlob_);
 
-	if (FAILED(dxCommon_->GetHr())) {
+	if (FAILED(dxCommon_->GetHr()))
+	{
 		Log(reinterpret_cast<char*>(errorBlob_->GetBufferPointer()));
 		assert(false);
 	}
@@ -156,6 +160,11 @@ void MyEngine::CreateInputlayOut()
 	inputElementDescs_[1].SemanticIndex = 0;
 	inputElementDescs_[1].Format = DXGI_FORMAT_R32G32_FLOAT;
 	inputElementDescs_[1].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
+
+	inputElementDescs_[2].SemanticName = "NORMAL";
+	inputElementDescs_[2].SemanticIndex = 0;
+	inputElementDescs_[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+	inputElementDescs_[2].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
 
 	inputLayoutDesc_.pInputElementDescs = inputElementDescs_;
 	inputLayoutDesc_.NumElements = _countof(inputElementDescs_);
@@ -327,10 +336,7 @@ void MyEngine::Finalize()
 	dxCommon_->Finalize();
 }
 
-void MyEngine::Update()
-{
-
-}
+void MyEngine::Update() {}
 
 DirectX::ScratchImage MyEngine::LoadTexture(const std::string& filePath)
 {
