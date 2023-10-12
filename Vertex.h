@@ -6,6 +6,8 @@
 #include "Vector3.h"
 #include "Vector4.h"
 
+#include <vector>
+
 struct VertexData
 {
 	Vector4 position;
@@ -45,4 +47,8 @@ struct DirectionalLight
 	Vector4 color;
 	Vector3 direction;
 	float intensity;
+};
+
+struct ModelData {
+	std::vector<VertexData> vertices;
 };
