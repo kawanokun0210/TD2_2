@@ -24,7 +24,6 @@ void Triangle::Draw(const Vector4& a, const Vector4& b, const Vector4& c, const 
 	uvTransformMatrix = MakeScaleMatrix(uvTransformSprite.scale);
 	uvTransformMatrix = Multiply(uvTransformMatrix, MakeRotateZmatrix(uvTransformSprite.rotate.num[2]));
 	uvTransformMatrix = Multiply(uvTransformMatrix, MakeTranslateMatrix(uvTransformSprite.translate));
-	materialData_->uvTransform = uvTransformMatrix;
 
 	//左下
 	vertexData_[0].position = a;
@@ -39,6 +38,7 @@ void Triangle::Draw(const Vector4& a, const Vector4& b, const Vector4& c, const 
 	vertexData_[2].texcoord = { 1.0f,1.0f };
 
 	*materialData_ = { material,false };
+	materialData_->uvTransform = uvTransformMatrix;
 	*wvpData_ = { wvpMatrix_,worldMatrix };
 	*directionalLight_ = light;
 
