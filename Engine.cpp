@@ -470,6 +470,7 @@ ModelData MyEngine::LoadObjFile(const std::string& directoryPath, const std::str
 		if (identifier == "v") {
 			Vector4 position;
 			s >> position.num[0] >> position.num[1] >> position.num[2];
+			position.num[2] *= -1.0f;
 			position.num[3] = 1.0f;
 			positions.push_back(position);
 		}
@@ -481,9 +482,11 @@ ModelData MyEngine::LoadObjFile(const std::string& directoryPath, const std::str
 		else if (identifier == "vn") {
 			Vector3 normal;
 			s >> normal.num[0] >> normal.num[1] >> normal.num[2];
+			normal.num[2] *= -1.0f;
 			normals.push_back(normal);
 		}
 		else if (identifier == "f") {
+			VertexData triangle[3];
 			//面は三角形限定,その他は未対応
 			for (int32_t faceVertex = 0; faceVertex < 3; ++faceVertex) {
 				std::string vertexDefinition;
@@ -499,9 +502,12 @@ ModelData MyEngine::LoadObjFile(const std::string& directoryPath, const std::str
 				Vector4 position = positions[elementIndices[0] - 1];
 				Vector2 texcoord = texcoords[elementIndices[1] - 1];
 				Vector3 normal = normals[elementIndices[2] - 1];
-				VertexData vertex = { position,texcoord,normal };
-				modelData.vertices.push_back(vertex);
+				//VertexData vertex = { position,texcoord,normal };
+				triangle[faceVertex] = { position,texcoord,normal };
 			}
+			modelData.vertices.push_back(triangle[2]);
+			modelData.vertices.push_back(triangle[1]);
+			modelData.vertices.push_back(triangle[0]);
 		}
 
 	}

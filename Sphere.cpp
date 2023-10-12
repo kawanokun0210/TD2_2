@@ -104,8 +104,8 @@ void Sphere::Draw(const Vector4& material, const Transform& transform, uint32_t 
 			dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(2, engine_->textureSrvHandleGPU_[index]);
 
 			//描画
-			//dxCommon_->GetCommandList()->DrawInstanced(vertexCount, 1, 0, 0);
-			dxCommon_->GetCommandList()->DrawInstanced(UINT(modelData.vertices.size()), 1, 0, 0);
+			dxCommon_->GetCommandList()->DrawInstanced(vertexCount, 1, 0, 0);
+			//dxCommon_->GetCommandList()->DrawInstanced(UINT(modelData.vertices.size()), 1, 0, 0);
 		}
 	}
 }
@@ -120,19 +120,19 @@ void Sphere::Finalize()
 
 void Sphere::SettingVertex()
 {
-	//vertexResource = dxCommon_->CreateBufferResource(dxCommon_->GetDevice(), sizeof(VertexData) * vertexCount);
-	vertexResource = dxCommon_->CreateBufferResource(dxCommon_->GetDevice(), sizeof(VertexData) * modelData.vertices.size());
+	vertexResource = dxCommon_->CreateBufferResource(dxCommon_->GetDevice(), sizeof(VertexData) * vertexCount);
+	//vertexResource = dxCommon_->CreateBufferResource(dxCommon_->GetDevice(), sizeof(VertexData) * modelData.vertices.size());
 	//リソースの先頭のアドレスから使う
 	vertexBufferView.BufferLocation = vertexResource->GetGPUVirtualAddress();
 
-	//vertexBufferView.SizeInBytes = sizeof(VertexData) * vertexCount;
-	vertexBufferView.SizeInBytes = UINT(sizeof(VertexData) * modelData.vertices.size());
+	vertexBufferView.SizeInBytes = sizeof(VertexData) * vertexCount;
+	//vertexBufferView.SizeInBytes = UINT(sizeof(VertexData) * modelData.vertices.size());
 
 	vertexBufferView.StrideInBytes = sizeof(VertexData);
 
 	vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 
-	std::memcpy(vertexData_, modelData.vertices.data(), sizeof(VertexData) * modelData.vertices.size());
+	//std::memcpy(vertexData_, modelData.vertices.data(), sizeof(VertexData) * modelData.vertices.size());
 }
 
 void Sphere::TransformMatrix()
