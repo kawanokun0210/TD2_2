@@ -15,6 +15,12 @@ public:
 
 	void Finalize();
 
+	Transform uvTransformSprite{
+		{1.0f,1.0f,1.0f},
+		{0.0f,0.0f,0.0f},
+		{0.0f,0.0f,0.0f}
+	};
+
 private:
 	void SettingVartex();
 
@@ -48,6 +54,8 @@ private:
 	D3D12_INDEX_BUFFER_VIEW indexBufferViewSprite{};
 
 	uint32_t* indexDataSprite = nullptr;
+
+	Matrix4x4 uvTransformMatrix;
 
 	static const int kMaxSprite = 3;
 	static const int kMaxSpriteVertex = kMaxSprite * 6;

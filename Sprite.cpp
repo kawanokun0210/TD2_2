@@ -67,6 +67,11 @@ void Sprite::Draw(const Vector4& a, const Vector4& b, const Transform& transform
 	Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(viewMatrix, projectionmatrix));
 	*transformationMatrixdata_ = { worldViewProjectionMatrix,worldMatrix };
 
+	uvTransformMatrix = MakeScaleMatrix(uvTransformSprite.scale);
+	uvTransformMatrix = Multiply(uvTransformMatrix, MakeRotateZmatrix(uvTransformSprite.rotate.num[2]));
+	uvTransformMatrix = Multiply(uvTransformMatrix, MakeTranslateMatrix(uvTransformSprite.translate));
+	materialData_->uvTransform = uvTransformMatrix;
+
 	//描画
 	dxCommon_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
 	dxCommon_->GetCommandList()->IASetIndexBuffer(&indexBufferViewSprite);
@@ -124,6 +129,8 @@ void Sprite::SettingColor()
 	materialResource_ = dxCommon_->CreateBufferResource(dxCommon_->GetDevice(), sizeof(VertexData));
 
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
+
+	materialData_->uvTransform = MakeIdentity4x4();
 }
 
 void Sprite::SettingDictionalLight()

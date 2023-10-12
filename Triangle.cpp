@@ -21,6 +21,11 @@ void Triangle::Draw(const Vector4& a, const Vector4& b, const Vector4& c, const 
 
 	Matrix4x4 wvpMatrix_ = Multiply(worldMatrix, Multiply(viewMatrix, projectionMatrix));
 
+	uvTransformMatrix = MakeScaleMatrix(uvTransformSprite.scale);
+	uvTransformMatrix = Multiply(uvTransformMatrix, MakeRotateZmatrix(uvTransformSprite.rotate.num[2]));
+	uvTransformMatrix = Multiply(uvTransformMatrix, MakeTranslateMatrix(uvTransformSprite.translate));
+	materialData_->uvTransform = uvTransformMatrix;
+
 	//左下
 	vertexData_[0].position = a;
 	vertexData_[0].texcoord = { 0.0f,1.0f };
@@ -87,6 +92,8 @@ void Triangle::SettingColor()
 
 	//書き込むためのアドレスを取得
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
+
+	materialData_->uvTransform = MakeIdentity4x4();
 }
 
 void Triangle::TransformMatrix()

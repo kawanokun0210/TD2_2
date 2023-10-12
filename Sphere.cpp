@@ -23,6 +23,11 @@ void Sphere::Draw(const Vector4& material, const Transform& transform, uint32_t 
 
 	Matrix4x4 wvpMatrix_ = Multiply(worldMatrix, Multiply(viewMatrix, projectionMatrix));
 
+	uvTransformMatrix = MakeScaleMatrix(uvTransformSprite.scale);
+	uvTransformMatrix = Multiply(uvTransformMatrix, MakeRotateZmatrix(uvTransformSprite.rotate.num[2]));
+	uvTransformMatrix = Multiply(uvTransformMatrix, MakeTranslateMatrix(uvTransformSprite.translate));
+	materialData_->uvTransform = uvTransformMatrix;
+
 	//経度分割一つ分の角度
 	const float kLonEvery = pi * 2.0f / float(kSubDivision);
 	const float kLatEvery = pi / float(kSubDivision);
@@ -136,6 +141,8 @@ void Sphere::SettingColor()
 	materialResource_ = dxCommon_->CreateBufferResource(dxCommon_->GetDevice(), sizeof(VertexData));
 
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
+
+	materialData_->uvTransform = MakeIdentity4x4();
 }
 
 void Sphere::SettingDictionalLight()
