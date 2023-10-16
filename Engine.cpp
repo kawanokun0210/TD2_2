@@ -413,10 +413,14 @@ ID3D12Resource* MyEngine::UploadtextureData(ID3D12Resource* texture, const Direc
 
 void MyEngine::SettingTexture(const std::string& filePath, uint32_t index)
 {
+	ModelData modelData;
 	DirectX::ScratchImage mipImage = LoadTexture(filePath);
+	DirectX::ScratchImage mipImages2 = LoadTexture(modelData.material.textureFilePath);
 	const DirectX::TexMetadata& metadata = mipImage.GetMetadata();
+	const DirectX::TexMetadata& metadata2 = mipImages2.GetMetadata();
 	textureResource_[index] = CreateTextureResource(dxCommon_->GetDevice(), metadata);
 	intermediateResource_[index] = UploadtextureData(textureResource_[index], mipImage, index);
+	intermediateResources_[index] = UploadtextureData(textureResource_[index], mipImages2, index);
 
 	//metaDataを基にSRVの設定
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
@@ -470,19 +474,20 @@ ModelData MyEngine::LoadObjFile(const std::string& directoryPath, const std::str
 		if (identifier == "v") {
 			Vector4 position;
 			s >> position.num[0] >> position.num[1] >> position.num[2];
-			position.num[2] *= -1.0f;
+			position.num[0] *= -1.0f;
 			position.num[3] = 1.0f;
 			positions.push_back(position);
 		}
 		else if (identifier == "vt") {
 			Vector2 texcoord;
 			s >> texcoord.num[0] >> texcoord.num[1];
+			texcoord.num[1] = 1.0f - texcoord.num[1];
 			texcoords.push_back(texcoord);
 		}
 		else if (identifier == "vn") {
 			Vector3 normal;
 			s >> normal.num[0] >> normal.num[1] >> normal.num[2];
-			normal.num[2] *= -1.0f;
+			normal.num[0] *= -1.0f;
 			normals.push_back(normal);
 		}
 		else if (identifier == "f") {
@@ -512,6 +517,38 @@ ModelData MyEngine::LoadObjFile(const std::string& directoryPath, const std::str
 
 	}
 	return modelData;
+}
+
+MaterialData MyEngine::LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename) {
+
+	ModelData modelData;//構築するmodelData
+	MaterialData materialData;//構築するMaterialData
+	std::string line;//ファイルから読んだ一桁を格納するもの
+	std::ifstream file(directoryPath + "/" + filename);//ファイルを開く
+	assert(file.is_open());
+
+	while (std::getline(file, line)) {
+		std::string identifier;
+		std::istringstream s(line);
+		s >> identifier;
+
+		//identifierに応じた処理
+		if (identifier == "map_kd") {
+			std::string textureFilename;
+			s >> textureFilename;
+			//連結にしてファイルパスにする
+			materialData.textureFilePath = directoryPath + "/" + textureFilename;
+		}
+		else if (identifier == "mtllib") {
+			//materialTemplateLibraryファイルの名前を取得
+			std::string materialFilename;
+			s >> materialFilename;
+			//基本的にOBJファイルと同一階層にmtlは存在させるので、ディレクトリ名とファイル名を渡す
+			modelData.material = LoadMaterialTemplateFile(directoryPath, materialFilename);
+		}
+
+	}
+	return materialData;
 }
 
 DirectXCommon* MyEngine::dxCommon_;
