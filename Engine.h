@@ -27,6 +27,8 @@ public:
 
 	void SettingTexture(const std::string& filePath, uint32_t index);
 
+	void SettingObjTexture(uint32_t index);
+
 	ModelData LoadObjFile(const std::string& directoryPath, const std::string& filename);
 
 	MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename);

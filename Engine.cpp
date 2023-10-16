@@ -415,12 +415,35 @@ void MyEngine::SettingTexture(const std::string& filePath, uint32_t index)
 {
 	ModelData modelData;
 	DirectX::ScratchImage mipImage = LoadTexture(filePath);
-	DirectX::ScratchImage mipImages2 = LoadTexture(modelData.material.textureFilePath);
 	const DirectX::TexMetadata& metadata = mipImage.GetMetadata();
-	const DirectX::TexMetadata& metadata2 = mipImages2.GetMetadata();
 	textureResource_[index] = CreateTextureResource(dxCommon_->GetDevice(), metadata);
 	intermediateResource_[index] = UploadtextureData(textureResource_[index], mipImage, index);
-	intermediateResources_[index] = UploadtextureData(textureResource_[index], mipImages2, index);
+
+	//metaDataを基にSRVの設定
+	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
+	srvDesc.Format = metadata.format;
+	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;//2Dテクスチャ
+	srvDesc.Texture2D.MipLevels = UINT(metadata.mipLevels);
+
+	//SRVを作成するDescripterHeapの場所を決める
+	textureSrvHandleGPU_[index] = GetGPUDescriptorHandle(dxCommon_->GetSrvDescriptiorHeap(), descriptorSizeSRV, index);
+	textureSrvHandleCPU_[index] = GetCPUDescriptorHandle(dxCommon_->GetSrvDescriptiorHeap(), descriptorSizeSRV, index);
+
+	//先頭はIMGUIが使ってるので、その次を使う
+	textureSrvHandleCPU_[index].ptr += dxCommon_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	textureSrvHandleGPU_[index].ptr += dxCommon_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+
+	//SRVの生成
+	dxCommon_->GetDevice()->CreateShaderResourceView(textureResource_[index], &srvDesc, textureSrvHandleCPU_[index]);
+}
+
+void MyEngine::SettingObjTexture(uint32_t index) {
+	ModelData modelData;
+	DirectX::ScratchImage mipImages2 = LoadTexture(modelData.material.textureFilePath);
+	const DirectX::TexMetadata& metadata = mipImages2.GetMetadata();
+	textureResource_[index] = CreateTextureResource(dxCommon_->GetDevice(), metadata);
+	intermediateResource_[index] = UploadtextureData(textureResource_[index], mipImages2, index);
 
 	//metaDataを基にSRVの設定
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
