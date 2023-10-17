@@ -230,13 +230,17 @@ void GameScene::Finalize()
 {
 	for (int i = 0; i < 2; i++)
 	{
-		triangle_[i]->Finalize();
+		//triangle_[i]->Finalize();
+		delete triangle_[i];
 	}
 
 	for (int i = 0; i < 2; i++)
 	{
-		sprite_[i]->Finalize();
+		//sprite_[i]->Finalize();
+		delete sprite_[i];
 	}
 
 	sphere_->Finalize();
+
+	delete sphere_;
 }

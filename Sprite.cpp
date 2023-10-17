@@ -88,10 +88,10 @@ void Sprite::Draw(const Vector4& a, const Vector4& b, const Transform& transform
 
 void Sprite::Finalize()
 {
-	vertexResourceSprite_->Release();
-	materialResource_->Release();
-	directionalLightResource_->Release();
-	transformationMatrixResource_->Release();
+//	vertexResourceSprite_->Release();
+//	materialResource_->Release();
+//	directionalLightResource_->Release();
+//	transformationMatrixResource_->Release();
 }
 
 void Sprite::SettingVartex()
