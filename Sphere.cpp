@@ -8,7 +8,6 @@ void Sphere::Initialize(DirectXCommon* dxCommon, MyEngine* engine)
 	engine_ = engine;
 	kSubDivision = 16;
 	vertexCount = kSubDivision * kSubDivision * 6;
-	modelData = engine_->LoadObjFile("Resource/", "plane.obj");
 	SettingVertex();
 	SettingColor();
 	SettingDictionalLight();

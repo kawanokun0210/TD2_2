@@ -6,7 +6,7 @@ void Object::Initialize(DirectXCommon* dxCommon, MyEngine* engine)
 {
 	dxCommon_ = dxCommon;
 	engine_ = engine;
-	modelData = engine_->LoadObjFile("Resource/", "plane.obj");
+	modelData = engine_->LoadObjFile("Resource/", "axis.obj");
 	SettingVertex();
 	SettingColor();
 	SettingDictionalLight();
@@ -26,7 +26,7 @@ void Object::Draw(const Vector4& material, const Transform& transform, uint32_t 
 	uvTransformMatrix = Multiply(uvTransformMatrix, MakeRotateZmatrix(uvTransformSprite.rotate.num[2]));
 	uvTransformMatrix = Multiply(uvTransformMatrix, MakeTranslateMatrix(uvTransformSprite.translate));
 
-	* materialData_ = { material,true };
+	*materialData_ = { material,true };
 	materialData_->uvTransform = uvTransformMatrix;
 	*wvpData_ = { wvpMatrix_,worldMatrix };
 	*directionalLight_ = light;

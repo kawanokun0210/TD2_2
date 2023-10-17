@@ -189,11 +189,11 @@ void GameScene::Update()
 		ImGui::DragFloat3("Translate", objectTransform_.translate.num, 0.05f);
 		ImGui::DragFloat3("Rotate", objectTransform_.rotate.num, 0.05f);
 		ImGui::DragFloat3("Scale", objectTransform_.scale.num, 0.05f);
-		ImGui::ColorEdit4("Color", sphereMaterial_.num, 0);
+		ImGui::ColorEdit4("Color", objectMaterial_.num, 0);
 		//ImGui::Checkbox("ChangeTexture", &texture_);
-		ImGui::DragFloat4("LightColor", directionalLight_.color.num, 1.0f);
+		/*ImGui::DragFloat4("LightColor", directionalLight_.color.num, 1.0f);
 		ImGui::DragFloat3("DirectionLight", directionalLight_.direction.num, 0.1f);
-		/*ImGui::DragFloat2("UVTranslate", &sphere_->uvTransformSprite.translate.num[0], 0.01f, -10.0f, 10.0f);
+		ImGui::DragFloat2("UVTranslate", &sphere_->uvTransformSprite.translate.num[0], 0.01f, -10.0f, 10.0f);
 		ImGui::DragFloat2("UVScale", &sphere_->uvTransformSprite.scale.num[0], 0.01f, -10.0f, 10.0f);
 		ImGui::SliderAngle("UVRotate", &sphere_->uvTransformSprite.rotate.num[2]);*/
 
@@ -260,7 +260,7 @@ void GameScene::Draw()
 		}
 	}
 	if (objectDraw_) {
-		object_->Draw(objectMaterial_, objectTransform_, texture_, cameraTransform_, directionalLight_);
+		object_->Draw(objectMaterial_, objectTransform_, 0, cameraTransform_, directionalLight_);
 	}
 }
 
