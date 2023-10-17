@@ -7,6 +7,7 @@
 #include "Triangle.h"
 #include "Sprite.h"
 #include "Sphere.h"
+#include "Object.h"
 
 class GameScene
 {
@@ -37,6 +38,11 @@ private:
 	Vector4 sphereMaterial_;
 	Matrix4x4 sphereMatrix_;
 
+	Object* object_;
+	Transform objectTransform_;
+	Vector4 objectMaterial_;
+	Matrix4x4 objectMatrix_;
+
 	Transform cameraTransform_;
 
 	uint32_t uvResourceNum_;
@@ -50,4 +56,5 @@ private:
 	bool triangleDrawB_;
 	int sphereDraw_;
 	int spriteDraw_;
+	int objectDraw_;
 };

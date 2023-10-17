@@ -37,6 +37,11 @@ void GameScene::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 
 	sphereDraw_ = false;
 
+	objectTransform_ = { {0.4f,0.4f,0.4f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
+	objectMaterial_ = { 1.0f,1.0f,1.0f,1.0f };
+
+	objectDraw_ = false;
+
 	directionalLight_.color = { 1.0f,1.0f,1.0f,1.0f };
 	directionalLight_.direction = { 0.0f,-1.0f,0.0f };
 	directionalLight_.intensity = 1.0f;
@@ -62,6 +67,9 @@ void GameScene::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 
 	sphere_ = new Sphere();
 	sphere_->Initialize(dxCommon_, engine_);
+
+	object_ = new Object();
+	object_->Initialize(dxCommon_, engine_);
 
 	cameraTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-5.0f} };
 }
@@ -165,6 +173,33 @@ void GameScene::Update()
 		ImGui::TreePop();
 	}
 
+	if (ImGui::TreeNode("Object"))
+	{
+		if (ImGui::Button("Object"))
+		{
+			if (objectDraw_ == false)
+			{
+				objectDraw_ = true;
+			}
+			else {
+				objectDraw_ = false;
+			}
+		}
+
+		ImGui::DragFloat3("Translate", objectTransform_.translate.num, 0.05f);
+		ImGui::DragFloat3("Rotate", objectTransform_.rotate.num, 0.05f);
+		ImGui::DragFloat3("Scale", objectTransform_.scale.num, 0.05f);
+		ImGui::ColorEdit4("Color", sphereMaterial_.num, 0);
+		//ImGui::Checkbox("ChangeTexture", &texture_);
+		ImGui::DragFloat4("LightColor", directionalLight_.color.num, 1.0f);
+		ImGui::DragFloat3("DirectionLight", directionalLight_.direction.num, 0.1f);
+		/*ImGui::DragFloat2("UVTranslate", &sphere_->uvTransformSprite.translate.num[0], 0.01f, -10.0f, 10.0f);
+		ImGui::DragFloat2("UVScale", &sphere_->uvTransformSprite.scale.num[0], 0.01f, -10.0f, 10.0f);
+		ImGui::SliderAngle("UVRotate", &sphere_->uvTransformSprite.rotate.num[2]);*/
+
+		ImGui::TreePop();
+	}
+
 	if (ImGui::TreeNode("Sprite"))
 	{
 		if (ImGui::Button("Sprite"))
@@ -224,6 +259,9 @@ void GameScene::Draw()
 			sprite_[i]->Draw(spriteData_.LeftTop[i], spriteData_.RightDown[i], spriteTransform_, spriteData_.material, uvResourceNum_, directionalLight_);
 		}
 	}
+	if (objectDraw_) {
+		object_->Draw(objectMaterial_, objectTransform_, texture_, cameraTransform_, directionalLight_);
+	}
 }
 
 void GameScene::Finalize()
@@ -241,6 +279,8 @@ void GameScene::Finalize()
 	}
 
 	sphere_->Finalize();
+	object_->Finalize();
 
 	delete sphere_;
+	delete object_;
 }

@@ -81,6 +81,9 @@
     <ClCompile Include="Sprite.cpp">
       <Filter>ソース ファイル\3d</Filter>
     </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>ソース ファイル\3d</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DirectX.h">
@@ -153,6 +156,9 @@
       <Filter>ヘッダー ファイル\common</Filter>
     </ClInclude>
     <ClInclude Include="ResourceObject.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
