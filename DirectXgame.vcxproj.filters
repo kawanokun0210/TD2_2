@@ -28,6 +28,9 @@
     <Filter Include="imgui">
       <UniqueIdentifier>{0798b278-bff0-406c-9e47-1502371307e6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\math">
+      <UniqueIdentifier>{ffaa7628-01f8-43e0-b42f-6d827449dc0c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DirectX.cpp">
@@ -104,21 +107,6 @@
     <ClInclude Include="String.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Vector4.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Matrix4x4.h">
-      <Filter>ヘッダー ファイル\common</Filter>
-    </ClInclude>
-    <ClInclude Include="MatrixCalculation.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Vector3.h">
-      <Filter>ヘッダー ファイル\common</Filter>
-    </ClInclude>
     <ClInclude Include="externals\imgui\imgui_impl_win32.h">
       <Filter>imgui</Filter>
     </ClInclude>
@@ -143,17 +131,11 @@
     <ClInclude Include="externals\imgui\imstb_truetype.h">
       <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="Vector2.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Vertex.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="GameScene.h">
       <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Matrix3x3.h">
-      <Filter>ヘッダー ファイル\common</Filter>
     </ClInclude>
     <ClInclude Include="ResourceObject.h">
       <Filter>ヘッダー ファイル</Filter>
@@ -172,6 +154,27 @@
     </ClInclude>
     <ClInclude Include="Sound.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.h">
+      <Filter>ヘッダー ファイル\common</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix3x3.h">
+      <Filter>ヘッダー ファイル\math</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix4x4.h">
+      <Filter>ヘッダー ファイル\math</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector3.h">
+      <Filter>ヘッダー ファイル\math</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2.h">
+      <Filter>ヘッダー ファイル\math</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector4.h">
+      <Filter>ヘッダー ファイル\math</Filter>
+    </ClInclude>
+    <ClInclude Include="MatrixCalculation.h">
+      <Filter>ヘッダー ファイル\math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
