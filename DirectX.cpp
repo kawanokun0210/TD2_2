@@ -35,6 +35,9 @@ void DirectXCommon::Initialization(const wchar_t* title, int32_t backBufferWidth
 	CreateDepthStensil();
 
 	ImGuiInitialize();
+
+	sound_ = new Sound();
+	sound_->Initialize();
 }
 
 void DirectXCommon::ImGuiInitialize()
@@ -451,6 +454,9 @@ void DirectXCommon::Finalize()
 	ImGui_ImplDX12_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
+
+	sound_->Finalize();
+	delete sound_;
 
 	//rtvDescriptorHeap_->Release();
 	//srvDescriptorHeap_->Release();

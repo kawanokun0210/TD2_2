@@ -6,6 +6,7 @@
 #include "String.h"
 #include <wrl.h>
 #include "externals/DirectXTex/DirectXTex.h"
+#include "Sound.h"
 
 struct D3DResourceLeakChecker
 {
@@ -56,6 +57,8 @@ private:
 	void CreateDepthStensil();
 
 private:
+	Sound* sound_;
+
 	//DXGIファクトリーの生成
 	Microsoft::WRL::ComPtr<IDXGIFactory7> dxgiFactory_;
 

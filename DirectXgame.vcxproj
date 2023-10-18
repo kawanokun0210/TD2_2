@@ -112,6 +112,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll"</Command>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MatrixCalculation.cpp" />
     <ClCompile Include="Object.cpp" />
+    <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="String.cpp" />
@@ -136,6 +137,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll"</Command>
     <ClInclude Include="MatrixCalculation.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ResourceObject.h" />
+    <ClInclude Include="Sound.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="String.h" />
