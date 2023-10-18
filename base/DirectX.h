@@ -6,8 +6,8 @@
 #include "../String.h"
 #include <wrl.h>
 #include "../externals/DirectXTex/DirectXTex.h"
-#include "../Sound.h"
-#include "../Input.h"
+#include "Sound.h"
+#include "Input.h"
 
 struct D3DResourceLeakChecker
 {
