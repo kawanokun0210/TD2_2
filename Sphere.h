@@ -1,5 +1,5 @@
 #pragma once
-#include "DirectX.h"
+#include "base/DirectX.h"
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Vector4.h"
