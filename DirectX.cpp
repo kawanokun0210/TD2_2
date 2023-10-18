@@ -38,6 +38,9 @@ void DirectXCommon::Initialization(const wchar_t* title, int32_t backBufferWidth
 
 	sound_ = new Sound();
 	sound_->Initialize();
+
+	input_ = new Input();
+	input_->Initialize();
 }
 
 void DirectXCommon::ImGuiInitialize()
@@ -457,6 +460,8 @@ void DirectXCommon::Finalize()
 
 	sound_->Finalize();
 	delete sound_;
+
+	delete input_;
 
 	//rtvDescriptorHeap_->Release();
 	//srvDescriptorHeap_->Release();

@@ -75,7 +75,7 @@ SoundData Sound::LoadWave(const char* filename) {
 
 }
 
-void Sound::PlayWave(IXAudio2* xAudio2, const SoundData& soundData) {
+void Sound::PlayWave(const SoundData& soundData) {
 	//波形フォーマットを元にSourceVoiceの生成
 	IXAudio2SourceVoice* pSourceVoice = nullptr;
 	result = xAudio2->CreateSourceVoice(&pSourceVoice, &soundData.wfex);

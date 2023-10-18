@@ -43,7 +43,7 @@ public:
 	void UnLoad(SoundData* soundData);
 
 	//音声再生
-	void PlayWave(IXAudio2* xAudio2, const SoundData& soundData);
+	void PlayWave(const SoundData& soundData);
 
 	//XAudio2の解放
 	void Finalize();

@@ -11,7 +11,7 @@ public:
     /// <summary>
     /// 初期化
     /// </summary>
-    void Initialize(WinApp* winApp);
+    void Initialize();
     /// <summary>
     /// 更新
     /// </summary>
@@ -26,8 +26,7 @@ public:
     bool TriggerKey(BYTE keyNumber);
 
 private:
-    WinApp* winApp = nullptr;
-
+   
     template <class Type> using ComPtr = Microsoft::WRL::ComPtr<Type>;
 
     ComPtr<IDirectInput8> directInput = nullptr;
