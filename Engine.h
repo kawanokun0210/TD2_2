@@ -1,5 +1,5 @@
 #pragma once
-#include "base/DirectX.h"
+#include "DirectX.h"
 #include <dxcapi.h>
 #include "String.h"
 #include "MatrixCalculation.h"
