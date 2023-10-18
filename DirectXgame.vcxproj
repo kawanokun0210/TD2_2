@@ -98,6 +98,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="3d\Object.cpp" />
+    <ClCompile Include="3d\Sphere.cpp" />
+    <ClCompile Include="3d\Sprite.cpp" />
+    <ClCompile Include="3d\Triangle.cpp" />
     <ClCompile Include="base\DirectX.cpp" />
     <ClCompile Include="base\Engine.cpp" />
     <ClCompile Include="base\WinApp.cpp" />
@@ -111,15 +115,15 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll"</Command>
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="math\MatrixCalculation.cpp" />
-    <ClCompile Include="Object.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
     <ClCompile Include="Sound.cpp" />
-    <ClCompile Include="Sphere.cpp" />
-    <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="String.cpp" />
-    <ClCompile Include="Triangle.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="3d\Object.h" />
+    <ClInclude Include="3d\Sphere.h" />
+    <ClInclude Include="3d\Sprite.h" />
+    <ClInclude Include="3d\Triangle.h" />
     <ClInclude Include="base\DirectX.h" />
     <ClInclude Include="base\Engine.h" />
     <ClInclude Include="base\WinApp.h" />
@@ -138,14 +142,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll"</Command>
     <ClInclude Include="math\Vector2.h" />
     <ClInclude Include="math\Vector3.h" />
     <ClInclude Include="math\Vector4.h" />
-    <ClInclude Include="Object.h" />
     <ClInclude Include="ResourceObject.h" />
     <ClInclude Include="scene\GameScene.h" />
     <ClInclude Include="Sound.h" />
-    <ClInclude Include="Sphere.h" />
-    <ClInclude Include="Sprite.h" />
     <ClInclude Include="String.h" />
-    <ClInclude Include="Triangle.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>

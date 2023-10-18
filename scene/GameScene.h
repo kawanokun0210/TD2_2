@@ -4,10 +4,10 @@
 #include "Vector4.h"
 #include "../Vertex.h"
 #include "Engine.h"
-#include "../Triangle.h"
-#include "../Sprite.h"
-#include "../Sphere.h"
-#include "../Object.h"
+#include "Triangle.h"
+#include "Sprite.h"
+#include "Sphere.h"
+#include "Object.h"
 
 class GameScene
 {

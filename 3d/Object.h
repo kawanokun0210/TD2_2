@@ -3,19 +3,17 @@
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Vector4.h"
-#include "Vertex.h"
-#include "Matrix4x4.h"
-#include "String.h"
+#include "../Vertex.h"
 #include "MatrixCalculation.h"
 
 class MyEngine;
 
-class Triangle
+class Object
 {
 public:
 	void Initialize(DirectXCommon* dxCommon, MyEngine* engine);
 
-	void Draw(const Vector4& a, const Vector4& b, const Vector4& c, const Vector4& material, const Transform& transform, const Transform& cameraTransform, uint32_t index, const DirectionalLight& light);
+	void Draw(const Vector4& material, const Transform& transform, uint32_t index, const Transform& cameraTransform, const DirectionalLight& light);
 
 	void Finalize();
 
@@ -35,26 +33,25 @@ private:
 	void TransformMatrix();
 
 private:
+	DirectXCommon* dxCommon_;
 	MyEngine* engine_;
 
-	DirectXCommon* dxCommon_;
-
+	D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
+	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource;
 	VertexData* vertexData_;
 
-	Material* materialData_;
-
-	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource_;
-
-	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
-
-	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
-
-	//WVP用のリソース
 	Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_;
 	TransformationMatrix* wvpData_;
+
+	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
+	Material* materialData_;
 
 	DirectionalLight* directionalLight_;
 	Microsoft::WRL::ComPtr<ID3D12Resource> directionalLightResource_;
 
 	Matrix4x4 uvTransformMatrix;
+
+	ModelData modelData;
+
 };
+

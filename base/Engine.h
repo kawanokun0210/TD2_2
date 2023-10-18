@@ -7,7 +7,7 @@
 #include "Vector3.h"
 #include "Vector4.h"
 #include "../Vertex.h"
-#include "../Triangle.h"
+#include "Triangle.h"
 #include "../externals/DirectXTex/d3dx12.h"
 #include <vector>
 #pragma comment(lib,"dxcompiler.lib")
