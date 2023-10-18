@@ -9,11 +9,11 @@ void Input::Initialize(WinApp* winApp) {
 
     HRESULT result;
     //DiretxInputのインスタンス生成
-    ComPtr<IDirectInput8> directInput = nullptr;
+    //ComPtr<IDirectInput8> directInput = nullptr;
     result = DirectInput8Create(HINSTANCE(winApp->GetInstance()), DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&directInput, nullptr);
     assert(SUCCEEDED(result));
     //キーボードデバイス作成
-    ComPtr<IDirectInputDevice8> keyboard;
+    //ComPtr<IDirectInputDevice8> keyboard;
     result = directInput->CreateDevice(GUID_SysKeyboard, &keyboard, NULL);
     assert(SUCCEEDED(result));
     //入力デーら形式のセット
