@@ -35,12 +35,6 @@ void DirectXCommon::Initialization(const wchar_t* title, int32_t backBufferWidth
 	CreateDepthStensil();
 
 	ImGuiInitialize();
-
-	sound_ = new Sound();
-	sound_->Initialize();
-
-	input_ = new Input();
-	input_->Initialize();
 }
 
 void DirectXCommon::ImGuiInitialize()
@@ -261,8 +255,6 @@ void DirectXCommon::PreDraw()
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 
-	input_->Update();
-
 	//書き込むバックバッファのインデックスを取得
 	UINT backBufferIndex = swapChain_->GetCurrentBackBufferIndex();
 
@@ -459,11 +451,6 @@ void DirectXCommon::Finalize()
 	ImGui_ImplDX12_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
-
-	sound_->Finalize();
-	delete sound_;
-
-	delete input_;
 
 	//rtvDescriptorHeap_->Release();
 	//srvDescriptorHeap_->Release();

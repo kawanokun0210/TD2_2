@@ -5,6 +5,14 @@ void GameScene::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 	engine_ = engine;
 	dxCommon_ = dxCommon;
 
+	sound_ = new Sound();
+	sound_->Initialize();
+
+	input_ = new Input();
+	input_->Initialize();
+
+	soundDataHandle_ = sound_->LoadWave("Audio/Alarm01.wav");
+
 	triangleData_[0].position[0] = { -0.5f,-0.5f,0.0f,1.0f };
 	triangleData_[0].position[1] = { 0.0f,0.5f,0.0f,1.0f };
 	triangleData_[0].position[2] = { 0.5f,-0.5f,0.0f,1.0f };
@@ -76,10 +84,16 @@ void GameScene::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 
 void GameScene::Update()
 {
+	input_->Update();
+
 	for (int i = 0; i < 2; i++)
 	{
 		transform_[i].rotate.num[1] += 0.01f;
 		worldMatrix_ = MakeAffineMatrix(transform_[i].scale, transform_[i].rotate, transform_[i].translate);
+	}
+
+	if (input_->PushKey(DIK_SPACE)) {
+		sound_->PlayWave(soundDataHandle_);
 	}
 
 	sphereTransform_.rotate.num[1] += 0.01f;
@@ -280,7 +294,11 @@ void GameScene::Finalize()
 
 	sphere_->Finalize();
 	object_->Finalize();
+	sound_->Finalize();
+	sound_->UnLoad(&soundDataHandle_);
 
 	delete sphere_;
 	delete object_;
+	delete sound_;
+	delete input_;
 }

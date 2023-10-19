@@ -8,6 +8,8 @@
 #include "Sprite.h"
 #include "Sphere.h"
 #include "Object.h"
+#include "Input.h"
+#include "Sound.h"
 
 class GameScene
 {
@@ -49,6 +51,11 @@ private:
 	uint32_t monsterBallResourceNum_;
 
 	DirectionalLight directionalLight_;
+
+	Sound* sound_;
+	SoundData soundDataHandle_;
+
+	Input* input_;
 
 	bool texture_;
 
