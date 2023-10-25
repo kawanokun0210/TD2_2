@@ -498,7 +498,8 @@ ModelData MyEngine::LoadObjFile(const std::string& directoryPath, const std::str
 		if (identifier == "v") {
 			Vector4 position;
 			s >> position.num[0] >> position.num[1] >> position.num[2];
-			position.num[0] *= -1.0f;
+			//position.num[0] *= -1.0f;
+			position.num[2] *= -1.0f;
 			position.num[3] = 1.0f;
 			positions.push_back(position);
 		}
@@ -511,7 +512,8 @@ ModelData MyEngine::LoadObjFile(const std::string& directoryPath, const std::str
 		else if (identifier == "vn") {
 			Vector3 normal;
 			s >> normal.num[0] >> normal.num[1] >> normal.num[2];
-			normal.num[0] *= -1.0f;
+			//normal.num[0] *= -1.0f;
+			normal.num[2] *= -1.0f;
 			normals.push_back(normal);
 		}
 		else if (identifier == "f") {
