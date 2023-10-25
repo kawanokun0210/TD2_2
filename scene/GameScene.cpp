@@ -84,17 +84,17 @@ void GameScene::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 
 void GameScene::Update()
 {
-	XINPUT_STATE joyState;
+	//XINPUT_STATE joyState;
 	input_->Update();
 
 	for (int i = 0; i < 2; i++)
 	{
-		if (!Input::GetInstance()->GetJoystickState(0, joyState)) {
+		/*if (!Input::GetInstance()->GetJoystickState(0, joyState)) {
 			return;
-		}
-		if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) {
+		}*/
+		//if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) {
 			transform_[i].rotate.num[1] += 0.01f;
-		}
+		//}
 		worldMatrix_ = MakeAffineMatrix(transform_[i].scale, transform_[i].rotate, transform_[i].translate);
 	}
 
