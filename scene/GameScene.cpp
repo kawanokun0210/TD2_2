@@ -45,9 +45,6 @@ void GameScene::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 
 	sphereDraw_ = false;
 
-	objectTransform_ = { {0.4f,0.4f,0.4f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
-	objectMaterial_ = { 1.0f,1.0f,1.0f,1.0f };
-
 	objectDraw_ = false;
 
 	directionalLight_.color = { 1.0f,1.0f,1.0f,1.0f };
@@ -76,8 +73,14 @@ void GameScene::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 	sphere_ = new Sphere();
 	sphere_->Initialize(dxCommon_, engine_);
 
-	object_ = new Object();
-	object_->Initialize(dxCommon_, engine_);
+	for (int i = 0; i < 2; i++) {
+		object_[i] = new Object();
+		object_[i]->Initialize(dxCommon_, engine_);
+		objectTransform_[i] = {{0.4f,0.4f,0.4f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f}};
+		objectMaterial_[i] = {1.0f,1.0f,1.0f,1.0f};
+	}
+
+	objectTransform_[1] = { {0.4f,0.4f,0.4f},{0.0f,0.0f,0.0f},{1.0f,1.0f,0.0f} };
 
 	cameraTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-5.0f} };
 }
@@ -206,10 +209,10 @@ void GameScene::Update()
 			}
 		}
 
-		ImGui::DragFloat3("Translate", objectTransform_.translate.num, 0.05f);
-		ImGui::DragFloat3("Rotate", objectTransform_.rotate.num, 0.05f);
-		ImGui::DragFloat3("Scale", objectTransform_.scale.num, 0.05f);
-		ImGui::ColorEdit4("Color", objectMaterial_.num, 0);
+		ImGui::DragFloat3("Translate", objectTransform_[0].translate.num, 0.05f);
+		ImGui::DragFloat3("Rotate", objectTransform_[0].rotate.num, 0.05f);
+		ImGui::DragFloat3("Scale", objectTransform_[0].scale.num, 0.05f);
+		ImGui::ColorEdit4("Color", objectMaterial_[0].num, 0);
 		//ImGui::Checkbox("ChangeTexture", &texture_);
 		/*ImGui::DragFloat4("LightColor", directionalLight_.color.num, 1.0f);
 		ImGui::DragFloat3("DirectionLight", directionalLight_.direction.num, 0.1f);
@@ -280,7 +283,9 @@ void GameScene::Draw()
 		}
 	}
 	if (objectDraw_) {
-		object_->Draw(objectMaterial_, objectTransform_, 0, cameraTransform_, directionalLight_);
+		for (int i = 0; i < 2; i++) {
+			object_[i]->Draw(objectMaterial_[i], objectTransform_[i], 0, cameraTransform_, directionalLight_);
+		}
 	}
 }
 
@@ -299,12 +304,14 @@ void GameScene::Finalize()
 	}
 
 	sphere_->Finalize();
-	object_->Finalize();
+	for (int i = 0; i < 2; i++) {
+		object_[i]->Finalize();
+		delete object_[i];
+	}
 	sound_->Finalize();
 	sound_->UnLoad(&soundDataHandle_);
 
 	delete sphere_;
-	delete object_;
 	delete sound_;
 	//delete input_;
 }
