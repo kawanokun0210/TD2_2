@@ -55,7 +55,7 @@ private:
 	Sound* sound_;
 	SoundData soundDataHandle_;
 
-	Input* input_;
+	Input* input_ = nullptr;
 
 	bool texture_;
 

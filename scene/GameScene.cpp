@@ -8,7 +8,7 @@ void GameScene::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 	sound_ = new Sound();
 	sound_->Initialize();
 
-	input_ = new Input();
+	input_ = Input::GetInstance();
 	input_->Initialize();
 
 	soundDataHandle_ = sound_->LoadWave("Audio/Alarm01.wav");
@@ -84,11 +84,17 @@ void GameScene::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 
 void GameScene::Update()
 {
+	XINPUT_STATE joyState;
 	input_->Update();
 
 	for (int i = 0; i < 2; i++)
 	{
-		transform_[i].rotate.num[1] += 0.01f;
+		if (!Input::GetInstance()->GetJoystickState(0, joyState)) {
+			return;
+		}
+		if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) {
+			transform_[i].rotate.num[1] += 0.01f;
+		}
 		worldMatrix_ = MakeAffineMatrix(transform_[i].scale, transform_[i].rotate, transform_[i].translate);
 	}
 
@@ -300,5 +306,5 @@ void GameScene::Finalize()
 	delete sphere_;
 	delete object_;
 	delete sound_;
-	delete input_;
+	//delete input_;
 }
