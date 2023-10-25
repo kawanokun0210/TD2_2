@@ -86,7 +86,7 @@ void GameScene::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 		objectMaterial_[i] = {1.0f,1.0f,1.0f,1.0f};
 	}
 
-	objectTransform_[1] = { {0.4f,0.4f,0.4f},{0.0f,0.0f,0.0f},{1.0f,-3.0f,0.0f} };
+	objectTransform_[1] = { {0.4f,0.4f,0.4f},{0.0f,0.0f,0.0f},{1.0f,-1.0f,0.0f} };
 
 	cameraTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-5.0f} };
 }
