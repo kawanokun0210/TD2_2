@@ -24,7 +24,7 @@ void Sphere::Draw(const Vector4& material, const Transform& transform, uint32_t 
 	Matrix4x4 wvpMatrix_ = Multiply(worldMatrix, Multiply(viewMatrix, projectionMatrix));
 
 	uvTransformMatrix = MakeScaleMatrix(uvTransformSprite.scale);
-	uvTransformMatrix = Multiply(uvTransformMatrix, MakeRotateZmatrix(uvTransformSprite.rotate.num[2]));
+	uvTransformMatrix = Multiply(uvTransformMatrix, MakeRotateZmatrix(uvTransformSprite.rotate.z));
 	uvTransformMatrix = Multiply(uvTransformMatrix, MakeTranslateMatrix(uvTransformSprite.translate));
 
 	//経度分割一つ分の角度
@@ -45,43 +45,43 @@ void Sphere::Draw(const Vector4& material, const Transform& transform, uint32_t 
 			vertexData_[start].texcoord = { float(lonIndex) / float(kSubDivision),1.0f - float(latIndex) / kSubDivision };
 
 			vertexData_[start + 1].position = { cos(lat + kLatEvery) * cos(lon),sin(lat + kLatEvery),cos(lat + kLatEvery) * sin(lon),1.0f };
-			vertexData_[start + 1].texcoord = { vertexData_[start].texcoord.num[0],vertexData_[start].texcoord.num[1] - 1.0f / float(kSubDivision) };
+			vertexData_[start + 1].texcoord = { vertexData_[start].texcoord.x,vertexData_[start].texcoord.y - 1.0f / float(kSubDivision) };
 
 			vertexData_[start + 2].position = { cos(lat) * cos(lon + kLonEvery),sin(lat),cos(lat) * sin(lon + kLonEvery),1.0f };
-			vertexData_[start + 2].texcoord = { vertexData_[start].texcoord.num[0] + 1.0f / float(kSubDivision),vertexData_[start].texcoord.num[1] };
+			vertexData_[start + 2].texcoord = { vertexData_[start].texcoord.x + 1.0f / float(kSubDivision),vertexData_[start].texcoord.y };
 
 			vertexData_[start + 3].position = { cos(lat) * cos(lon + kLonEvery),sin(lat),cos(lat) * sin(lon + kLonEvery),1.0f };
-			vertexData_[start + 3].texcoord = { vertexData_[start].texcoord.num[0] + 1.0f / float(kSubDivision),vertexData_[start].texcoord.num[1] };
+			vertexData_[start + 3].texcoord = { vertexData_[start].texcoord.x + 1.0f / float(kSubDivision),vertexData_[start].texcoord.y };
 
 			vertexData_[start + 4].position = { cos(lat + kLatEvery) * cos(lon),sin(lat + kLatEvery),cos(lat + kLatEvery) * sin(lon),1.0f };
-			vertexData_[start + 4].texcoord = { vertexData_[start].texcoord.num[0],vertexData_[start].texcoord.num[1] - 1.0f / float(kSubDivision) };
+			vertexData_[start + 4].texcoord = { vertexData_[start].texcoord.x,vertexData_[start].texcoord.y - 1.0f / float(kSubDivision) };
 
 			vertexData_[start + 5].position = { cos(lat + kLatEvery) * cos(lon + kLonEvery),sin(lat + kLatEvery), cos(lat + kLatEvery) * sin(lon + kLonEvery),1.0f };
-			vertexData_[start + 5].texcoord = { vertexData_[start].texcoord.num[0] + 1.0f / float(kSubDivision),vertexData_[start].texcoord.num[1] - 1.0f / float(kSubDivision) };
+			vertexData_[start + 5].texcoord = { vertexData_[start].texcoord.x + 1.0f / float(kSubDivision),vertexData_[start].texcoord.y - 1.0f / float(kSubDivision) };
 
-			vertexData_[start].normal.num[0] = vertexData_[start].position.num[0];
-			vertexData_[start].normal.num[1] = vertexData_[start].position.num[1];
-			vertexData_[start].normal.num[2] = vertexData_[start].position.num[2];
+			vertexData_[start].normal.x = vertexData_[start].position.x;
+			vertexData_[start].normal.y = vertexData_[start].position.y;
+			vertexData_[start].normal.z = vertexData_[start].position.z;
 
-			vertexData_[start + 1].normal.num[0] = vertexData_[start + 1].position.num[0];
-			vertexData_[start + 1].normal.num[1] = vertexData_[start + 1].position.num[1];
-			vertexData_[start + 1].normal.num[2] = vertexData_[start + 1].position.num[2];
+			vertexData_[start + 1].normal.x = vertexData_[start + 1].position.x;
+			vertexData_[start + 1].normal.y = vertexData_[start + 1].position.y;
+			vertexData_[start + 1].normal.z = vertexData_[start + 1].position.z;
 
-			vertexData_[start + 2].normal.num[0] = vertexData_[start + 2].position.num[0];
-			vertexData_[start + 2].normal.num[1] = vertexData_[start + 2].position.num[1];
-			vertexData_[start + 2].normal.num[2] = vertexData_[start + 2].position.num[2];
+			vertexData_[start + 2].normal.x = vertexData_[start + 2].position.x;
+			vertexData_[start + 2].normal.y = vertexData_[start + 2].position.y;
+			vertexData_[start + 2].normal.z = vertexData_[start + 2].position.z;
 
-			vertexData_[start + 3].normal.num[0] = vertexData_[start + 3].position.num[0];
-			vertexData_[start + 3].normal.num[1] = vertexData_[start + 3].position.num[1];
-			vertexData_[start + 3].normal.num[2] = vertexData_[start + 3].position.num[2];
+			vertexData_[start + 3].normal.x = vertexData_[start + 3].position.x;
+			vertexData_[start + 3].normal.y = vertexData_[start + 3].position.y;
+			vertexData_[start + 3].normal.z = vertexData_[start + 3].position.z;
 
-			vertexData_[start + 4].normal.num[0] = vertexData_[start + 4].position.num[0];
-			vertexData_[start + 4].normal.num[1] = vertexData_[start + 4].position.num[1];
-			vertexData_[start + 4].normal.num[2] = vertexData_[start + 4].position.num[2];
+			vertexData_[start + 4].normal.x = vertexData_[start + 4].position.x;
+			vertexData_[start + 4].normal.y = vertexData_[start + 4].position.y;
+			vertexData_[start + 4].normal.z = vertexData_[start + 4].position.z;
 
-			vertexData_[start + 5].normal.num[0] = vertexData_[start + 5].position.num[0];
-			vertexData_[start + 5].normal.num[1] = vertexData_[start + 5].position.num[1];
-			vertexData_[start + 5].normal.num[2] = vertexData_[start + 5].position.num[2];			
+			vertexData_[start + 5].normal.x = vertexData_[start + 5].position.x;
+			vertexData_[start + 5].normal.y = vertexData_[start + 5].position.y;
+			vertexData_[start + 5].normal.z = vertexData_[start + 5].position.z;			
 		}
 	}
 

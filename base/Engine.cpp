@@ -497,23 +497,23 @@ ModelData MyEngine::LoadObjFile(const std::string& directoryPath, const std::str
 
 		if (identifier == "v") {
 			Vector4 position;
-			s >> position.num[0] >> position.num[1] >> position.num[2];
-			//position.num[0] *= -1.0f;
-			position.num[2] *= -1.0f;
-			position.num[3] = 1.0f;
+			s >> position.x >> position.y >> position.z;
+			//position.x *= -1.0f;
+			position.z *= -1.0f;
+			position.w = 1.0f;
 			positions.push_back(position);
 		}
 		else if (identifier == "vt") {
 			Vector2 texcoord;
-			s >> texcoord.num[0] >> texcoord.num[1];
-			texcoord.num[1] = 1.0f - texcoord.num[1];
+			s >> texcoord.x >> texcoord.y;
+			texcoord.y = 1.0f - texcoord.y;
 			texcoords.push_back(texcoord);
 		}
 		else if (identifier == "vn") {
 			Vector3 normal;
-			s >> normal.num[0] >> normal.num[1] >> normal.num[2];
-			//normal.num[0] *= -1.0f;
-			normal.num[2] *= -1.0f;
+			s >> normal.x >> normal.y >> normal.z;
+			//normal.x *= -1.0f;
+			normal.z *= -1.0f;
 			normals.push_back(normal);
 		}
 		else if (identifier == "f") {

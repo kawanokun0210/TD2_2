@@ -1,5 +1,8 @@
 #pragma once
 
 struct Vector4 final {
-	float num[4];
+	float x;
+	float y;
+	float z;
+	float w;
 };

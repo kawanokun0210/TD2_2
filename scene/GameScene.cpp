@@ -102,7 +102,7 @@ void GameScene::Update()
 			return;
 		}*/
 		//if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) {
-			transform_[i].rotate.num[1] += 0.01f;
+			transform_[i].rotate.y += 0.01f;
 		//}
 		worldMatrix_ = MakeAffineMatrix(transform_[i].scale, transform_[i].rotate, transform_[i].translate);
 	}
@@ -111,7 +111,7 @@ void GameScene::Update()
 		sound_->PlayWave(soundDataHandle_);
 	}
 
-	sphereTransform_.rotate.num[1] += 0.01f;
+	sphereTransform_.rotate.y += 0.01f;
 	sphereMatrix_ = MakeAffineMatrix(sphereTransform_.scale, sphereTransform_.rotate, sphereTransform_.translate);
 
 	Matrix4x4 sphereAffine = MakeAffineMatrix(sphereTransform_.scale, sphereTransform_.rotate, sphereTransform_.translate);
@@ -155,10 +155,10 @@ void GameScene::Update()
 		{
 			if (ImGui::TreeNode("Triangle1"))
 			{
-				ImGui::DragFloat3("Translate", transform_[0].translate.num, 0.05f);
-				ImGui::DragFloat3("Rotate", transform_[0].rotate.num, 0.05f);
-				ImGui::DragFloat3("Scale", transform_[0].scale.num, 0.05f);
-				ImGui::ColorEdit4("Color", triangleData_[0].material.num, 0);
+				ImGui::DragFloat3("Translate", &transform_[0].translate.x, 0.05f);
+				ImGui::DragFloat3("Rotate", &transform_[0].rotate.x, 0.05f);
+				ImGui::DragFloat3("Scale", &transform_[0].scale.x, 0.05f);
+				ImGui::ColorEdit4("Color", &triangleData_[0].material.x, 0);
 				ImGui::TreePop();
 			}
 		}
@@ -166,10 +166,10 @@ void GameScene::Update()
 		{
 			if (ImGui::TreeNode("Triangle2"))
 			{
-				ImGui::DragFloat3("Translate2", transform_[1].translate.num, 0.05f);
-				ImGui::DragFloat3("Rotate2", transform_[1].rotate.num, 0.05f);
-				ImGui::DragFloat3("Scale2", transform_[1].scale.num, 0.05f);
-				ImGui::ColorEdit4("Color", triangleData_[1].material.num, 0);
+				ImGui::DragFloat3("Translate2", &transform_[1].translate.x, 0.05f);
+				ImGui::DragFloat3("Rotate2", &transform_[1].rotate.x, 0.05f);
+				ImGui::DragFloat3("Scale2", &transform_[1].scale.x, 0.05f);
+				ImGui::ColorEdit4("Color", &triangleData_[1].material.x, 0);
 				ImGui::TreePop();
 			}
 		}
@@ -188,16 +188,16 @@ void GameScene::Update()
 			}
 		}
 
-		ImGui::DragFloat3("Translate", sphereTransform_.translate.num, 0.05f);
-		ImGui::DragFloat3("Rotate", sphereTransform_.rotate.num, 0.05f);
-		ImGui::DragFloat3("Scale", sphereTransform_.scale.num, 0.05f);
-		ImGui::ColorEdit4("Color", sphereMaterial_.num, 0);
+		ImGui::DragFloat3("Translate", &sphereTransform_.translate.x, 0.05f);
+		ImGui::DragFloat3("Rotate", &sphereTransform_.rotate.x, 0.05f);
+		ImGui::DragFloat3("Scale", &sphereTransform_.scale.x, 0.05f);
+		ImGui::ColorEdit4("Color", &sphereMaterial_.x, 0);
 		ImGui::Checkbox("ChangeTexture", &texture_);
-		ImGui::DragFloat4("LightColor", directionalLight_.color.num, 1.0f);
-		ImGui::DragFloat3("DirectionLight", directionalLight_.direction.num, 0.1f);
-		ImGui::DragFloat2("UVTranslate", &sphere_->uvTransformSprite.translate.num[0], 0.01f, -10.0f, 10.0f);
-		ImGui::DragFloat2("UVScale", &sphere_->uvTransformSprite.scale.num[0], 0.01f, -10.0f, 10.0f);
-		ImGui::SliderAngle("UVRotate", &sphere_->uvTransformSprite.rotate.num[2]);
+		ImGui::DragFloat4("LightColor", &directionalLight_.color.x, 1.0f);
+		ImGui::DragFloat3("DirectionLight", &directionalLight_.direction.x, 0.1f);
+		ImGui::DragFloat2("UVTranslate", &sphere_->uvTransformSprite.translate.x, 0.01f, -10.0f, 10.0f);
+		ImGui::DragFloat2("UVScale", &sphere_->uvTransformSprite.scale.x, 0.01f, -10.0f, 10.0f);
+		ImGui::SliderAngle("UVRotate", &sphere_->uvTransformSprite.rotate.z);
 
 		ImGui::TreePop();
 	}
@@ -215,16 +215,16 @@ void GameScene::Update()
 			}
 		}
 
-		ImGui::DragFloat3("Translate", objectTransform_[1].translate.num, 0.05f);
-		ImGui::DragFloat3("Rotate", objectTransform_[1].rotate.num, 0.05f);
-		ImGui::DragFloat3("Scale", objectTransform_[1].scale.num, 0.05f);
-		ImGui::ColorEdit4("Color", objectMaterial_[1].num, 0);
+		ImGui::DragFloat3("Translate", &objectTransform_[1].translate.x, 0.05f);
+		ImGui::DragFloat3("Rotate", &objectTransform_[1].rotate.x, 0.05f);
+		ImGui::DragFloat3("Scale", &objectTransform_[1].scale.x, 0.05f);
+		ImGui::ColorEdit4("Color", &objectMaterial_[1].x, 0);
 		//ImGui::Checkbox("ChangeTexture", &texture_);
 		/*ImGui::DragFloat4("LightColor", directionalLight_.color.num, 1.0f);
 		ImGui::DragFloat3("DirectionLight", directionalLight_.direction.num, 0.1f);
-		ImGui::DragFloat2("UVTranslate", &sphere_->uvTransformSprite.translate.num[0], 0.01f, -10.0f, 10.0f);
-		ImGui::DragFloat2("UVScale", &sphere_->uvTransformSprite.scale.num[0], 0.01f, -10.0f, 10.0f);
-		ImGui::SliderAngle("UVRotate", &sphere_->uvTransformSprite.rotate.num[2]);*/
+		ImGui::DragFloat2("UVTranslate", &sphere_->uvTransformSprite.translate.x, 0.01f, -10.0f, 10.0f);
+		ImGui::DragFloat2("UVScale", &sphere_->uvTransformSprite.scale.x, 0.01f, -10.0f, 10.0f);
+		ImGui::SliderAngle("UVRotate", &sphere_->uvTransformSprite.rotate.z);*/
 
 		ImGui::TreePop();
 	}
@@ -242,23 +242,23 @@ void GameScene::Update()
 			}
 		}
 
-		ImGui::DragFloat3("Translate", spriteTransform_.translate.num, 0.05f);
-		ImGui::DragFloat3("Rotate", spriteTransform_.rotate.num, 0.05f);
-		ImGui::DragFloat3("Scale", spriteTransform_.scale.num, 0.05f);
-		ImGui::ColorEdit4("Color", spriteData_.material.num, 0);
+		ImGui::DragFloat3("Translate", &spriteTransform_.translate.x, 0.05f);
+		ImGui::DragFloat3("Rotate", &spriteTransform_.rotate.x, 0.05f);
+		ImGui::DragFloat3("Scale", &spriteTransform_.scale.x, 0.05f);
+		ImGui::ColorEdit4("Color", &spriteData_.material.x, 0);
 		for (int i = 0; i < 2; i++) {
-			ImGui::DragFloat2("UVTranslate", &sprite_[i]->uvTransformSprite.translate.num[0], 0.01f, -10.0f, 10.0f);
-			ImGui::DragFloat2("UVScale", &sprite_[i]->uvTransformSprite.scale.num[0], 0.01f, -10.0f, 10.0f);
-			ImGui::SliderAngle("UVRotate", &sprite_[i]->uvTransformSprite.rotate.num[2]);
+			ImGui::DragFloat2("UVTranslate", &sprite_[i]->uvTransformSprite.translate.x, 0.01f, -10.0f, 10.0f);
+			ImGui::DragFloat2("UVScale", &sprite_[i]->uvTransformSprite.scale.x, 0.01f, -10.0f, 10.0f);
+			ImGui::SliderAngle("UVRotate", &sprite_[i]->uvTransformSprite.rotate.z);
 		}
 		ImGui::TreePop();
 	}
 
 	if (ImGui::TreeNode("Camera"))
 	{
-		ImGui::DragFloat3("Translate", cameraTransform_.translate.num, 0.05f);
-		ImGui::DragFloat3("Rotate", cameraTransform_.rotate.num, 0.05f);
-		ImGui::DragFloat3("Scale", cameraTransform_.scale.num, 0.05f);
+		ImGui::DragFloat3("Translate", &cameraTransform_.translate.x, 0.05f);
+		ImGui::DragFloat3("Rotate", &cameraTransform_.rotate.x, 0.05f);
+		ImGui::DragFloat3("Scale", &cameraTransform_.scale.x, 0.05f);
 		ImGui::TreePop();
 	}
 	ImGui::End();

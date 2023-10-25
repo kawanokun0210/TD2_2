@@ -31,12 +31,12 @@ void Sprite::Draw(const Vector4& a, const Vector4& b, const Transform& transform
 	//}
 
 	//座標の設定
-	vertexData_[0].position = { a.num[0],b.num[1],0.0f,1.0f };
-	vertexData_[1].position = { a.num[0],a.num[1],0.0f,1.0f };
-	vertexData_[2].position = { b.num[0],b.num[1],0.0f,1.0f };
-	vertexData_[3].position = { a.num[0],a.num[1],0.0f,1.0f };
-	vertexData_[4].position = { b.num[0],a.num[1],0.0f,1.0f };
-	vertexData_[5].position = { b.num[0],b.num[1],0.0f,1.0f };
+	vertexData_[0].position = { a.x,b.y,0.0f,1.0f };
+	vertexData_[1].position = { a.x,a.y,0.0f,1.0f };
+	vertexData_[2].position = { b.x,b.y,0.0f,1.0f };
+	vertexData_[3].position = { a.x,a.y,0.0f,1.0f };
+	vertexData_[4].position = { b.x,a.y,0.0f,1.0f };
+	vertexData_[5].position = { b.x,b.y,0.0f,1.0f };
 
 	//Texcoordの設定
 	vertexData_[0].texcoord = { 0.0f,1.0f };
@@ -68,7 +68,7 @@ void Sprite::Draw(const Vector4& a, const Vector4& b, const Transform& transform
 	*transformationMatrixdata_ = { worldViewProjectionMatrix,worldMatrix };
 
 	uvTransformMatrix = MakeScaleMatrix(uvTransformSprite.scale);
-	uvTransformMatrix = Multiply(uvTransformMatrix, MakeRotateZmatrix(uvTransformSprite.rotate.num[2]));
+	uvTransformMatrix = Multiply(uvTransformMatrix, MakeRotateZmatrix(uvTransformSprite.rotate.z));
 	uvTransformMatrix = Multiply(uvTransformMatrix, MakeTranslateMatrix(uvTransformSprite.translate));
 	materialData_->uvTransform = uvTransformMatrix;
 
