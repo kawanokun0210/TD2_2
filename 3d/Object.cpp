@@ -2,11 +2,11 @@
 #include "Engine.h"
 #include <cmath>
 
-void Object::Initialize(DirectXCommon* dxCommon, MyEngine* engine)
+void Object::Initialize(DirectXCommon* dxCommon, MyEngine* engine, const std::string& directoryPath, const std::string& filename)
 {
 	dxCommon_ = dxCommon;
 	engine_ = engine;
-	modelData = engine_->LoadObjFile("Resource/", "axis.obj");
+	modelData = engine_->LoadObjFile(directoryPath, filename);
 	SettingVertex();
 	SettingColor();
 	SettingDictionalLight();
@@ -52,10 +52,10 @@ void Object::Draw(const Vector4& material, const Transform& transform, uint32_t 
 
 void Object::Finalize()
 {
-	//	vertexResource->Release();
-	//	materialResource_->Release();
-	//	directionalLightResource_->Release();
-	//	wvpResource_->Release();
+	/*vertexResource->Release();
+	materialResource_->Release();
+	directionalLightResource_->Release();
+	wvpResource_->Release();*/
 }
 
 void Object::SettingVertex()

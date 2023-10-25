@@ -73,14 +73,20 @@ void GameScene::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 	sphere_ = new Sphere();
 	sphere_->Initialize(dxCommon_, engine_);
 
+	object_[0] = new Object();
+
+	object_[0]->Initialize(dxCommon_, engine_, "Resource/", "axis.obj");
+
+	object_[1] = new Object();
+
+	object_[1]->Initialize(dxCommon_, engine_, "Resource/", "plane.obj");
+
 	for (int i = 0; i < 2; i++) {
-		object_[i] = new Object();
-		object_[i]->Initialize(dxCommon_, engine_);
 		objectTransform_[i] = {{0.4f,0.4f,0.4f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f}};
 		objectMaterial_[i] = {1.0f,1.0f,1.0f,1.0f};
 	}
 
-	objectTransform_[1] = { {0.4f,0.4f,0.4f},{0.0f,0.0f,0.0f},{1.0f,1.0f,0.0f} };
+	objectTransform_[1] = { {0.4f,0.4f,0.4f},{0.0f,0.0f,0.0f},{1.0f,-3.0f,0.0f} };
 
 	cameraTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-5.0f} };
 }
@@ -209,10 +215,10 @@ void GameScene::Update()
 			}
 		}
 
-		ImGui::DragFloat3("Translate", objectTransform_[0].translate.num, 0.05f);
-		ImGui::DragFloat3("Rotate", objectTransform_[0].rotate.num, 0.05f);
-		ImGui::DragFloat3("Scale", objectTransform_[0].scale.num, 0.05f);
-		ImGui::ColorEdit4("Color", objectMaterial_[0].num, 0);
+		ImGui::DragFloat3("Translate", objectTransform_[1].translate.num, 0.05f);
+		ImGui::DragFloat3("Rotate", objectTransform_[1].rotate.num, 0.05f);
+		ImGui::DragFloat3("Scale", objectTransform_[1].scale.num, 0.05f);
+		ImGui::ColorEdit4("Color", objectMaterial_[1].num, 0);
 		//ImGui::Checkbox("ChangeTexture", &texture_);
 		/*ImGui::DragFloat4("LightColor", directionalLight_.color.num, 1.0f);
 		ImGui::DragFloat3("DirectionLight", directionalLight_.direction.num, 0.1f);
@@ -306,8 +312,10 @@ void GameScene::Finalize()
 	sphere_->Finalize();
 	for (int i = 0; i < 2; i++) {
 		object_[i]->Finalize();
-		delete object_[i];
 	}
+	delete object_[0];
+	delete object_[1];
+
 	sound_->Finalize();
 	sound_->UnLoad(&soundDataHandle_);
 
