@@ -18,6 +18,18 @@ PixelShaderOutput main(VertexShaderOutput input)
 
 	output.color = gMaterial.color * textureColor;
 
+	if (textureColor.a <= 0.5) {
+		discard;
+	}
+
+	if (textureColor.a == 0.0) {
+		discard;
+	}
+
+	if (output.color.a == 0.0) {
+		discard;
+	}
+
 	if (gMaterial.enableLighting != 0)
 	{
 		//float cos = saturate(dot(normalize(input.normal), -gDirectionalLight.direction));
