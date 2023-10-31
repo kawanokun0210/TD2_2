@@ -220,9 +220,9 @@ void GameScene::Update()
 		ImGui::DragFloat3("Scale", &objectTransform_[1].scale.x, 0.05f);
 		ImGui::ColorEdit4("Color", &objectMaterial_[1].x, 0);
 		//ImGui::Checkbox("ChangeTexture", &texture_);
-		/*ImGui::DragFloat4("LightColor", directionalLight_.color.num, 1.0f);
-		ImGui::DragFloat3("DirectionLight", directionalLight_.direction.num, 0.1f);
-		ImGui::DragFloat2("UVTranslate", &sphere_->uvTransformSprite.translate.x, 0.01f, -10.0f, 10.0f);
+		ImGui::DragFloat4("LightColor", &directionalLight_.color.x, 1.0f);
+		ImGui::DragFloat3("DirectionLight", &directionalLight_.direction.x, 0.1f);
+		/*ImGui::DragFloat2("UVTranslate", &sphere_->uvTransformSprite.translate.x, 0.01f, -10.0f, 10.0f);
 		ImGui::DragFloat2("UVScale", &sphere_->uvTransformSprite.scale.x, 0.01f, -10.0f, 10.0f);
 		ImGui::SliderAngle("UVRotate", &sphere_->uvTransformSprite.rotate.z);*/
 
