@@ -58,7 +58,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(ProjectDir)3d;$(ProjectDir)sound;$(ProjectDir)base;$(ProjectDir)math;$(ProjectDir)scene;$(ProjectDir)input;$(ProjectDir)game;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)3d;$(ProjectDir)sound;$(ProjectDir)base;$(ProjectDir)math;$(ProjectDir)scene;$(ProjectDir)input;$(ProjectDir)game\floor;$(ProjectDir)game\goalBall;$(ProjectDir)game\player;$(ProjectDir)game\skydome;$(ProjectDir)game\wall;$(ProjectDir)collision;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -83,7 +83,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll"</Command>
       <TreatWarningAsError>true</TreatWarningAsError>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>$(ProjectDir)3d;$(ProjectDir)sound;$(ProjectDir)base;$(ProjectDir)math;$(ProjectDir)scene;$(ProjectDir)input;$(ProjectDir)game;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)3d;$(ProjectDir)sound;$(ProjectDir)base;$(ProjectDir)math;$(ProjectDir)scene;$(ProjectDir)input;$(ProjectDir)game\floor;$(ProjectDir)game\goalBall;$(ProjectDir)game\player;$(ProjectDir)game\skydome;$(ProjectDir)game\wall;$(ProjectDir)collision;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -107,6 +107,12 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll"</Command>
     <ClCompile Include="base\DirectX.cpp" />
     <ClCompile Include="base\Engine.cpp" />
     <ClCompile Include="base\WinApp.cpp" />
+    <ClCompile Include="collision\Collider.cpp" />
+    <ClCompile Include="collision\CollisionManager.cpp" />
+    <ClCompile Include="scene\GameManager.cpp" />
+    <ClCompile Include="scene\Clear.cpp" />
+    <ClCompile Include="game\floor\Floor.cpp" />
+    <ClCompile Include="game\wall\Wall.cpp" />
     <ClCompile Include="externals\imgui\imgui.cpp" />
     <ClCompile Include="externals\imgui\imgui_demo.cpp" />
     <ClCompile Include="externals\imgui\imgui_draw.cpp" />
@@ -114,13 +120,18 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll"</Command>
     <ClCompile Include="externals\imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="externals\imgui\imgui_tables.cpp" />
     <ClCompile Include="externals\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="game\goalBall\GoalBall.cpp" />
     <ClCompile Include="input\Input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="math\MatrixCalculation.cpp" />
-    <ClCompile Include="game\Player.cpp" />
+    <ClCompile Include="game\player\Player.cpp" />
+    <ClCompile Include="scene\Play.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
+    <ClCompile Include="game\skydome\Skydome.cpp" />
     <ClCompile Include="sound\Sound.cpp" />
+    <ClCompile Include="scene\StageSelect.cpp" />
     <ClCompile Include="String.cpp" />
+    <ClCompile Include="scene\Title.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3d\Object.h" />
@@ -130,6 +141,12 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll"</Command>
     <ClInclude Include="base\DirectX.h" />
     <ClInclude Include="base\Engine.h" />
     <ClInclude Include="base\WinApp.h" />
+    <ClInclude Include="collision\Collider.h" />
+    <ClInclude Include="collision\CollisionManager.h" />
+    <ClInclude Include="scene\GameManager.h" />
+    <ClInclude Include="scene\Clear.h" />
+    <ClInclude Include="game\floor\Floor.h" />
+    <ClInclude Include="game\wall\Wall.h" />
     <ClInclude Include="externals\imgui\imconfig.h" />
     <ClInclude Include="externals\imgui\imgui.h" />
     <ClInclude Include="externals\imgui\imgui_impl_dx12.h" />
@@ -138,6 +155,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll"</Command>
     <ClInclude Include="externals\imgui\imstb_rectpack.h" />
     <ClInclude Include="externals\imgui\imstb_textedit.h" />
     <ClInclude Include="externals\imgui\imstb_truetype.h" />
+    <ClInclude Include="game\goalBall\GoalBall.h" />
     <ClInclude Include="input\Input.h" />
     <ClInclude Include="math\Matrix3x3.h" />
     <ClInclude Include="math\Matrix4x4.h" />
@@ -145,11 +163,15 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll"</Command>
     <ClInclude Include="math\Vector2.h" />
     <ClInclude Include="math\Vector3.h" />
     <ClInclude Include="math\Vector4.h" />
-    <ClInclude Include="game\Player.h" />
+    <ClInclude Include="game\player\Player.h" />
+    <ClInclude Include="scene\Play.h" />
     <ClInclude Include="ResourceObject.h" />
     <ClInclude Include="scene\GameScene.h" />
+    <ClInclude Include="game\skydome\Skydome.h" />
     <ClInclude Include="sound\Sound.h" />
+    <ClInclude Include="scene\StageSelect.h" />
     <ClInclude Include="String.h" />
+    <ClInclude Include="scene\Title.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>
