@@ -10,6 +10,7 @@
 #include "Object.h"
 #include "Input.h"
 #include "Sound.h"
+#include "Floor.h"
 
 class GameScene
 {
@@ -26,16 +27,16 @@ private:
 	MyEngine* engine_;
 	DirectXCommon* dxCommon_;
 
-	Triangle* triangle_[2];
+	//Triangle* triangle_[2];
 	TriangleData triangleData_[2];
 	Transform transform_[2];
 	Matrix4x4 worldMatrix_;
 
-	Sprite* sprite_[2];
+	//Sprite* sprite_[2];
 	SpriteData spriteData_;
 	Transform spriteTransform_;
 
-	Sphere* sphere_;
+	//Sphere* sphere_;
 	Transform sphereTransform_;
 	Vector4 sphereMaterial_;
 	Matrix4x4 sphereMatrix_;
@@ -51,6 +52,8 @@ private:
 	uint32_t monsterBallResourceNum_;
 
 	DirectionalLight directionalLight_;
+
+	Floor* floor_;
 
 	Sound* sound_;
 	SoundData soundDataHandle_;
