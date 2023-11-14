@@ -2,6 +2,7 @@
 #include <memory>
 #include "../IScene.h"
 #include "Title.h"
+#include "GameScene.h"
 #include "StageSelect.h"
 #include "Play.h"
 #include "Clear.h"

@@ -6,7 +6,7 @@ GameManager::GameManager(MyEngine* engine, DirectXCommon* dxCommon) {
 
 	sceneArr[TITLE] = std::make_unique<Title>();
 	sceneArr[SELECT] = std::make_unique<StageSelect>();
-	sceneArr[PLAY] = std::make_unique<Play>();
+	sceneArr[PLAY] = std::make_unique<GameScene>();
 	sceneArr[CLEAR] = std::make_unique<Clear>();
 
 	currentSceneNo = iscene->GetSceneNo();
