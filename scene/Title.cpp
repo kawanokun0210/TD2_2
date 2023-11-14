@@ -13,7 +13,7 @@ void Title::Initialize(MyEngine* engine, DirectXCommon* dxCommon) {
 	spriteData_.RightDown[0] = { 640.0f,360.0f,0.0f,1.0f };
 	spriteData_.LeftTop[1] = { 0.0f,0.0f,0.0f,1.0f };
 	spriteData_.RightDown[1] = { 640.0f,360.0f,0.0f,1.0f };
-	spriteData_.material = { 0.0f,0.0f,0.0f,0.0f };
+	spriteData_.material = {1.0f,1.0f,1.0f,1.0f };
 	spriteTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 
 	directionalLight_.color = { 1.0f,1.0f,1.0f,1.0f };
