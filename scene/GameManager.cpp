@@ -10,6 +10,8 @@ GameManager::GameManager(MyEngine* engine, DirectXCommon* dxCommon) {
 	sceneArr[CLEAR] = std::make_unique<Clear>();
 
 	currentSceneNo = iscene->GetSceneNo();
+
+	sceneArr[currentSceneNo]->Initialize(engine_, dxCommon_);
 }
 
 GameManager::~GameManager() {};
@@ -31,6 +33,7 @@ int GameManager::Run() {
 
 		if (prevSceneNo != currentSceneNo) {
 			sceneArr[currentSceneNo]->Initialize(engine_, dxCommon_);
+			sceneArr[prevSceneNo]->Finalize();
 		}
 
 		sceneArr[currentSceneNo]->Update();

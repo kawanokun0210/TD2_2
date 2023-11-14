@@ -19,7 +19,7 @@ private:
 	MyEngine* engine_;
 	DirectXCommon* dxCommon_;
 
-	Sprite* sprite_[1];
+	Sprite* sprite_;
 	SpriteData spriteData_;
 	Transform spriteTransform_;
 
