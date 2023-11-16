@@ -10,11 +10,16 @@
 #include "Object.h"
 #include "Input.h"
 #include "Sound.h"
+
 #include "Floor.h"
+#include "Wall.h"
 
 class GameScene
 {
 public:
+
+	~GameScene();
+
 	void Initialize(MyEngine* engine, DirectXCommon* dxCommon);
 
 	void Update();
@@ -32,14 +37,26 @@ private:
 
 	Transform cameraTransform_;
 
-	uint32_t floorTexture_;
-
 	DirectionalLight directionalLight_;
-
-	Floor* floor_;
 
 	Sound* sound_;
 	SoundData soundDataHandle_;
 
 	Input* input_ = nullptr;
+
+private:
+	// 床
+	static const uint32_t kMaxFloor = 3;
+
+	Floor* floor_[kMaxFloor];
+	Transform floorTransform[kMaxFloor];
+	uint32_t floorTexture_;
+
+	// 壁
+	static const uint32_t kMaxWall = 3;
+
+	Wall* wall_[kMaxWall];
+	Transform wallTransform[kMaxWall];
+	uint32_t wallTexture_;
+
 };

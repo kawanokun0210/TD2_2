@@ -277,7 +277,14 @@ void DirectXCommon::PreDraw()
 	commandList_->ResourceBarrier(1, &barrier_);
 
 	//描画先のRTVを設定する
-	commandList_->OMSetRenderTargets(1, &rtvHandles_[backBufferIndex], false, nullptr);
+	//commandList_->OMSetRenderTargets(1, &rtvHandles_[backBufferIndex], false, nullptr);
+
+	// 描画先のRTVとDSVをを設定する
+	dsvhandle_ = dsvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
+	commandList_->OMSetRenderTargets(1, &rtvHandles_[backBufferIndex], false, &dsvhandle_);
+
+	// 指定した深度で画面全体をクリアする
+	commandList_->ClearDepthStencilView(dsvhandle_, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
 	//指定した色で画面全体をクリアする
 	float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };//青っぽい色、RGBA順
@@ -342,7 +349,14 @@ void DirectXCommon::ClearRenderTarget()
 	UINT backBufferIndex = swapChain_->GetCurrentBackBufferIndex();
 
 	//描画先のRTVを設定する
-	commandList_->OMSetRenderTargets(1, &rtvHandles_[backBufferIndex], false, nullptr);
+	//commandList_->OMSetRenderTargets(1, &rtvHandles_[backBufferIndex], false, nullptr);
+
+	// 描画先のRTVとDSVをを設定する
+	dsvhandle_ = dsvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
+	commandList_->OMSetRenderTargets(1, &rtvHandles_[backBufferIndex], false, &dsvhandle_);
+
+	// 指定した深度で画面全体をクリアする
+	commandList_->ClearDepthStencilView(dsvhandle_, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
 	//指定した色で画面全体をクリアする
 	float clearcolor[] = { 0.1f,0.25f,0.5f,1.0f };//青っぽい色
