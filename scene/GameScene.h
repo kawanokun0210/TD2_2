@@ -50,13 +50,13 @@ private:
 
 	Floor* floor_[kMaxFloor];
 	Transform floorTransform[kMaxFloor];
-	uint32_t floorTexture_;
+	uint32_t floorTexture_ = 0;
 
 	// 壁
-	static const uint32_t kMaxWall = 3;
+	static const uint32_t kMaxWall = 4;
 
 	Wall* wall_[kMaxWall];
 	Transform wallTransform[kMaxWall];
-	uint32_t wallTexture_;
+	uint32_t wallTexture_ = 1;
 
 };
