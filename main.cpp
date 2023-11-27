@@ -1,6 +1,5 @@
 #include "Engine.h"
-#include "GameScene.h"
-
+#include "GameManager.h"
 
 const wchar_t kWindowTitle[] = { L"CG2_WinMain" };
 
@@ -18,36 +17,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	MyEngine* engine = new MyEngine;
 	engine->Initialize(kWindowTitle, 1280, 720);
 
-	GameScene* gameScene = new GameScene();
-	gameScene->Initialize(engine, engine->GetDirectXCommon());
+	GameManager* gameManager = new GameManager(engine, engine->GetDirectXCommon());
 
-	while (true)
-	{
-		//windowのメッセージを最優先で処理させる
-		if (WinApp::GetInstance()->Procesmessage())
-		{
-			break;
-		}
-
-		//ゲームの処理
-		engine->BeginFrame();
-
-		gameScene->Update();
-
-		gameScene->Draw();
-
-		engine->EndFrame();
-	}
-
-	//解放処理
-	gameScene->Finalize();
-
-	engine->Finalize();
+	gameManager->Run();
 
 	delete engine;
-	delete gameScene;
-
-	CoUninitialize();
+	delete gameManager;
 
 	return 0;
 }

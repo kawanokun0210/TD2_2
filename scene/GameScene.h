@@ -10,23 +10,21 @@
 #include "Object.h"
 #include "Input.h"
 #include "Sound.h"
+#include "../IScene.h"
 
 #include "Floor.h"
 #include "Wall.h"
 
-class GameScene
+class GameScene : public IScene
 {
 public:
+	void Initialize(MyEngine* engine, DirectXCommon* dxCommon) override;
 
-	~GameScene();
+	void Update() override;
 
-	void Initialize(MyEngine* engine, DirectXCommon* dxCommon);
+	void Draw() override;
 
-	void Update();
-
-	void Draw();
-
-	void Finalize();
+	void Finalize() override;
 
 private:
 	MyEngine* engine_;

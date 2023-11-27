@@ -109,6 +109,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll"</Command>
     <ClCompile Include="base\WinApp.cpp" />
     <ClCompile Include="collision\Collider.cpp" />
     <ClCompile Include="collision\CollisionManager.cpp" />
+    <ClCompile Include="IScene.cpp" />
     <ClCompile Include="scene\GameManager.cpp" />
     <ClCompile Include="scene\Clear.cpp" />
     <ClCompile Include="game\floor\Floor.cpp" />
@@ -143,6 +144,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll"</Command>
     <ClInclude Include="base\WinApp.h" />
     <ClInclude Include="collision\Collider.h" />
     <ClInclude Include="collision\CollisionManager.h" />
+    <ClInclude Include="IScene.h" />
     <ClInclude Include="scene\GameManager.h" />
     <ClInclude Include="scene\Clear.h" />
     <ClInclude Include="game\floor\Floor.h" />
