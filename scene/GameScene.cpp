@@ -84,7 +84,7 @@ void GameScene::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 	object_[1]->Initialize(dxCommon_, engine_, "Resource/", "plane.obj");*/
 
 	for (int i = 0; i < 2; i++) {
-		objectTransform_[i] = {{300.0f,300.0f,300.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f}};
+		objectTransform_[i] = {{500.0f,500.0f,500.0f},{0.0f,0.0f,0.0f},{0.0f,180.0f,300.0f}};
 		objectMaterial_[i] = {1.0f,1.0f,1.0f,1.0f};
 	}
 
@@ -105,6 +105,7 @@ void GameScene::Update()
 		}*/
 		//if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) {
 			transform_[i].rotate.y += 0.01f;
+			objectTransform_[i].rotate.y += 0.001f;
 		//}
 		worldMatrix_ = MakeAffineMatrix(transform_[i].scale, transform_[i].rotate, transform_[i].translate);
 	}
