@@ -16,6 +16,7 @@ public:
 	void Draw(uint32_t index, const Transform& cameraTransform, const DirectionalLight& light);
 
 	Vector3 GetPlayerTranslate() { return playerTransform.translate; }
+	float GetRadius() { return radius; }
 	bool GetIsShotMode() { return isShotMode; }
 
 private:
@@ -24,11 +25,13 @@ private:
 
 	Vector4 playerMaterial;
 	Transform playerTransform;
+	float radius = 0.5f;
 
 	// 追従対象からplayerまでのオフセット
 	Vector3 offset;
 
 	bool isShotMode;
+	bool isAttack;
 
 };
 

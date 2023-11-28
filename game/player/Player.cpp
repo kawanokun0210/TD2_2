@@ -16,6 +16,10 @@ void Player::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 
 	sphere_ = new Sphere;
 	sphere_->Initialize(dxCommon, engine);
+
+	isAttack = false;
+	isShotMode = false;
+
 	playerMaterial = { 1.0f,1.0f,1.0f,1.0f };
 	playerTransform = { {0.5f,0.5f,0.5f},{0.0f,0.0f,0.0f},{0.0f,0.6f,-9.0f} };
 }
@@ -27,15 +31,15 @@ void Player::Update()
 		isShotMode = true;
 	}
 
+	if (input_->PushKey(DIK_A)) {
+		playerTransform.rotate.y += 0.01f;
+	}
+
+	if (input_->PushKey(DIK_D)) {
+		playerTransform.rotate.y -= 0.01f;
+	}
+
 	if (isShotMode == 0) {
-		if (input_->PushKey(DIK_A)) {
-			playerTransform.rotate.y -= 0.01f;
-		}
-
-		if (input_->PushKey(DIK_D)) {
-			playerTransform.rotate.y += 0.01f;
-		}
-
 		Transform origin = { {0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f},{0.0f,0.6f,0.0f} };
 		offset = { 0.0f, 0.0f, -9.0f };
 		// カメラの角度から回転行列を計算する
@@ -46,6 +50,31 @@ void Player::Update()
 		playerTransform.translate.x = origin.translate.x + offset.x;
 		playerTransform.translate.y = origin.translate.y + offset.y;
 		playerTransform.translate.z = origin.translate.z + offset.z;
+	}
+
+	if (isShotMode) {
+		if (input_->PushKey(DIK_SPACE)) {
+			isAttack = true;
+		}
+	}
+
+	if (isAttack) {
+		// キャラクターの移動速さ
+		const float kCharacterSpeed = 1.0f;
+
+		// キャラの移動
+		Vector3 kVelocity(0, 0, kCharacterSpeed);
+
+		kVelocity = Normalise(kVelocity);
+		kVelocity.x *= kCharacterSpeed;
+		kVelocity.y *= kCharacterSpeed;
+		kVelocity.z *= kCharacterSpeed;
+
+		kVelocity = TransformNormal(kVelocity, MakeAffineMatrix(playerTransform.scale, playerTransform.rotate, playerTransform.translate));
+
+		playerTransform.translate.x += kVelocity.x;
+		playerTransform.translate.y += kVelocity.y;
+		playerTransform.translate.z += kVelocity.z;
 	}
 
 	/*if (input_->PushKey(DIK_W)) {

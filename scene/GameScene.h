@@ -47,6 +47,7 @@ private:
 	Input* input_ = nullptr;
 
 private:
+
 	// 床
 	static const uint32_t kMaxFloor = 3;
 
@@ -63,11 +64,11 @@ private:
 
 	// go-ru
 	GoalBall* goal_;
-	Transform goalTransform;
 	uint32_t goalTexture = 2;
 
 	// player
 	Player* player_;
-	Transform playerTransform;
 	uint32_t playerTexture = 3;
+
+	bool isAttack = false;
 };

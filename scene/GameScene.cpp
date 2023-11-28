@@ -64,7 +64,6 @@ void GameScene::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 
 	goal_ = new GoalBall;
 	goal_->Initialize(engine_, dxCommon_);
-	goalTransform = { {0.5f,0.5f,0.5f},{0.0f,0.0f,0.0f},{0.0f,0.6f,0.0f} };
 
 	player_ = new Player;
 	player_->Initialize(engine_, dxCommon_);
@@ -89,13 +88,14 @@ void GameScene::Update()
 	//}
 
 	player_->Update();
+	goal_->Update();
 
 	if (input_->PushKey(DIK_A)) {
-		cameraTransform_.rotate.y -= 0.01f;
+		cameraTransform_.rotate.y += 0.01f;
 	}
 
 	if (input_->PushKey(DIK_D)) {
-		cameraTransform_.rotate.y += 0.01f;
+		cameraTransform_.rotate.y -= 0.01f;
 	}
 
 	Transform origin = { {0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f},{0.0f,0.6f,0.0f} };
@@ -116,9 +116,29 @@ void GameScene::Update()
 		cameraTransform_.translate.z = player_->GetPlayerTranslate().z + offset.z;
 	}
 
-	if (input_->PushKey(DIK_SPACE)) {
-		sound_->PlayWave(soundDataHandle_, true);
+	// 判定対象AとBの座標
+	Vector3 posA, posB;
+	float radiusA, radiusB;
+
+	posA = player_->GetPlayerTranslate();
+	radiusA = player_->GetRadius();
+
+	posB = goal_->GetGoalTranslate();
+	radiusB = goal_->GetRadius();
+
+	float e2b = (posB.x - posA.x) * (posB.x - posA.x) +
+		(posB.y - posA.y) * (posB.y - posA.y) +
+		(posB.z - posA.z) * (posB.z - posA.z);
+	float r2r = (radiusA + radiusB) * (radiusA + radiusB);
+
+	if (e2b <= r2r) {
+		player_->Initialize(engine_, dxCommon_);
+		cameraTransform_ = { {1.0f,1.0f,1.0f},{0.5f,0.0f,0.0f},{0.0f,23.0f,-40.0f} };
 	}
+
+	/*if (input_->PushKey(DIK_SPACE)) {
+		sound_->PlayWave(soundDataHandle_, true);
+	}*/
 
 	if (ImGui::TreeNode("Camera"))
 	{
@@ -178,14 +198,6 @@ void GameScene::Update()
 		ImGui::DragFloat3("Scale", &wallTransform[3].scale.x, 0.01f);
 		ImGui::TreePop();
 	}
-
-	if (ImGui::TreeNode("GoalBoll"))
-	{
-		ImGui::DragFloat3("Translate", &goalTransform.translate.x, 0.01f);
-		ImGui::DragFloat3("Rotate", &goalTransform.rotate.x, 0.01f);
-		ImGui::DragFloat3("Scale", &goalTransform.scale.x, 0.01f);
-		ImGui::TreePop();
-	}
 	
 }
 
@@ -199,7 +211,7 @@ void GameScene::Draw()
 		wall_[i]->Draw(wallTransform[i], wallTexture_, cameraTransform_, directionalLight_);
 	}
 
-	goal_->Draw(goalTransform, goalTexture, cameraTransform_, directionalLight_);
+	goal_->Draw(goalTexture, cameraTransform_, directionalLight_);
 
 	player_->Draw(playerTexture, cameraTransform_, directionalLight_);
 }
@@ -227,4 +239,27 @@ void GameScene::Finalize()
 
 	sound_->Finalize();
 	sound_->UnLoad(&soundDataHandle_);
+}
+
+bool IsCollision(const Vector3& min, const Vector3& max, const Vector3& sphereCenter, int sphereRadius) {
+	bool g = false;
+
+	// 最近接点を求める
+	Vector3 closestPoint{
+		std::clamp(sphereCenter.x,min.x,max.x),
+		std::clamp(sphereCenter.y,min.y,max.y),
+		std::clamp(sphereCenter.z,min.z,max.z)
+	};
+
+	// 最近接点と弾の中心との距離を求める
+	float distance = Length({
+		closestPoint.x - sphereCenter.x,
+		closestPoint.y - sphereCenter.y,
+		closestPoint.z - sphereCenter.z });
+	// 距離が半径よりも小さければ衝突
+	if (distance <= sphereRadius) {
+		g = true;
+	}
+	else { g = false; }
+	return g;
 }
