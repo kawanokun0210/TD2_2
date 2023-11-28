@@ -10,6 +10,9 @@ GameScene::~GameScene()
 		delete wall_[i];
 	}
 
+	delete goal_;
+	delete player_;
+
 	//delete sphere_;
 	delete sound_;
 	//delete input_;
@@ -32,8 +35,10 @@ void GameScene::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 	directionalLight_.direction = { 0.0f,-1.0f,0.0f };
 	directionalLight_.intensity = 1.0f;
 
-	engine_->SettingTexture("Resource/uvChecker.png", floorTexture_);
-	engine_->SettingTexture("Resource/floor.png", wallTexture_);
+	engine_->SettingTexture("Resource/floor.png", floorTexture_);
+	engine_->SettingTexture("Resource/wall.png", wallTexture_);
+	engine_->SettingTexture("Resource/uvChecker.png", goalTexture);
+	engine_->SettingTexture("Resource/player.png", playerTexture);
 
 	for (int i = 0; i < kMaxFloor; i++) {
 		floor_[i] = new Floor();
@@ -41,9 +46,9 @@ void GameScene::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 		//floorTransform[i] = {{10.0f,0.5f,10.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f}};
 	}
 
-	floorTransform[0] = { {10.0f,0.5f,10.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
-	floorTransform[1] = { {2.2f,0.1f,8.3f},{0.0f,0.0f,0.0f},{-4.35f,3.150f,0.0f} };
-	floorTransform[2] = { {1.9f,0.1f,2.65f},{0.15f,-1.57f,-0.8f},{-0.1f,1.55f,1.95f} };
+	floorTransform[0] = { {2.3f,0.1f,10.0f},{0.0f,0.0f,0.0f},{7.6f,0.0f,0.0f} };
+	floorTransform[1] = { {3.0f,0.1f,8.3f},{0.0f,0.0f,0.0f},{-8.6f,0.0f,0.0f} };
+	floorTransform[2] = { {5.53f,0.1f,2.0f},{0.0f,0.0f,0.0f},{-0.1f,0.0f,0.0f} };
 
 
 	for (int i = 0; i < kMaxWall; i++) {
@@ -52,10 +57,17 @@ void GameScene::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 		//wallTransform[i] = { {0.2f,0.5f,10.0f},{0.0f,0.0f,0.0f},{0.0f,1.0f,0.0f} };
 	}
 
-	wallTransform[0] = { {0.1f,0.35f,0.98f},{0.0f,1.57f,0.0f},{-3.1f,3.6f,-0.3f} };
-	wallTransform[1] = { {0.1f,0.35f,2.36f},{0.0f,0.0f,0.0f},{-6.45f,3.6f,0.36f} };
-	wallTransform[2] = { {0.1f,0.5f,4.53f},{0.0f,1.57f,0.0f},{0.59f,1.0f,-3.6f} };
-	wallTransform[3] = { {0.1f,0.5f,5.31f},{0.0f,0.0f,0.0f},{5.03f,1.0f,0.0f} };
+	wallTransform[0] = { {0.1f,0.3f,0.98f},{0.0f,1.57f,0.0f},{-3.1f,0.4f,1.9f} };
+	wallTransform[1] = { {0.1f,0.3f,2.36f},{0.0f,0.0f,0.0f},{-8.5f,0.4f,0.8f} };
+	wallTransform[2] = { {0.1f,0.3f,2.5f},{0.0f,1.57f,0.0f},{0.5f,0.4f,-1.9f} };
+	wallTransform[3] = { {0.1f,0.3f,1.5f},{0.0f,0.0f,0.0f},{5.4f,0.4f,-2.0f} };
+
+	goal_ = new GoalBall;
+	goal_->Initialize(engine_, dxCommon_);
+	goalTransform = { {0.5f,0.5f,0.5f},{0.0f,0.0f,0.0f},{0.0f,0.6f,0.0f} };
+
+	player_ = new Player;
+	player_->Initialize(engine_, dxCommon_);
 
 	cameraTransform_ = { {1.0f,1.0f,1.0f},{0.5f,0.0f,0.0f},{0.0f,23.0f,-40.0f} };
 }
@@ -64,26 +76,6 @@ void GameScene::Update()
 {
 	//XINPUT_STATE joyState;
 	input_->Update();
-
-	/*if (input_->PushKey(DIK_A)) {
-		for (int i = 0; i < kMaxFloor; i++) {
-			floorTransform[i].rotate.y -= 0.01f;
-		}
-
-		for (int i = 0; i < kMaxFloor; i++) {
-			wallTransform[i].rotate.y -= 0.01f;
-		}
-	}
-
-	if (input_->PushKey(DIK_D)) {
-		for (int i = 0; i < kMaxFloor; i++) {
-			floorTransform[i].rotate.y += 0.01f;
-		}
-
-		for (int i = 0; i < kMaxFloor; i++) {
-			wallTransform[i].rotate.y += 0.01f;
-		}
-	}*/
 
 	//for (int i = 0; i < 2; i++)
 	//{
@@ -96,6 +88,8 @@ void GameScene::Update()
 	//	worldMatrix_ = MakeAffineMatrix(transform_[i].scale, transform_[i].rotate, transform_[i].translate);
 	//}
 
+	player_->Update();
+
 	if (input_->PushKey(DIK_A)) {
 		cameraTransform_.rotate.y -= 0.01f;
 	}
@@ -104,7 +98,7 @@ void GameScene::Update()
 		cameraTransform_.rotate.y += 0.01f;
 	}
 
-	Transform origin = { {0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
+	Transform origin = { {0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f},{0.0f,0.6f,0.0f} };
 	// 追従対象からカメラまでのオフセット
 	Vector3 offset = { 0.0f, 23.0f, -40.0f };
 	// カメラの角度から回転行列を計算する
@@ -116,6 +110,11 @@ void GameScene::Update()
 	cameraTransform_.translate.y = origin.translate.y + offset.y;
 	cameraTransform_.translate.z = origin.translate.z + offset.z;
 
+	if (player_->GetIsShotMode()) {
+		cameraTransform_.translate.x = player_->GetPlayerTranslate().x + offset.x;
+		cameraTransform_.translate.y = player_->GetPlayerTranslate().y + offset.y;
+		cameraTransform_.translate.z = player_->GetPlayerTranslate().z + offset.z;
+	}
 
 	if (input_->PushKey(DIK_SPACE)) {
 		sound_->PlayWave(soundDataHandle_, true);
@@ -179,6 +178,14 @@ void GameScene::Update()
 		ImGui::DragFloat3("Scale", &wallTransform[3].scale.x, 0.01f);
 		ImGui::TreePop();
 	}
+
+	if (ImGui::TreeNode("GoalBoll"))
+	{
+		ImGui::DragFloat3("Translate", &goalTransform.translate.x, 0.01f);
+		ImGui::DragFloat3("Rotate", &goalTransform.rotate.x, 0.01f);
+		ImGui::DragFloat3("Scale", &goalTransform.scale.x, 0.01f);
+		ImGui::TreePop();
+	}
 	
 }
 
@@ -191,6 +198,10 @@ void GameScene::Draw()
 	for (int i = 0; i < kMaxWall; i++) {
 		wall_[i]->Draw(wallTransform[i], wallTexture_, cameraTransform_, directionalLight_);
 	}
+
+	goal_->Draw(goalTransform, goalTexture, cameraTransform_, directionalLight_);
+
+	player_->Draw(playerTexture, cameraTransform_, directionalLight_);
 }
 
 void GameScene::Finalize()
