@@ -58,6 +58,8 @@ void GameScene::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 	monsterBallResourceNum_ = 1;
 	engine_->SettingTexture("Resource/monsterBall.png", monsterBallResourceNum_);
 
+	engine_->SettingTexture("Resource/skydomeTex.png", 3);
+
 	for (int i = 0; i < 2; i++)
 	{
 		triangle_[i] = new Triangle();
@@ -75,18 +77,18 @@ void GameScene::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 
 	object_[0] = new Object();
 
-	object_[0]->Initialize(dxCommon_, engine_, "Resource/", "axis.obj");
+	object_[0]->Initialize(dxCommon_, engine_, "Resource/", "skydome.obj");
 
-	object_[1] = new Object();
+	/*object_[1] = new Object();
 
-	object_[1]->Initialize(dxCommon_, engine_, "Resource/", "plane.obj");
+	object_[1]->Initialize(dxCommon_, engine_, "Resource/", "plane.obj");*/
 
 	for (int i = 0; i < 2; i++) {
-		objectTransform_[i] = {{0.4f,0.4f,0.4f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f}};
+		objectTransform_[i] = {{300.0f,300.0f,300.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f}};
 		objectMaterial_[i] = {1.0f,1.0f,1.0f,1.0f};
 	}
 
-	objectTransform_[1] = { {0.4f,0.4f,0.4f},{0.0f,0.0f,0.0f},{1.0f,-1.0f,0.0f} };
+	/*objectTransform_[1] = { {0.4f,0.4f,0.4f},{0.0f,0.0f,0.0f},{1.0f,-1.0f,0.0f} };*/
 
 	cameraTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-5.0f} };
 }
@@ -290,7 +292,7 @@ void GameScene::Draw()
 	}
 	if (objectDraw_) {
 		for (int i = 0; i < 2; i++) {
-			object_[i]->Draw(objectMaterial_[i], objectTransform_[i], 0, cameraTransform_, directionalLight_);
+			object_[0]->Draw(objectMaterial_[i], objectTransform_[i], 3, cameraTransform_, directionalLight_);
 		}
 	}
 }

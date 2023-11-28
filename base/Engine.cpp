@@ -496,6 +496,8 @@ ModelData MyEngine::LoadObjFile(const std::string& directoryPath, const std::str
 	std::ifstream file(directoryPath + "/" + filename);
 	assert(file.is_open());
 
+	LoadMaterialTemplateFile(directoryPath, filename);
+
 	while (std::getline(file, line)) {
 		std::string identifier;
 		std::istringstream s(line);
