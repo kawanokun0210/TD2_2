@@ -34,6 +34,7 @@ void GameScene::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 
 	engine_->SettingTexture("Resource/uvChecker.png", floorTexture_);
 	engine_->SettingTexture("Resource/floor.png", wallTexture_);
+	engine_->SettingTexture("Resource/uvChecker.png", playerTexture_);
 
 	for (int i = 0; i < kMaxFloor; i++) {
 		floor_[i] = new Floor();
@@ -58,6 +59,13 @@ void GameScene::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 	wallTransform[3] = { {0.1f,0.5f,5.31f},{0.0f,0.0f,0.0f},{5.03f,1.0f,0.0f} };
 
 	cameraTransform_ = { {1.0f,1.0f,1.0f},{0.5f,0.0f,0.0f},{0.0f,23.0f,-40.0f} };
+
+
+
+	// Player
+	player_ = new PlayerBall;
+	player_->Initialize2(engine_,dxCommon_);
+
 }
 
 void GameScene::Update()
@@ -191,6 +199,8 @@ void GameScene::Draw()
 	for (int i = 0; i < kMaxWall; i++) {
 		wall_[i]->Draw(wallTransform[i], wallTexture_, cameraTransform_, directionalLight_);
 	}
+
+	player_->Draw(cameraTransform_, playerTexture_,directionalLight_);
 }
 
 void GameScene::Finalize()

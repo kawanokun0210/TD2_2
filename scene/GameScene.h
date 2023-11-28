@@ -15,9 +15,12 @@
 #include "Floor.h"
 #include "Wall.h"
 
+#include "Player.h"
+
 class GameScene : public IScene
 {
 public:
+	~GameScene();
 	void Initialize(MyEngine* engine, DirectXCommon* dxCommon) override;
 
 	void Update() override;
@@ -56,5 +59,8 @@ private:
 	Wall* wall_[kMaxWall];
 	Transform wallTransform[kMaxWall];
 	uint32_t wallTexture_ = 1;
+	
 
+	PlayerBall* player_ = nullptr;
+	uint32_t playerTexture_ = 2;
 };
