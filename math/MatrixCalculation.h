@@ -74,4 +74,4 @@ Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float botto
 Vector3 TransformNormal(const Vector3& vector, const Matrix4x4& matrix);
 
 
-bool IsCollisionAABB(Vector3 floorPos, Vector3 min, Vector3 max, float radius, Vector3 pos);
+bool IsCollisionAABB(Vector3 min, Vector3 max, float radius, Vector3 pos);

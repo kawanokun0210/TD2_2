@@ -75,6 +75,9 @@ void GameScene::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 
 void GameScene::Update()
 {
+	// 重力の追加
+	float gravity = 9.8f / 60;
+
 	//XINPUT_STATE joyState;
 	input_->Update();
 
@@ -239,7 +242,22 @@ void GameScene::Update()
 		}
 
 	}
+	for (int i = 0; i < kMaxFloor; i++) {
+		if (IsCollisionAABB(
+			{ 
+			floorTransform[i].translate.x - floorTransform[i].scale.x,
+			floorTransform[i].translate.y - floorTransform[i].scale.y,
+			floorTransform[i].translate.z - floorTransform[i].scale.z },
+			{
+			floorTransform[i].translate.x + floorTransform[i].scale.x,
+			floorTransform[i].translate.y + floorTransform[i].scale.y,
+			floorTransform[i].translate.z + floorTransform[i].scale.z },
+			player_->GetRadius(),player_->GetPlayerTranslate())) {
 
+
+
+		}
+	}
 	/*if (input_->PushKey(DIK_SPACE)) {
 		sound_->PlayWave(soundDataHandle_, true);
 	}*/
