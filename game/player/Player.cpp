@@ -22,7 +22,7 @@ void Player::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 
 	playerMaterial = { 1.0f,1.0f,1.0f,1.0f };
 	playerTransform = { {0.5f,0.5f,0.5f},{0.0f,0.0f,0.0f},{0.0f,0.5f,-9.0f} };
-
+	gravity_ = 0;
 	velo_ = { 1.0f,1.0f,1.0f };
 }
 
@@ -72,13 +72,13 @@ void Player::Update()
 
 		kVelocity = Normalise(kVelocity);
 		kVelocity.x *= kCharacterSpeed;
-		kVelocity.y *= kCharacterSpeed;
+		kVelocity.y *= kCharacterSpeed ;
 		kVelocity.z *= kCharacterSpeed;
 
 		kVelocity = TransformNormal(kVelocity, MakeAffineMatrix(playerTransform.scale, playerTransform.rotate, playerTransform.translate));
 
 		playerTransform.translate.x += kVelocity.x * velo_.x;
-		playerTransform.translate.y += kVelocity.y - gravity_;
+		playerTransform.translate.y = playerTransform.translate.y + kVelocity.y + gravity_;
 		playerTransform.translate.z += kVelocity.z * velo_.z;
 	}
 
@@ -95,6 +95,7 @@ void Player::Update()
 		ImGui::DragFloat3("Translate", &playerTransform.translate.x, 0.01f);
 		ImGui::DragFloat3("Rotate", &playerTransform.rotate.x, 0.01f);
 		ImGui::DragFloat3("Scale", &playerTransform.scale.x, 0.01f);
+		ImGui::Text("%f", gravity_);
 		ImGui::TreePop();
 	}
 }
@@ -110,10 +111,20 @@ void Player::Move()
 }
 
 void Player::SetGravity(float velo) {
-
-	gravity_  += velo;
+	
+	gravity_  = + velo;
 
 }
+
+void Player::InitGravity() {
+
+	gravity_  = 0;
+
+}
+
+void Player::InitVelo() {
+	velo_ = { 1.0f,1.0f,1.0f };
+};
 
 void Player::SetVelo(Vector3 velo){
 	

@@ -22,6 +22,19 @@ struct AABB {
 	int color;
 };
 
+struct OBB {
+	Vector3 center;
+	Vector3 orientations[3];
+	Vector3 size;
+};
+
+struct Plane {
+	Vector3 normal; // !< 法線
+	float distance; //!< 距離
+	int color;
+
+};
+
 float cot(float theta);
 float Length(const Vector3& v);
 float Dot(const Vector3& v1, const Vector3& v2);
@@ -75,3 +88,25 @@ Vector3 TransformNormal(const Vector3& vector, const Matrix4x4& matrix);
 
 
 bool IsCollisionAABB(Vector3 min, Vector3 max, float radius, Vector3 pos);
+
+
+// ベクトルの差を計算する関数
+Vector3 subtract(const Vector3& a, const Vector3& b);
+
+
+// 原点から平面までの距離を計算する関数
+float distanceToPlane(const Vector3& normal, const Vector3& pointOnPlane) ;
+// ベクトルの内積を計算する関数
+float dotProduct(const Vector3& a, const Vector3& b);
+// 指定した点から平面までの距離を計算する関数
+float adistanceToPlane(const Vector3& normal, const Vector3& pointOnPlane, const Vector3& fromPoint);
+
+Vector3 multiplyMatrixVector(const Matrix4x4& mat, const Vector3& vec);
+Vector3 Reflect(const Vector3& input, const Vector3& normal);
+
+
+bool IsCollisionPlane(const Vector3& pos, float radius, const Plane& s2);
+
+Vector3 Project(const Vector3& v1, const Vector3& v2);
+Vector3 Normalize(const Vector3& v);
+

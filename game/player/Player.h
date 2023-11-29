@@ -19,11 +19,14 @@ public:
 
 	void SetTransform(Vector3 pos);
 	void SetGravity(float velo);
+	void InitGravity();
 	void SetVelo(Vector3 velo);
+	void InitVelo();
 
 	Vector3 GetPlayerTranslate() { return playerTransform.translate; }
 	float GetRadius() { return radius; }
 	bool GetIsShotMode() { return isShotMode; }
+	bool GetIsAttack() { return isAttack; }
 
 private:
 	Sphere* sphere_;

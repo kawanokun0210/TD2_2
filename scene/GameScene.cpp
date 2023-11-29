@@ -49,7 +49,7 @@ void GameScene::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 	for (int i = 0; i < kMaxFloor; i++) {
 		floor_[i] = new Floor();
 		floor_[i]->Inisialize(engine_, dxCommon_);
-		floorTransform[i] = {{10.0f,0.1f,10.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f}};
+		floorTransform[i] = {{10.0f,0.1f,10.0f},{0.0f,0.0f,0.0f},{100.0f,50.0f,100.0f}};
 	}
 
 	/*floorTransform[0] = { {2.3f,0.1f,10.0f},{0.0f,0.0f,0.0f},{7.6f,0.0f,0.0f} };
@@ -69,7 +69,7 @@ void GameScene::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 	wallTransform[3] = { {0.1f,0.3f,1.5f},{0.0f,0.0f,0.0f},{5.4f,0.4f,-2.0f} };*/
 
 	// 重力の追加
-	gravity_ = 9.8f / 60;
+	gravity_ = -9.8f / 50.0f;
 
 	goal_ = new GoalBall;
 	goal_->Initialize(engine_, dxCommon_);
@@ -101,7 +101,7 @@ void GameScene::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 	spriteData_.material = { 1.0f,1.0f,1.0f,1.0f };
 	spriteTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 
-	stageNum = TITLE2;
+	stageNum = 3;
 }
 
 void GameScene::Update()
@@ -201,9 +201,9 @@ void GameScene::Update()
 
 		floorTransform[0] = { {10.0f,0.1f,10.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 
-		wallTransform[0] = { {0.1f,0.3f,2.0f},{0.0f,1.57f,0.0f},{0.0f,0.4f,5.0f} };
+		wallTransform[0] = { {2.0f,0.3f,0.1f},{0.0f,0.0f,0.0f},{0.0f,0.4f,5.0f} };
 		wallTransform[1] = { {0.1f,0.3f,2.0f},{0.0f,0.0f,0.0f},{5.0f,0.4f,0.0f} };
-		wallTransform[2] = { {0.1f,0.3f,2.0f},{0.0f,1.57f,0.0f},{0.0f,0.4f,-5.0f} };
+		wallTransform[2] = { {1.0f,0.3f,0.1f},{0.0f,0.0f,0.0f},{0.0f,0.4f,-5.0f} };
 		wallTransform[3] = { {0.1f,0.3f,2.0f},{0.0f,0.0f,0.0f},{-5.0f,0.4f,0.0f} };
 
 		if (hitCount == 3) {
@@ -221,9 +221,9 @@ void GameScene::Update()
 
 		floorTransform[0] = { {2.0f,0.1f,10.0f},{0.0f,0.0f,0.0f},{8.0f,0.0f,0.0f} };
 		floorTransform[1] = { {2.0f,0.1f,10.0f},{0.0f,0.0f,0.0f},{-8.0f,0.0f,0.0f} };
-		floorTransform[2] = { {2.0f,0.1f,10.0f},{0.0f,1.57f,0.0f},{0.0f,0.0f,8.0f} };
-		floorTransform[3] = { {2.0f,0.1f,10.0f},{0.0f,1.57f,0.0f},{0.0f,0.0f,-8.0f} };
-		floorTransform[4] = { {2.0f,0.1f,10.0f},{0.0f,1.57f,0.0f},{0.0f,0.0f,0.0f} };
+		floorTransform[2] = { {10.0f,0.1f,2.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,8.0f} };
+		floorTransform[3] = { {10.0f,0.1f,2.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-8.0f} };
+		floorTransform[4] = { {10.0f,0.1f,2.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 
 		if (hitCount == 3) {
 			if (input_->PushKey(DIK_SPACE)) {
@@ -240,9 +240,9 @@ void GameScene::Update()
 
 		floorTransform[0] = { {2.0f,0.1f,10.0f},{0.0f,0.0f,0.0f},{8.0f,0.0f,0.0f} };
 		floorTransform[1] = { {2.0f,0.1f,10.0f},{0.0f,0.0f,0.0f},{-8.0f,0.0f,0.0f} };
-		floorTransform[2] = { {2.0f,0.1f,10.0f},{0.0f,1.57f,0.0f},{0.0f,0.0f,8.0f} };
-		floorTransform[3] = { {2.0f,0.1f,10.0f},{0.0f,1.57f,0.0f},{0.0f,0.0f,-8.0f} };
-		floorTransform[4] = { {2.0f,0.1f,10.0f},{0.0f,1.57f,0.0f},{0.0f,0.0f,0.0f} };
+		floorTransform[2] = { {10.0f,0.1f,2.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,8.0f} };
+		floorTransform[3] = { {10.0f,0.1f,2.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-8.0f} };
+		floorTransform[4] = { {10.0f,0.1f,2.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 
 		wallTransform[0] = { {0.1f,0.3f,1.0f},{0.0f,1.57f,0.0f},{-2.0f,0.4f,2.0f} };
 		wallTransform[1] = { {0.1f,0.3f,1.2f},{0.0f,0.0f,0.0f},{6.0f,0.4f,-0.8f} };
@@ -264,8 +264,8 @@ void GameScene::Update()
 
 		floorTransform[0] = { {2.0f,0.1f,10.0f},{0.0f,0.0f,0.0f},{8.0f,0.0f,0.0f} };
 		floorTransform[1] = { {2.0f,0.1f,10.0f},{0.0f,0.0f,0.0f},{-8.0f,0.0f,0.0f} };
-		floorTransform[2] = { {2.0f,0.1f,10.0f},{0.0f,1.57f,0.0f},{0.0f,0.0f,8.0f} };
-		floorTransform[3] = { {2.0f,0.1f,10.0f},{0.0f,1.57f,0.0f},{0.0f,0.0f,-8.0f} };
+		floorTransform[2] = { {10.0f,0.1f,2.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,8.0f} };
+		floorTransform[3] = { {10.0f,0.1f,2.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-8.0f} };
 		floorTransform[4] = { {1.5f,0.1f,5.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,4.0f} };
 
 		wallTransform[0] = { {0.1f,0.3f,0.6f},{0.0f,1.57f,0.0f},{-0.9f,0.4f,-1.0f} };
@@ -280,7 +280,7 @@ void GameScene::Update()
 		}
 
 	}
-	for (int i = 0; i < kMaxFloor; i++) {
+	for (int i = 0; i < 5; i++) {
 		if (IsCollisionAABB(
 			{ 
 			floorTransform[i].translate.x - floorTransform[i].scale.x,
@@ -292,14 +292,39 @@ void GameScene::Update()
 			floorTransform[i].translate.z + floorTransform[i].scale.z },
 			player_->GetRadius(),player_->GetPlayerTranslate())) {
 			player_->SetVelo({ 1.0f,1.0f,1.0f });
+			player_->InitGravity();
 			player_->SetGravity(0);
-			player_->SetTransform({player_->GetPlayerTranslate().x,0.49f,player_->GetPlayerTranslate().z});
+			player_->SetTransform({player_->GetPlayerTranslate().x,0.50f,player_->GetPlayerTranslate().z});
 			flagTmp = true;
 		}
-		else if(player_->GetIsShotMode()){ 
-			player_->SetVelo({1.0f,1.0f,1.0f});
+		else if(!IsCollisionAABB(
+			{
+			floorTransform[i].translate.x - floorTransform[i].scale.x,
+			floorTransform[i].translate.y - floorTransform[i].scale.y,
+			floorTransform[i].translate.z - floorTransform[i].scale.z },
+			{
+			floorTransform[i].translate.x + floorTransform[i].scale.x,
+			floorTransform[i].translate.y + floorTransform[i].scale.y,
+			floorTransform[i].translate.z + floorTransform[i].scale.z },
+			player_->GetRadius(), player_->GetPlayerTranslate())&&player_->GetIsAttack()){
+			player_->SetVelo({0.95f,1.0f,0.95f});
 			player_->SetGravity(gravity_);
 			flagTmp = false;
+		}
+		
+		if (IsCollisionAABB(
+			{
+			floorTransform[i].translate.x - floorTransform[i].scale.x,
+			floorTransform[i].translate.y - floorTransform[i].scale.y,
+			floorTransform[i].translate.z - floorTransform[i].scale.z },
+			{
+			floorTransform[i].translate.x + floorTransform[i].scale.x,
+			floorTransform[i].translate.y + floorTransform[i].scale.y,
+			floorTransform[i].translate.z + floorTransform[i].scale.z },
+			player_->GetRadius(), player_->GetPlayerTranslate()) && player_->GetIsAttack()) {
+			player_->SetVelo({ 1.0f,1.0f,1.0f });
+			player_->InitVelo();
+			
 		}
 	}
 	/*if (input_->PushKey(DIK_SPACE)) {

@@ -490,3 +490,72 @@ bool IsCollisionAABB(Vector3 min, Vector3 max, float radius, Vector3 pos) {
 	else { g = false; }
 	return g;
 }
+// ベクトルの差を計算する関数
+Vector3 subtract(const Vector3& a, const Vector3& b) {
+	return { a.x - b.x, a.y - b.y, a.z - b.z };
+}
+
+
+// 原点から平面までの距離を計算する関数
+float distanceToPlane(const Vector3& normal, const Vector3& pointOnPlane) {
+	return -(normal.x * pointOnPlane.x + normal.y * pointOnPlane.y + normal.z * pointOnPlane.z);
+}
+
+// ベクトルの内積を計算する関数
+float dotProduct(const Vector3& a, const Vector3& b) {
+	return a.x * b.x + a.y * b.y + a.z * b.z;
+}
+// 指定した点から平面までの距離を計算する関数
+float adistanceToPlane(const Vector3& normal, const Vector3& pointOnPlane, const Vector3& fromPoint) {
+	Vector3 vectorToPoint = subtract(fromPoint, pointOnPlane);
+	return dotProduct(normal, vectorToPoint);
+}
+
+Vector3 multiplyMatrixVector(const Matrix4x4& mat, const Vector3& vec) {
+	Vector3 result;
+	result.x = mat.m[0][0] * vec.x + mat.m[1][0] * vec.y + mat.m[2][0] * vec.z + mat.m[3][0];
+	result.y = mat.m[0][1] * vec.x + mat.m[1][1] * vec.y + mat.m[2][1] * vec.z + mat.m[3][1];
+	result.z = mat.m[0][2] * vec.x + mat.m[1][2] * vec.y + mat.m[2][2] * vec.z + mat.m[3][2];
+	return result;
+}
+
+Vector3 Reflect(const Vector3& input, const Vector3& normal) {
+	Vector3 r;
+	Vector3 proj = Project(input, normal);
+	r.x = input.x - 2 * proj.x;
+	r.y = input.y - 2 * proj.y;
+	r.z = input.z - 2 * proj.z;
+	return r;
+}
+
+
+bool IsCollisionPlane(const Vector3& pos, float radius, const Plane& s2) {
+	bool g = false;
+	//Vector3 q = { s1.center.x - s2.normal.x * s2.distance,s1.center.y - s2.normal.y * s2.distance, s1.center.z - s2.normal.z * s2.distance, };
+	//float d = Dot(s2.normal, q);
+	// 2つの弾の中心点間の距離を求める
+	float distance = fabsf(Dot(s2.normal, pos) - s2.distance);
+	if (distance <= radius) {
+		g = true;
+	}
+	else { g = false; }
+	return g;
+}
+
+Vector3 Project(const Vector3& v1, const Vector3& v2) {
+	float m3 = Dot(v1, Normalize(v2));
+	Vector3 result;
+	Vector3 demo = Normalize(v2);
+	result.x = m3 * demo.x;
+	result.y = m3 * demo.y;
+	result.z = m3 * demo.z;
+	return result;
+}	//正規化
+		Vector3 Normalize(const Vector3 & v) {
+		Vector3 m3;
+		float mag = 1 / sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
+		m3 = { v.x * mag,v.y * mag,v.z * mag };
+
+		return m3;
+
+	};
