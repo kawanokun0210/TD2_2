@@ -70,7 +70,7 @@ void GameScene::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 
 	cameraTransform_ = { {1.0f,1.0f,1.0f},{0.5f,0.0f,0.0f},{0.0f,23.0f,-40.0f} };
 
-	stageNum = 4;
+	stageNum = 0;
 }
 
 void GameScene::Update()
