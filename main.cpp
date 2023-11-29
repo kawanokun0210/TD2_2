@@ -1,7 +1,7 @@
 #include "Engine.h"
 #include "GameManager.h"
 
-const wchar_t kWindowTitle[] = { L"CG2_WinMain" };
+const wchar_t kWindowTitle[] = { L"2223_ボッチャリング" };
 
 //Windowsアプリでのエントリーポイント
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
