@@ -12,6 +12,16 @@ struct Transform
 	Vector3 translate;
 };
 
+struct AABB {
+	Vector3 min;
+	Vector3 max;
+	Vector3 pos;
+	float width;
+	float height;
+	float length;
+	int color;
+};
+
 float cot(float theta);
 float Length(const Vector3& v);
 float Dot(const Vector3& v1, const Vector3& v2);
@@ -62,3 +72,6 @@ Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float botto
 
 // 座標返還
 Vector3 TransformNormal(const Vector3& vector, const Matrix4x4& matrix);
+
+
+bool IsCollisionAABB(Vector3 floorPos, Vector3 min, Vector3 max, float radius, Vector3 pos);

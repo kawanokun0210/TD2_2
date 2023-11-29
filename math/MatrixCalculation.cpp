@@ -1,4 +1,5 @@
 #include "MatrixCalculation.h"
+#include <algorithm>
 
 Vector3 Normalise(const Vector3& v)
 {
@@ -464,3 +465,28 @@ Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m) {
 	};
 	return result;
 };
+
+
+
+bool IsCollisionAABB(Vector3 min, Vector3 max, float radius, Vector3 pos) {
+	bool g = false;
+
+	// 最近接点を求める
+	Vector3 closestPoint{
+		std::clamp(pos.x,min.x,max.x),
+		std::clamp(pos.y,min.y,max.y),
+		std::clamp(pos.z,min.z,max.z)
+	};
+
+	// 最近接点と弾の中心との距離を求める
+	float distance = Length({
+		closestPoint.x - pos.x,
+		closestPoint.y - pos.y,
+		closestPoint.z - pos.z });
+	// 距離が半径よりも小さければ衝突
+	if (distance <= radius) {
+		g = true;
+	}
+	else { g = false; }
+	return g;
+}
