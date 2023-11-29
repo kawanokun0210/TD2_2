@@ -12,8 +12,8 @@ Title::~Title()
 
 void Title::Initialize(MyEngine* engine, DirectXCommon* dxCommon) {
 
-	input_->Input::GetInstance();
-	/*input_->Initialize();*/
+	/*input_->Input::GetInstance();
+	input_->Initialize();*/
 
 	engine_ = engine;
 	dxCommon_ = dxCommon;
@@ -37,13 +37,13 @@ void Title::Initialize(MyEngine* engine, DirectXCommon* dxCommon) {
 }
 
 void Title::Update() {
-	input_->Update();
+	//input_->Update();
 
 	directionalLight_.direction = Normalise(directionalLight_.direction);
 
-	if (input_->TriggerKey(DIK_SPACE)) {
+	/*if (input_->TriggerKey(DIK_SPACE)) {
 		sceneNo = PLAY;
-	}
+	}*/
 }
 
 void Title::Draw() {

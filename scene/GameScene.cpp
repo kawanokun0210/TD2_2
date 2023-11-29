@@ -67,12 +67,15 @@ void GameScene::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 	wallTransform[2] = { {0.1f,0.3f,2.5f},{0.0f,1.57f,0.0f},{0.5f,0.4f,-1.9f} };
 	wallTransform[3] = { {0.1f,0.3f,1.5f},{0.0f,0.0f,0.0f},{5.4f,0.4f,-2.0f} };*/
 
+	// 重力の追加
+	gravity_ = 9.8f / 60;
+
 	goal_ = new GoalBall;
 	goal_->Initialize(engine_, dxCommon_);
 
 	player_ = new Player;
 	player_->Initialize(engine_, dxCommon_);
-
+	player_->SetGravity(gravity_);
 	cameraTransform_ = { {1.0f,1.0f,1.0f},{0.5f,0.0f,0.0f},{0.0f,23.0f,-40.0f} };
 
 	title_ = new Sprite();
@@ -99,9 +102,6 @@ void GameScene::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 
 void GameScene::Update()
 {
-	// 重力の追加
-	float gravity = 9.8f / 60;
-
 	//XINPUT_STATE joyState;
 	input_->Update();
 
@@ -287,23 +287,28 @@ void GameScene::Update()
 			floorTransform[i].translate.y + floorTransform[i].scale.y,
 			floorTransform[i].translate.z + floorTransform[i].scale.z },
 			player_->GetRadius(),player_->GetPlayerTranslate())) {
-
-
-
+			player_->SetVelo({ 1.0f,1.0f,1.0f });
+			player_->SetGravity(0);
+			player_->SetTransform({player_->GetPlayerTranslate().x,0.49f,player_->GetPlayerTranslate().z});
+			flagTmp = true;
+		}
+		else { 
+			player_->SetVelo({1.0f,1.0f,1.0f});
+			player_->SetGravity(gravity_);
+			flagTmp = false;
 		}
 	}
 	/*if (input_->PushKey(DIK_SPACE)) {
 		sound_->PlayWave(soundDataHandle_, true);
 	}*/
 
-	/*if (ImGui::TreeNode("Camera"))
+	if (ImGui::TreeNode("Flag"))
 	{
-		ImGui::DragFloat3("Translate", &cameraTransform_.translate.x, 0.01f);
-		ImGui::DragFloat3("Rotate", &cameraTransform_.rotate.x, 0.01f);
-		ImGui::DragFloat3("Scale", &cameraTransform_.scale.x, 0.01f);
+		ImGui::Text("Flag : %d", flagTmp);
 		ImGui::TreePop();
 	}
-
+		
+	/*
 	if (ImGui::TreeNode("Floor1"))
 	{
 		ImGui::DragFloat3("Translate", &floorTransform[0].translate.x, 0.01f);
