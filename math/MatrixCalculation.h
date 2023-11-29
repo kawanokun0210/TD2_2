@@ -62,3 +62,9 @@ Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float botto
 
 // 座標返還
 Vector3 TransformNormal(const Vector3& vector, const Matrix4x4& matrix);
+
+// 法線反射
+Vector3 Reflect(const Vector3& input, const Vector3& normal);
+
+//
+Vector3 Project(const Vector3& v1, const Vector3& v2);

@@ -464,3 +464,22 @@ Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m) {
 	};
 	return result;
 };
+
+Vector3 Project(const Vector3& v1, const Vector3& v2) {
+	float m3 = Dot(v1, Normalise(v2));
+	Vector3 result;
+	Vector3 demo = Normalise(v2);
+	result.x = m3 * demo.x;
+	result.y = m3 * demo.y;
+	result.z = m3 * demo.z;
+	return result;
+}
+
+Vector3 Reflect(const Vector3& input, const Vector3& normal) {
+	Vector3 r;
+	Vector3 proj = Project(input, normal);
+	r.x = input.x - 2 * proj.x;
+	r.y = input.y - 2 * proj.y;
+	r.z = input.z - 2 * proj.z;
+	return r;
+}
