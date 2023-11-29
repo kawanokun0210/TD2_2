@@ -496,8 +496,6 @@ ModelData MyEngine::LoadObjFile(const std::string& directoryPath, const std::str
 	std::ifstream file(directoryPath + "/" + filename);
 	assert(file.is_open());
 
-	LoadMaterialTemplateFile(directoryPath, filename);
-
 	while (std::getline(file, line)) {
 		std::string identifier;
 		std::istringstream s(line);
@@ -548,6 +546,13 @@ ModelData MyEngine::LoadObjFile(const std::string& directoryPath, const std::str
 			modelData.vertices.push_back(triangle[1]);
 			modelData.vertices.push_back(triangle[0]);
 		}
+		else if (identifier == "mtllib") {
+			//materialTemplateLibraryファイルの名前を取得
+			std::string materialFilename;
+			s >> materialFilename;
+			//基本的にOBJファイルと同一階層にmtlは存在させるので、ディレクトリ名とファイル名を渡す
+			modelData.material = LoadMaterialTemplateFile(directoryPath, materialFilename);
+		}
 
 	}
 	return modelData;
@@ -572,13 +577,6 @@ MaterialData MyEngine::LoadMaterialTemplateFile(const std::string& directoryPath
 			s >> textureFilename;
 			//連結にしてファイルパスにする
 			materialData.textureFilePath = directoryPath + "/" + textureFilename;
-		}
-		else if (identifier == "mtllib") {
-			//materialTemplateLibraryファイルの名前を取得
-			std::string materialFilename;
-			s >> materialFilename;
-			//基本的にOBJファイルと同一階層にmtlは存在させるので、ディレクトリ名とファイル名を渡す
-			modelData.material = LoadMaterialTemplateFile(directoryPath, materialFilename);
 		}
 
 	}
