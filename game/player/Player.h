@@ -15,6 +15,8 @@ public:
 
 	void Draw(uint32_t index, const Transform& cameraTransform, const DirectionalLight& light);
 
+	void Move();
+
 	Vector3 GetPlayerTranslate() { return playerTransform.translate; }
 	float GetRadius() { return radius; }
 	bool GetIsShotMode() { return isShotMode; }

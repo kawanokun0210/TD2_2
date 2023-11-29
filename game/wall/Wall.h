@@ -15,7 +15,6 @@ public:
 	void Draw(Transform& transform, uint32_t index, const Transform& cameraTransform, const DirectionalLight& light);
 private:
 	Object* object_;
-	MyEngine* engine_;
 
 	Vector4 wallMaterial;
 };

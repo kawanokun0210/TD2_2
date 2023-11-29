@@ -12,9 +12,9 @@ GameScene::~GameScene()
 
 	delete goal_;
 	delete player_;
+	delete sound_;
 
 	//delete sphere_;
-	delete sound_;
 	//delete input_;
 }
 
@@ -43,24 +43,24 @@ void GameScene::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 	for (int i = 0; i < kMaxFloor; i++) {
 		floor_[i] = new Floor();
 		floor_[i]->Inisialize(engine_, dxCommon_);
-		//floorTransform[i] = {{10.0f,0.5f,10.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f}};
+		floorTransform[i] = {{10.0f,0.1f,10.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f}};
 	}
 
-	floorTransform[0] = { {2.3f,0.1f,10.0f},{0.0f,0.0f,0.0f},{7.6f,0.0f,0.0f} };
+	/*floorTransform[0] = { {2.3f,0.1f,10.0f},{0.0f,0.0f,0.0f},{7.6f,0.0f,0.0f} };
 	floorTransform[1] = { {3.0f,0.1f,8.3f},{0.0f,0.0f,0.0f},{-8.6f,0.0f,0.0f} };
-	floorTransform[2] = { {5.53f,0.1f,2.0f},{0.0f,0.0f,0.0f},{-0.1f,0.0f,0.0f} };
+	floorTransform[2] = { {5.53f,0.1f,2.0f},{0.0f,0.0f,0.0f},{-0.1f,0.0f,0.0f} };*/
 
 
 	for (int i = 0; i < kMaxWall; i++) {
 		wall_[i] = new Wall();
 		wall_[i]->Inisialize(engine_, dxCommon_);
-		//wallTransform[i] = { {0.2f,0.5f,10.0f},{0.0f,0.0f,0.0f},{0.0f,1.0f,0.0f} };
+		//wallTransform[i] = { {0.2f,0.3f,10.0f},{0.0f,0.0f,0.0f},{0.0f,0.4f,0.0f} };
 	}
 
-	wallTransform[0] = { {0.1f,0.3f,0.98f},{0.0f,1.57f,0.0f},{-3.1f,0.4f,1.9f} };
+	/*wallTransform[0] = { {0.1f,0.3f,0.98f},{0.0f,1.57f,0.0f},{-3.1f,0.4f,1.9f} };
 	wallTransform[1] = { {0.1f,0.3f,2.36f},{0.0f,0.0f,0.0f},{-8.5f,0.4f,0.8f} };
 	wallTransform[2] = { {0.1f,0.3f,2.5f},{0.0f,1.57f,0.0f},{0.5f,0.4f,-1.9f} };
-	wallTransform[3] = { {0.1f,0.3f,1.5f},{0.0f,0.0f,0.0f},{5.4f,0.4f,-2.0f} };
+	wallTransform[3] = { {0.1f,0.3f,1.5f},{0.0f,0.0f,0.0f},{5.4f,0.4f,-2.0f} };*/
 
 	goal_ = new GoalBall;
 	goal_->Initialize(engine_, dxCommon_);
@@ -69,6 +69,8 @@ void GameScene::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 	player_->Initialize(engine_, dxCommon_);
 
 	cameraTransform_ = { {1.0f,1.0f,1.0f},{0.5f,0.0f,0.0f},{0.0f,23.0f,-40.0f} };
+
+	stageNum = 4;
 }
 
 void GameScene::Update()
@@ -132,15 +134,117 @@ void GameScene::Update()
 	float r2r = (radiusA + radiusB) * (radiusA + radiusB);
 
 	if (e2b <= r2r) {
+		hitCount += 1;
 		player_->Initialize(engine_, dxCommon_);
 		cameraTransform_ = { {1.0f,1.0f,1.0f},{0.5f,0.0f,0.0f},{0.0f,23.0f,-40.0f} };
+	}
+
+	if (stageNum == 0) {
+
+		floorTransform[0] = { {20.0f,0.1f,20.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
+
+		if (hitCount == 3) {
+			if (input_->PushKey(DIK_SPACE)) {
+				hitCount = 0;
+				stageNum = 1;
+				player_->Initialize(engine_, dxCommon_);
+				cameraTransform_ = { {1.0f,1.0f,1.0f},{0.5f,0.0f,0.0f},{0.0f,23.0f,-40.0f} };
+			}
+		}
+
+	}
+
+	if (stageNum == 1) {
+
+		floorTransform[0] = { {10.0f,0.1f,10.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
+
+		wallTransform[0] = { {0.1f,0.3f,2.0f},{0.0f,1.57f,0.0f},{0.0f,0.4f,5.0f} };
+		wallTransform[1] = { {0.1f,0.3f,2.0f},{0.0f,0.0f,0.0f},{5.0f,0.4f,0.0f} };
+		wallTransform[2] = { {0.1f,0.3f,2.0f},{0.0f,1.57f,0.0f},{0.0f,0.4f,-5.0f} };
+		wallTransform[3] = { {0.1f,0.3f,2.0f},{0.0f,0.0f,0.0f},{-5.0f,0.4f,0.0f} };
+
+		if (hitCount == 3) {
+			if (input_->PushKey(DIK_SPACE)) {
+				hitCount = 0;
+				stageNum = 2;
+				player_->Initialize(engine_, dxCommon_);
+				cameraTransform_ = { {1.0f,1.0f,1.0f},{0.5f,0.0f,0.0f},{0.0f,23.0f,-40.0f} };
+			}
+		}
+
+	}
+
+	if (stageNum == 2) {
+
+		floorTransform[0] = { {2.0f,0.1f,10.0f},{0.0f,0.0f,0.0f},{8.0f,0.0f,0.0f} };
+		floorTransform[1] = { {2.0f,0.1f,10.0f},{0.0f,0.0f,0.0f},{-8.0f,0.0f,0.0f} };
+		floorTransform[2] = { {2.0f,0.1f,10.0f},{0.0f,1.57f,0.0f},{0.0f,0.0f,8.0f} };
+		floorTransform[3] = { {2.0f,0.1f,10.0f},{0.0f,1.57f,0.0f},{0.0f,0.0f,-8.0f} };
+		floorTransform[4] = { {2.0f,0.1f,10.0f},{0.0f,1.57f,0.0f},{0.0f,0.0f,0.0f} };
+
+		if (hitCount == 3) {
+			if (input_->PushKey(DIK_SPACE)) {
+				hitCount = 0;
+				stageNum = 3;
+				player_->Initialize(engine_, dxCommon_);
+				cameraTransform_ = { {1.0f,1.0f,1.0f},{0.5f,0.0f,0.0f},{0.0f,23.0f,-40.0f} };
+			}
+		}
+
+	}
+
+	if (stageNum == 3) {
+
+		floorTransform[0] = { {2.0f,0.1f,10.0f},{0.0f,0.0f,0.0f},{8.0f,0.0f,0.0f} };
+		floorTransform[1] = { {2.0f,0.1f,10.0f},{0.0f,0.0f,0.0f},{-8.0f,0.0f,0.0f} };
+		floorTransform[2] = { {2.0f,0.1f,10.0f},{0.0f,1.57f,0.0f},{0.0f,0.0f,8.0f} };
+		floorTransform[3] = { {2.0f,0.1f,10.0f},{0.0f,1.57f,0.0f},{0.0f,0.0f,-8.0f} };
+		floorTransform[4] = { {2.0f,0.1f,10.0f},{0.0f,1.57f,0.0f},{0.0f,0.0f,0.0f} };
+
+		wallTransform[0] = { {0.1f,0.3f,1.0f},{0.0f,1.57f,0.0f},{-2.0f,0.4f,2.0f} };
+		wallTransform[1] = { {0.1f,0.3f,1.2f},{0.0f,0.0f,0.0f},{6.0f,0.4f,-0.8f} };
+		wallTransform[2] = { {0.1f,0.3f,1.0f},{0.0f,1.57f,0.0f},{2.0f,0.4f,-2.0f} };
+		wallTransform[3] = { {0.1f,0.3f,1.2f},{0.0f,0.0f,0.0f},{-6.0f,0.4f,0.8f} };
+
+		if (hitCount == 3) {
+			if (input_->PushKey(DIK_SPACE)) {
+				hitCount = 0;
+				stageNum = 4;
+				player_->Initialize(engine_, dxCommon_);
+				cameraTransform_ = { {1.0f,1.0f,1.0f},{0.5f,0.0f,0.0f},{0.0f,23.0f,-40.0f} };
+			}
+		}
+
+	}
+
+	if (stageNum == 4) {
+
+		floorTransform[0] = { {2.0f,0.1f,10.0f},{0.0f,0.0f,0.0f},{8.0f,0.0f,0.0f} };
+		floorTransform[1] = { {2.0f,0.1f,10.0f},{0.0f,0.0f,0.0f},{-8.0f,0.0f,0.0f} };
+		floorTransform[2] = { {2.0f,0.1f,10.0f},{0.0f,1.57f,0.0f},{0.0f,0.0f,8.0f} };
+		floorTransform[3] = { {2.0f,0.1f,10.0f},{0.0f,1.57f,0.0f},{0.0f,0.0f,-8.0f} };
+		floorTransform[4] = { {1.5f,0.1f,5.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,4.0f} };
+
+		wallTransform[0] = { {0.1f,0.3f,0.6f},{0.0f,1.57f,0.0f},{-0.9f,0.4f,-1.0f} };
+		wallTransform[1] = { {0.1f,0.3f,1.2f},{0.0f,0.0f,0.0f},{1.5f,0.4f,1.0f} };
+		wallTransform[2] = { {0.1f,0.3f,1.0f},{0.0f,1.57f,0.0f},{1.0f,0.4f,6.0f} };
+
+		if (hitCount == 3) {
+			/*if (input_->PushKey(DIK_SPACE)) {
+				hitCount = 0;
+				stageNum = 5;
+				player_->Initialize(engine_, dxCommon_);
+				cameraTransform_ = { {1.0f,1.0f,1.0f},{0.5f,0.0f,0.0f},{0.0f,23.0f,-40.0f} };
+			}*/
+		}
+
 	}
 
 	/*if (input_->PushKey(DIK_SPACE)) {
 		sound_->PlayWave(soundDataHandle_, true);
 	}*/
 
-	if (ImGui::TreeNode("Camera"))
+	/*if (ImGui::TreeNode("Camera"))
 	{
 		ImGui::DragFloat3("Translate", &cameraTransform_.translate.x, 0.01f);
 		ImGui::DragFloat3("Rotate", &cameraTransform_.rotate.x, 0.01f);
@@ -169,7 +273,6 @@ void GameScene::Update()
 		ImGui::DragFloat3("Scale", &floorTransform[2].scale.x, 0.01f);
 		ImGui::TreePop();
 	}
-
 	if (ImGui::TreeNode("Wall1"))
 	{
 		ImGui::DragFloat3("Translate", &wallTransform[0].translate.x, 0.01f);
@@ -197,19 +300,69 @@ void GameScene::Update()
 		ImGui::DragFloat3("Rotate", &wallTransform[3].rotate.x, 0.01f);
 		ImGui::DragFloat3("Scale", &wallTransform[3].scale.x, 0.01f);
 		ImGui::TreePop();
-	}
-	
+	}*/
 }
 
 void GameScene::Draw()
 {
-	for (int i = 0; i < kMaxFloor; i++) {
+
+	if (stageNum == 0) {
+
+		floor_[0]->Draw(floorTransform[0], floorTexture_, cameraTransform_, directionalLight_);
+
+	}
+
+
+	if (stageNum == 1) {
+
+		floor_[0]->Draw(floorTransform[0], floorTexture_, cameraTransform_, directionalLight_);
+
+		for (int i = 0; i < 4; i++) {
+			wall_[i]->Draw(wallTransform[i], wallTexture_, cameraTransform_, directionalLight_);
+		}
+
+	}
+
+	if (stageNum == 2) {
+
+		for (int i = 0; i < 5; i++) {
+			floor_[i]->Draw(floorTransform[i], floorTexture_, cameraTransform_, directionalLight_);
+		}
+
+	}
+
+	if (stageNum == 3) {
+
+		for (int i = 0; i < 5; i++) {
+			floor_[i]->Draw(floorTransform[i], floorTexture_, cameraTransform_, directionalLight_);
+		}
+
+		for (int i = 0; i < 4; i++) {
+			wall_[i]->Draw(wallTransform[i], wallTexture_, cameraTransform_, directionalLight_);
+		}
+
+	}
+
+	if (stageNum == 4) {
+
+		for (int i = 0; i < 5; i++) {
+			floor_[i]->Draw(floorTransform[i], floorTexture_, cameraTransform_, directionalLight_);
+		}
+
+		for (int i = 0; i < 3; i++) {
+			wall_[i]->Draw(wallTransform[i], wallTexture_, cameraTransform_, directionalLight_);
+		}
+
+	}
+
+
+	/*for (int i = 0; i < kMaxFloor; i++) {
 		floor_[i]->Draw(floorTransform[i], floorTexture_, cameraTransform_, directionalLight_);
 	}
 
 	for (int i = 0; i < kMaxWall; i++) {
 		wall_[i]->Draw(wallTransform[i], wallTexture_, cameraTransform_, directionalLight_);
-	}
+	}*/
 
 	goal_->Draw(goalTexture, cameraTransform_, directionalLight_);
 

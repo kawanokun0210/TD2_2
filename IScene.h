@@ -1,12 +1,14 @@
 #pragma once
 #include "Engine.h"
 #include "DirectX.h"
+#include "Input.h"
 
 enum SCENE {
 	TITLE,
 	SELECT,
 	PLAY,
-	CLEAR
+	CLEAR,
+	GAMEOVER
 };
 
 class IScene

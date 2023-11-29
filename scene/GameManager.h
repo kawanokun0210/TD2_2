@@ -6,12 +6,13 @@
 #include "StageSelect.h"
 #include "Play.h"
 #include "Clear.h"
+#include "GameOver.h"
 
 class GameManager
 {
 private:
 
-	std::unique_ptr<IScene> sceneArr[4];
+	std::unique_ptr<IScene> sceneArr[5];
 
 	int currentSceneNo;
 	int prevSceneNo;

@@ -27,9 +27,6 @@ void Player::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 void Player::Update()
 {
 
-	if (input_->PushKey(DIK_RETURN)) {
-		isShotMode = true;
-	}
 
 	if (input_->PushKey(DIK_A)) {
 		playerTransform.rotate.y += 0.01f;
@@ -39,9 +36,15 @@ void Player::Update()
 		playerTransform.rotate.y -= 0.01f;
 	}
 
+	if (input_->PushKey(DIK_RETURN)) {
+		isShotMode = true;
+	}
+
 	if (isShotMode == 0) {
+
 		Transform origin = { {0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f},{0.0f,0.6f,0.0f} };
 		offset = { 0.0f, 0.0f, -9.0f };
+
 		// カメラの角度から回転行列を計算する
 		Matrix4x4 worldTransform = MakeRotateYmatrix(playerTransform.rotate.y);
 		// オフセットをカメラの回転に合わせて回転させる
@@ -97,4 +100,9 @@ void Player::Update()
 void Player::Draw(uint32_t index, const Transform& cameraTransform, const DirectionalLight& light)
 {
 	sphere_->Draw(playerMaterial, playerTransform, index, cameraTransform, light);
+}
+
+void Player::Move()
+{
+	offset.z += 0.01f;
 }

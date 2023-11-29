@@ -1,10 +1,15 @@
 #pragma once
 #include "../IScene.h"
 #include "Sprite.h"
+#include "Engine.h"
+#include "Input.h"
+
 
 class Title : public IScene
 {
 public:
+	Title();
+	~Title();
 
 	void Initialize(MyEngine* engine, DirectXCommon* dxCommon) override;
 
@@ -16,16 +21,14 @@ public:
 
 private:
 
-	MyEngine* engine_;
-	DirectXCommon* dxCommon_;
+	MyEngine* engine_ = nullptr;
+	DirectXCommon* dxCommon_ = nullptr;
+	Input* input_ = nullptr;
 
-	Sprite* sprite_;
-	SpriteData spriteData_;
-	Transform spriteTransform_;
+	Sprite* sprite_ = nullptr;
+	SpriteData spriteData_{0};
+	Transform spriteTransform_{0};
 
-	DirectionalLight directionalLight_;
-
-	int time;
-
+	DirectionalLight directionalLight_{0};
 };
 

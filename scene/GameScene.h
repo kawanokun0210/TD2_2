@@ -17,6 +17,14 @@
 #include "GoalBall.h"
 #include "Player.h"
 
+enum STAGE {
+	STAGE1,
+	STAGE2,
+	STAGE3,
+	STAGE4,
+	STAGE5
+};
+
 class GameScene : public IScene
 {
 public:
@@ -49,14 +57,14 @@ private:
 private:
 
 	// 床
-	static const uint32_t kMaxFloor = 3;
+	static const uint32_t kMaxFloor = 50;
 
 	Floor* floor_[kMaxFloor];
 	Transform floorTransform[kMaxFloor];
 	uint32_t floorTexture_ = 0;
 
 	// 壁
-	static const uint32_t kMaxWall = 4;
+	static const uint32_t kMaxWall = 50;
 
 	Wall* wall_[kMaxWall];
 	Transform wallTransform[kMaxWall];
@@ -71,4 +79,7 @@ private:
 	uint32_t playerTexture = 3;
 
 	bool isAttack = false;
+
+	uint32_t stageNum;
+	uint32_t hitCount;
 };
