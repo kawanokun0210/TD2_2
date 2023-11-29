@@ -69,7 +69,7 @@ private:
 	uint32_t floorTexture_ = 0;
 
 	// 壁
-	static const uint32_t kMaxWall = 50;
+	static const uint32_t kMaxWall = 4;
 
 	Wall* wall_[kMaxWall];
 	Transform wallTransform[kMaxWall];
@@ -106,4 +106,7 @@ private:
 
 	uint32_t stageNum;
 	uint32_t hitCount;
+	OBB obb[4];
+	AABB aabbOBBLoacal[4];
+	
 };

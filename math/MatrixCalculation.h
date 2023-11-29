@@ -110,3 +110,18 @@ bool IsCollisionPlane(const Vector3& pos, float radius, const Plane& s2);
 Vector3 Project(const Vector3& v1, const Vector3& v2);
 Vector3 Normalize(const Vector3& v);
 
+// 1. X軸回転行列
+Matrix4x4 MakeRotateXMatrix(float radian);
+
+// 2. Y軸回転行列
+Matrix4x4 MakeRotateYMatrix(float radian);
+
+// 3. Z軸回転行列
+Matrix4x4 MakeRotateZMatrix(float radian);
+
+Vector3 Transforma(const Vector3& vector, const Matrix4x4& matrix);
+
+//クロス績
+Vector3 Cross(const Vector3& v1, const Vector3& v2);
+
+Vector3 Add(const Vector3& v1, const Vector3& v2);

@@ -60,16 +60,18 @@ void Player::Update()
 	if (isShotMode) {
 		if (input_->PushKey(DIK_SPACE)) {
 			isAttack = true;
+			// キャラクターの移動速さ
+			float kCharacterSpeed = 1.0f;
+
+			
 		}
 	}
 
 	if (isAttack) {
-		// キャラクターの移動速さ
-		const float kCharacterSpeed = 1.0f;
+		float kCharacterSpeed = 1.0f;
 
 		// キャラの移動
-		Vector3 kVelocity(0, 0, kCharacterSpeed);
-
+		kVelocity = { 0,0 ,1 };
 		kVelocity = Normalise(kVelocity);
 		kVelocity.x *= kCharacterSpeed;
 		kVelocity.y *= kCharacterSpeed ;
@@ -77,9 +79,9 @@ void Player::Update()
 
 		kVelocity = TransformNormal(kVelocity, MakeAffineMatrix(playerTransform.scale, playerTransform.rotate, playerTransform.translate));
 
-		playerTransform.translate.x += kVelocity.x * velo_.x;
+		playerTransform.translate.x += kVelocity.x * velo_.x*0.5f;
 		playerTransform.translate.y = playerTransform.translate.y + kVelocity.y + gravity_;
-		playerTransform.translate.z += kVelocity.z * velo_.z;
+		playerTransform.translate.z += kVelocity.z * velo_.z * 0.5f;
 	}
 
 	/*if (input_->PushKey(DIK_W)) {
@@ -149,3 +151,7 @@ void Player::SetVelo(Vector3 velo){
 void  Player::SetTransform(Vector3 pos) {
 	playerTransform.translate = pos;
 };
+
+void Player::SetKvelocity(Vector3 velo) {
+	kVelocity = velo;
+}

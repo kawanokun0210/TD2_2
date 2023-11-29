@@ -60,7 +60,7 @@ void GameScene::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 	for (int i = 0; i < kMaxWall; i++) {
 		wall_[i] = new Wall();
 		wall_[i]->Inisialize(engine_, dxCommon_);
-		//wallTransform[i] = { {0.2f,0.3f,10.0f},{0.0f,0.0f,0.0f},{0.0f,0.4f,0.0f} };
+		wallTransform[i] = { {0.2f,0.3f,10.0f},{0.0f,0.0f,0.0f},{100.0f,0.4f,0.0f} };
 	}
 
 	/*wallTransform[0] = { {0.1f,0.3f,0.98f},{0.0f,1.57f,0.0f},{-3.1f,0.4f,1.9f} };
@@ -101,7 +101,7 @@ void GameScene::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 	spriteData_.material = { 1.0f,1.0f,1.0f,1.0f };
 	spriteTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 
-	stageNum = 3;
+	stageNum = 4;
 }
 
 void GameScene::Update()
@@ -244,9 +244,9 @@ void GameScene::Update()
 		floorTransform[3] = { {10.0f,0.1f,2.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-8.0f} };
 		floorTransform[4] = { {10.0f,0.1f,2.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 
-		wallTransform[0] = { {0.1f,0.3f,1.0f},{0.0f,1.57f,0.0f},{-2.0f,0.4f,2.0f} };
+		wallTransform[0] = { {1.0f,0.3f,0.1f},{0.0f,0.0f,0.0f},{-2.0f,0.4f,2.0f} };
 		wallTransform[1] = { {0.1f,0.3f,1.2f},{0.0f,0.0f,0.0f},{6.0f,0.4f,-0.8f} };
-		wallTransform[2] = { {0.1f,0.3f,1.0f},{0.0f,1.57f,0.0f},{2.0f,0.4f,-2.0f} };
+		wallTransform[2] = { {1.0f,0.3f,0.1f},{0.0f,0.0f,0.0f},{2.0f,0.4f,-2.0f} };
 		wallTransform[3] = { {0.1f,0.3f,1.2f},{0.0f,0.0f,0.0f},{-6.0f,0.4f,0.8f} };
 
 		if (hitCount == 3) {
@@ -268,9 +268,9 @@ void GameScene::Update()
 		floorTransform[3] = { {10.0f,0.1f,2.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-8.0f} };
 		floorTransform[4] = { {1.5f,0.1f,5.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,4.0f} };
 
-		wallTransform[0] = { {0.1f,0.3f,0.6f},{0.0f,1.57f,0.0f},{-0.9f,0.4f,-1.0f} };
-		wallTransform[1] = { {0.1f,0.3f,1.2f},{0.0f,0.0f,0.0f},{1.5f,0.4f,1.0f} };
-		wallTransform[2] = { {0.1f,0.3f,1.0f},{0.0f,1.57f,0.0f},{1.0f,0.4f,6.0f} };
+		wallTransform[0] = { {1.0f,0.5f,0.1f},{0.0f,0.0f,0.0f},{-0.9f,0.4f,-1.0f} };
+		wallTransform[1] = { {0.1f,0.5f,1.2f},{0.0f,0.0f,0.0f},{1.5f,0.4f,1.0f} };
+		wallTransform[2] = { {1.0f,0.5f,0.1f},{0.0f,0.0f,0.0f},{1.0f,0.4f,6.0f} };
 
 		if (hitCount == 3) {
 			if (input_->PushKey(DIK_SPACE)) {
@@ -325,6 +325,38 @@ void GameScene::Update()
 			player_->SetVelo({ 1.0f,1.0f,1.0f });
 			player_->InitVelo();
 			
+		}
+	}
+
+	if (player_->GetPlayerTranslate().y <= -40) {
+		player_->Initialize(engine_, dxCommon_);
+		cameraTransform_ = { {1.0f,1.0f,1.0f},{0.5f,0.0f,0.0f},{0.0f,23.0f,-40.0f} };
+	}
+
+
+	for (int i = 0; i < kMaxWall; ++i) {
+		if (IsCollisionAABB(subtract(wallTransform[i].translate, wallTransform[i].scale), Add(wallTransform[i].translate, wallTransform[i].scale), player_->GetRadius(), player_->GetPlayerTranslate())) {
+
+			if (wallTransform[i].translate.z - wallTransform[i].scale.z > player_->GetPlayerTranslate().z) {
+				player_->SetKvelocity({ 0.0f,0.0f,player_->GetkVelo().z * -1 });
+				player_->SetTransform({ player_->GetPlayerTranslate().x,player_->GetPlayerTranslate().y,wallTransform[i].translate.z - wallTransform[i].scale.z - player_->GetRadius() });
+			}
+			else if (wallTransform[i].translate.z + wallTransform[i].scale.z < player_->GetPlayerTranslate().z) {
+				player_->SetKvelocity({ 0.0f,0.0f,player_->GetkVelo().z * -1 });
+				player_->SetTransform({ player_->GetPlayerTranslate().x,player_->GetPlayerTranslate().y,wallTransform[i].translate.z + wallTransform[i].scale.z + player_->GetRadius() });
+			}
+			else if (wallTransform[i].translate.x - wallTransform[i].scale.x > player_->GetPlayerTranslate().x) {
+				player_->SetKvelocity({ player_->GetkVelo().x * -1,0.0f,0.0f });
+				player_->SetTransform({ wallTransform[i].translate.x - wallTransform[i].scale.z - player_->GetRadius(),player_->GetPlayerTranslate().y ,player_->GetPlayerTranslate().z});
+			}
+			else if (wallTransform[i].translate.x + wallTransform[i].scale.x < player_->GetPlayerTranslate().x) {
+				player_->SetKvelocity({ player_->GetkVelo().x * -1,0.0f,0.0f });
+				player_->SetTransform({ wallTransform[i].translate.x + wallTransform[i].scale.x + player_->GetRadius(),player_->GetPlayerTranslate().y,player_->GetPlayerTranslate().z });
+			}
+
+
+
+
 		}
 	}
 	/*if (input_->PushKey(DIK_SPACE)) {

@@ -559,3 +559,85 @@ Vector3 Project(const Vector3& v1, const Vector3& v2) {
 		return m3;
 
 	};
+
+		// 1. X軸回転行列
+		Matrix4x4 MakeRotateXMatrix(float radian) {
+			Matrix4x4 m4;
+			for (int i = 0; i < 4; i++) {
+				for (int j = 0; j < 4; j++) {
+					m4.m[i][j] = 0;
+				}
+			}
+			m4.m[0][0] = 1;
+			m4.m[1][1] = std::cos(radian);
+			m4.m[1][2] = std::sin(radian);
+			m4.m[2][1] = -std::sin(radian);
+			m4.m[2][2] = std::cos(radian);
+			m4.m[3][3] = 1;
+			return m4;
+		};
+
+		// 2. Y軸回転行列
+		Matrix4x4 MakeRotateYMatrix(float radian) {
+			Matrix4x4 m4;
+			for (int i = 0; i < 4; i++) {
+				for (int j = 0; j < 4; j++) {
+					m4.m[i][j] = 0;
+				}
+			}
+			m4.m[0][0] = std::cos(radian);
+			m4.m[1][1] = 1;
+			m4.m[2][2] = std::cos(radian);
+			m4.m[0][2] = -std::sin(radian);
+			m4.m[2][0] = std::sin(radian);
+			m4.m[3][3] = 1;
+			return m4;
+		};
+
+		// 3. Z軸回転行列
+		Matrix4x4 MakeRotateZMatrix(float radian) {
+			Matrix4x4 m4;
+			for (int i = 0; i < 4; i++) {
+				for (int j = 0; j < 4; j++) {
+					m4.m[i][j] = 0;
+				}
+			}
+			m4.m[0][0] = std::cos(radian);
+			m4.m[2][2] = 1;
+			m4.m[1][1] = std::cos(radian);
+			m4.m[1][0] = -std::sin(radian);
+			m4.m[0][1] = std::sin(radian);
+			m4.m[3][3] = 1;
+			return m4;
+		};;
+		Vector3 Transforma(const Vector3& vector, const Matrix4x4& matrix) {
+			Vector3 result;
+			result.x = vector.x * matrix.m[0][0] + vector.y * matrix.m[1][0] + vector.z * matrix.m[2][0] + 1.0f * matrix.m[3][0];
+			result.y = vector.x * matrix.m[0][1] + vector.y * matrix.m[1][1] + vector.z * matrix.m[2][1] + 1.0f * matrix.m[3][1];
+			result.z = vector.x * matrix.m[0][2] + vector.y * matrix.m[1][2] + vector.z * matrix.m[2][2] + 1.0f * matrix.m[3][2];
+			float w = vector.x * matrix.m[0][3] + vector.y * matrix.m[1][3] + vector.z * matrix.m[2][3] + 1.0f * matrix.m[3][3];
+			assert(w != 0.0f);
+			result.x /= w;
+			result.y /= w;
+			result.z /= w;
+			return result;
+		};
+
+		//クロス績
+		Vector3 Cross(const Vector3& v1, const Vector3& v2) {
+			Vector3 v3;
+			v3.x = v1.y * v2.z - v1.z * v2.y;
+			v3.y = v1.z * v2.x - v1.x * v2.z;
+			v3.z = v1.x * v2.y - v1.y * v2.x;
+			return v3;
+		};
+
+		Vector3 Add(const Vector3& v1, const Vector3& v2) {
+			Vector3 m3;
+			m3.x = v1.x + v2.x;
+			m3.y = v1.y + v2.y;
+			m3.z = v1.z + v2.z;
+
+			return m3;
+
+		};

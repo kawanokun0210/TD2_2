@@ -27,13 +27,15 @@ public:
 	float GetRadius() { return radius; }
 	bool GetIsShotMode() { return isShotMode; }
 	bool GetIsAttack() { return isAttack; }
-
+	Vector3 GetkVelo() { return kVelocity; }
+	void SetKvelocity(Vector3 velo);
+	//Vector3 SetTransform { return kVelocity; }
 private:
 	Sphere* sphere_;
 	Input* input_ = nullptr;
-
-	Vector4 playerMaterial;
 	Transform playerTransform;
+	Vector4 playerMaterial;
+	
 	float radius = 0.5f;
 
 	// 追従対象からplayerまでのオフセット
@@ -43,6 +45,6 @@ private:
 	bool isShotMode;
 	bool isAttack;
 	float gravity_;
-
+	Vector3 kVelocity;
 };
 
