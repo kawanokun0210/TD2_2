@@ -37,12 +37,13 @@ void GameScene::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 
 	engine_->SettingTexture("Resource/floor.png", floorTexture_);
 	engine_->SettingTexture("Resource/wall.png", wallTexture_);
-	engine_->SettingTexture("Resource/uvChecker.png", goalTexture);
+	engine_->SettingTexture("Resource/goal.png", goalTexture);
 	engine_->SettingTexture("Resource/player.png", playerTexture);
 	engine_->SettingTexture("Resource/title.png", titleTexture);
 	engine_->SettingTexture("Resource/setumei.png", setumeiTexture);
 	engine_->SettingTexture("Resource/clear.png", clearTexture);
 	engine_->SettingTexture("Resource/next.png", nextTexture);
+	engine_->SettingTexture("Resource/haikei.png", haikeiTexture);
 
 
 	for (int i = 0; i < kMaxFloor; i++) {
@@ -86,6 +87,9 @@ void GameScene::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 
 	next_ = new Sprite();
 	next_->Initialize(dxCommon_, engine_);
+
+	haikei_ = new Sprite();
+	haikei_->Initialize(dxCommon_, engine_);
 
 	spriteData_.LeftTop[0] = { 0.0f,0.0f,0.0f,1.0f };
 	spriteData_.RightDown[0] = { 1280.0f,720.0f,0.0f,1.0f };

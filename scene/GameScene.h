@@ -99,6 +99,9 @@ private:
 	Sprite* next_ = nullptr;
 	uint32_t nextTexture = 7;
 
+	Sprite* haikei_ = nullptr;
+	uint32_t haikeiTexture = 8;
+
 	uint32_t stageNum;
 	uint32_t hitCount;
 };
