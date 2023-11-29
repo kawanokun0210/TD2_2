@@ -292,7 +292,7 @@ void GameScene::Update()
 			player_->SetTransform({player_->GetPlayerTranslate().x,0.49f,player_->GetPlayerTranslate().z});
 			flagTmp = true;
 		}
-		else { 
+		else if(player_->GetIsShotMode()){ 
 			player_->SetVelo({1.0f,1.0f,1.0f});
 			player_->SetGravity(gravity_);
 			flagTmp = false;
