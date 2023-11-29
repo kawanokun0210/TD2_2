@@ -287,7 +287,7 @@ void DirectXCommon::PreDraw()
 	commandList_->ClearDepthStencilView(dsvhandle_, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
 	//指定した色で画面全体をクリアする
-	float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };//青っぽい色、RGBA順
+	float clearColor[] = { 0.2f,0.2f,0.2f,1.0f };//青っぽい色、RGBA順
 	commandList_->ClearRenderTargetView(rtvHandles_[backBufferIndex], clearColor, 0, nullptr);
 
 	//描画用のDescriptorHeapの設定
@@ -359,7 +359,7 @@ void DirectXCommon::ClearRenderTarget()
 	commandList_->ClearDepthStencilView(dsvhandle_, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
 	//指定した色で画面全体をクリアする
-	float clearcolor[] = { 0.1f,0.25f,0.5f,1.0f };//青っぽい色
+	float clearcolor[] = { 0.1f,0.25f,0.1f,1.0f };//青っぽい色
 	commandList_->ClearRenderTargetView(rtvHandles_[backBufferIndex], clearcolor, 0, nullptr);
 }
 
