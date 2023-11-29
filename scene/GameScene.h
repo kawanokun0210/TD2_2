@@ -16,13 +16,17 @@
 #include "Wall.h"
 #include "GoalBall.h"
 #include "Player.h"
+#include "Sprite.h"
 
 enum STAGE {
 	STAGE1,
 	STAGE2,
 	STAGE3,
 	STAGE4,
-	STAGE5
+	STAGE5,
+	TITLE2,
+	CLEAR2,
+	SETUMEI
 };
 
 class GameScene : public IScene
@@ -79,6 +83,21 @@ private:
 	uint32_t playerTexture = 3;
 
 	bool isAttack = false;
+
+
+	Sprite* title_ = nullptr;
+	SpriteData spriteData_{ 0 };
+	Transform spriteTransform_{ 0 };
+	uint32_t titleTexture = 4;
+
+	Sprite* setumei_ = nullptr;
+	uint32_t setumeiTexture = 5;
+
+	Sprite* clear_ = nullptr;
+	uint32_t clearTexture = 6;
+
+	Sprite* next_ = nullptr;
+	uint32_t nextTexture = 7;
 
 	uint32_t stageNum;
 	uint32_t hitCount;

@@ -13,7 +13,7 @@ Title::~Title()
 void Title::Initialize(MyEngine* engine, DirectXCommon* dxCommon) {
 
 	input_->Input::GetInstance();
-	input_->Initialize();
+	/*input_->Initialize();*/
 
 	engine_ = engine;
 	dxCommon_ = dxCommon;

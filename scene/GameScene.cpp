@@ -39,6 +39,11 @@ void GameScene::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 	engine_->SettingTexture("Resource/wall.png", wallTexture_);
 	engine_->SettingTexture("Resource/uvChecker.png", goalTexture);
 	engine_->SettingTexture("Resource/player.png", playerTexture);
+	engine_->SettingTexture("Resource/title.png", titleTexture);
+	engine_->SettingTexture("Resource/setumei.png", setumeiTexture);
+	engine_->SettingTexture("Resource/clear.png", clearTexture);
+	engine_->SettingTexture("Resource/next.png", nextTexture);
+
 
 	for (int i = 0; i < kMaxFloor; i++) {
 		floor_[i] = new Floor();
@@ -70,7 +75,26 @@ void GameScene::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 
 	cameraTransform_ = { {1.0f,1.0f,1.0f},{0.5f,0.0f,0.0f},{0.0f,23.0f,-40.0f} };
 
-	stageNum = 0;
+	title_ = new Sprite();
+	title_->Initialize(dxCommon_, engine_);
+
+	setumei_ = new Sprite();
+	setumei_->Initialize(dxCommon_, engine_);
+
+	clear_ = new Sprite();
+	clear_->Initialize(dxCommon_, engine_);
+
+	next_ = new Sprite();
+	next_->Initialize(dxCommon_, engine_);
+
+	spriteData_.LeftTop[0] = { 0.0f,0.0f,0.0f,1.0f };
+	spriteData_.RightDown[0] = { 1280.0f,720.0f,0.0f,1.0f };
+	spriteData_.LeftTop[1] = { 0.0f,0.0f,0.0f,1.0f };
+	spriteData_.RightDown[1] = { 1280.0f,720.0f,0.0f,1.0f };
+	spriteData_.material = { 1.0f,1.0f,1.0f,1.0f };
+	spriteTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
+
+	stageNum = TITLE2;
 }
 
 void GameScene::Update()
@@ -140,6 +164,18 @@ void GameScene::Update()
 		hitCount += 1;
 		player_->Initialize(engine_, dxCommon_);
 		cameraTransform_ = { {1.0f,1.0f,1.0f},{0.5f,0.0f,0.0f},{0.0f,23.0f,-40.0f} };
+	}
+
+	if (stageNum == TITLE2) {
+		if (input_->PushKey(DIK_S)) {
+			stageNum = SETUMEI;
+		}
+	}
+
+	if (stageNum == SETUMEI) {
+		if (input_->PushKey(DIK_W)) {
+			stageNum = 0;
+		}
 	}
 
 	if (stageNum == 0) {
@@ -233,12 +269,10 @@ void GameScene::Update()
 		wallTransform[2] = { {0.1f,0.3f,1.0f},{0.0f,1.57f,0.0f},{1.0f,0.4f,6.0f} };
 
 		if (hitCount == 3) {
-			/*if (input_->PushKey(DIK_SPACE)) {
+			if (input_->PushKey(DIK_SPACE)) {
 				hitCount = 0;
-				stageNum = 5;
-				player_->Initialize(engine_, dxCommon_);
-				cameraTransform_ = { {1.0f,1.0f,1.0f},{0.5f,0.0f,0.0f},{0.0f,23.0f,-40.0f} };
-			}*/
+				stageNum = CLEAR2;
+			}
 		}
 
 	}
@@ -323,6 +357,22 @@ void GameScene::Update()
 
 void GameScene::Draw()
 {
+
+	if (stageNum == TITLE2) {
+		title_->Draw(spriteData_.LeftTop[0], spriteData_.RightDown[0], spriteTransform_, spriteData_.material, titleTexture, directionalLight_);
+	}
+
+	if (stageNum == SETUMEI) {
+		title_->Draw(spriteData_.LeftTop[0], spriteData_.RightDown[0], spriteTransform_, spriteData_.material, setumeiTexture, directionalLight_);
+	}
+
+	if (stageNum == CLEAR2) {
+		title_->Draw(spriteData_.LeftTop[0], spriteData_.RightDown[0], spriteTransform_, spriteData_.material, clearTexture, directionalLight_);
+	}
+
+	if (hitCount == 3) {
+		title_->Draw(spriteData_.LeftTop[0], spriteData_.RightDown[0], spriteTransform_, spriteData_.material, nextTexture, directionalLight_);
+	}
 
 	if (stageNum == 0) {
 
