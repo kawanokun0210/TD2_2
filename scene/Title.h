@@ -2,7 +2,7 @@
 #include "../IScene.h"
 #include "Sprite.h"
 #include "Engine.h"
-#include "Input.h"
+//#include "Input.h"
 
 
 class Title : public IScene
@@ -23,7 +23,7 @@ private:
 
 	MyEngine* engine_ = nullptr;
 	DirectXCommon* dxCommon_ = nullptr;
-	Input* input_ = nullptr;
+	//Input* input_ = nullptr;
 
 	Sprite* sprite_ = nullptr;
 	SpriteData spriteData_{0};

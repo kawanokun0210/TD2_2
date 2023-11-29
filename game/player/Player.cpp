@@ -21,7 +21,9 @@ void Player::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 	isShotMode = false;
 
 	playerMaterial = { 1.0f,1.0f,1.0f,1.0f };
-	playerTransform = { {0.5f,0.5f,0.5f},{0.0f,0.0f,0.0f},{0.0f,0.6f,-9.0f} };
+	playerTransform = { {0.5f,0.5f,0.5f},{0.0f,0.0f,0.0f},{0.0f,0.5f,-9.0f} };
+
+	velo_ = { 1.0f,1.0f,1.0f };
 }
 
 void Player::Update()
@@ -42,7 +44,7 @@ void Player::Update()
 
 	if (isShotMode == 0) {
 
-		Transform origin = { {0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f},{0.0f,0.6f,0.0f} };
+		Transform origin = { {0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f},{0.0f,0.5f,0.0f} };
 		offset = { 0.0f, 0.0f, -9.0f };
 
 		// カメラの角度から回転行列を計算する
@@ -75,9 +77,9 @@ void Player::Update()
 
 		kVelocity = TransformNormal(kVelocity, MakeAffineMatrix(playerTransform.scale, playerTransform.rotate, playerTransform.translate));
 
-		playerTransform.translate.x += kVelocity.x;
-		playerTransform.translate.y += kVelocity.y;
-		playerTransform.translate.z += kVelocity.z;
+		playerTransform.translate.x += kVelocity.x * velo_.x;
+		playerTransform.translate.y += kVelocity.y - gravity_;
+		playerTransform.translate.z += kVelocity.z * velo_.z;
 	}
 
 	/*if (input_->PushKey(DIK_W)) {
@@ -106,3 +108,33 @@ void Player::Move()
 {
 	offset.z += 0.01f;
 }
+
+void Player::SetGravity(float velo) {
+
+	gravity_  += velo;
+
+}
+
+void Player::SetVelo(Vector3 velo){
+	
+	
+	velo_.y = velo.y;
+	if (velo_.x > 0) {
+		velo_.x *= velo.x;
+	}
+	else if (velo_.x <= 0) {
+		velo_.x = 0;
+	}
+
+	if (velo_.z >= 0) {
+		velo_.z *= velo.z;
+	}
+	else if (velo_.z <= 0) {
+		velo_.z = 0;
+	}
+
+}
+
+void  Player::SetTransform(Vector3 pos) {
+	playerTransform.translate = pos;
+};

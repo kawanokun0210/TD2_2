@@ -58,6 +58,7 @@ private:
 
 	Input* input_ = nullptr;
 
+	float gravity_;
 private:
 
 	// 床
@@ -83,6 +84,7 @@ private:
 	uint32_t playerTexture = 3;
 
 	bool isAttack = false;
+	bool flagTmp = false;
 
 
 	Sprite* title_ = nullptr;

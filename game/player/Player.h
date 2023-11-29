@@ -17,6 +17,10 @@ public:
 
 	void Move();
 
+	void SetTransform(Vector3 pos);
+	void SetGravity(float velo);
+	void SetVelo(Vector3 velo);
+
 	Vector3 GetPlayerTranslate() { return playerTransform.translate; }
 	float GetRadius() { return radius; }
 	bool GetIsShotMode() { return isShotMode; }
@@ -31,9 +35,11 @@ private:
 
 	// 追従対象からplayerまでのオフセット
 	Vector3 offset;
+	Vector3 velo_;
 
 	bool isShotMode;
 	bool isAttack;
+	float gravity_;
 
 };
 
