@@ -93,14 +93,14 @@ void Player::Update()
 		playerTransform.translate.y -= 0.01f;
 	}*/
 
-	if (ImGui::TreeNode("Player"))
+	/*if (ImGui::TreeNode("Player"))
 	{
 		ImGui::DragFloat3("Translate", &playerTransform.translate.x, 0.01f);
 		ImGui::DragFloat3("Rotate", &playerTransform.rotate.x, 0.01f);
 		ImGui::DragFloat3("Scale", &playerTransform.scale.x, 0.01f);
 		ImGui::Text("%f", gravity_);
 		ImGui::TreePop();
-	}
+	}*/
 }
 
 void Player::Draw(uint32_t index, const Transform& cameraTransform, const DirectionalLight& light)

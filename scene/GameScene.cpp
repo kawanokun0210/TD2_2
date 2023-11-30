@@ -101,7 +101,7 @@ void GameScene::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 	spriteData_.material = { 1.0f,1.0f,1.0f,1.0f };
 	spriteTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 
-	stageNum = 4;
+	stageNum = TITLE2;
 }
 
 void GameScene::Update()
@@ -212,6 +212,9 @@ void GameScene::Update()
 				stageNum = 2;
 				player_->Initialize(engine_, dxCommon_);
 				cameraTransform_ = { {1.0f,1.0f,1.0f},{0.5f,0.0f,0.0f},{0.0f,23.0f,-40.0f} };
+				for (int i = 0; i < kMaxWall; i++) {
+					wallTransform[i] = { {0.2f,0.3f,10.0f},{0.0f,0.0f,0.0f},{100.0f,0.4f,0.0f} };
+				}
 			}
 		}
 
@@ -231,6 +234,9 @@ void GameScene::Update()
 				stageNum = 3;
 				player_->Initialize(engine_, dxCommon_);
 				cameraTransform_ = { {1.0f,1.0f,1.0f},{0.5f,0.0f,0.0f},{0.0f,23.0f,-40.0f} };
+				for (int i = 0; i < kMaxWall; i++) {
+					wallTransform[i] = { {0.2f,0.3f,10.0f},{0.0f,0.0f,0.0f},{100.0f,0.4f,0.0f} };
+				}
 			}
 		}
 
@@ -255,6 +261,9 @@ void GameScene::Update()
 				stageNum = 4;
 				player_->Initialize(engine_, dxCommon_);
 				cameraTransform_ = { {1.0f,1.0f,1.0f},{0.5f,0.0f,0.0f},{0.0f,23.0f,-40.0f} };
+				for (int i = 0; i < kMaxWall; i++) {
+					wallTransform[i] = { {0.2f,0.3f,10.0f},{0.0f,0.0f,0.0f},{100.0f,0.4f,0.0f} };
+				}
 			}
 		}
 
@@ -276,6 +285,9 @@ void GameScene::Update()
 			if (input_->PushKey(DIK_SPACE)) {
 				hitCount = 0;
 				stageNum = CLEAR2;
+				for (int i = 0; i < kMaxWall; i++) {
+					wallTransform[i] = { {0.2f,0.3f,10.0f},{0.0f,0.0f,0.0f},{100.0f,0.4f,0.0f} };
+				}
 			}
 		}
 
@@ -378,11 +390,11 @@ void GameScene::Update()
 		sound_->PlayWave(soundDataHandle_, true);
 	}*/
 
-	if (ImGui::TreeNode("Flag"))
+	/*if (ImGui::TreeNode("Flag"))
 	{
 		ImGui::Text("Flag : %d", flagTmp);
 		ImGui::TreePop();
-	}
+	}*/
 		
 	/*
 	if (ImGui::TreeNode("Floor1"))

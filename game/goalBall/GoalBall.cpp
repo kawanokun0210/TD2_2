@@ -19,13 +19,13 @@ void GoalBall::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 
 void GoalBall::Update()
 {
-	if (ImGui::TreeNode("GoalBoll"))
+	/*if (ImGui::TreeNode("GoalBoll"))
 	{
 		ImGui::DragFloat3("Translate", &goalTransform.translate.x, 0.01f);
 		ImGui::DragFloat3("Rotate", &goalTransform.rotate.x, 0.01f);
 		ImGui::DragFloat3("Scale", &goalTransform.scale.x, 0.01f);
 		ImGui::TreePop();
-	}
+	}*/
 }
 
 void GoalBall::Draw(uint32_t index, const Transform& cameraTransform, const DirectionalLight& light)
