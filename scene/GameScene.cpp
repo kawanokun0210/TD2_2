@@ -280,6 +280,17 @@ void GameScene::Update()
 		}
 
 	}
+
+	if (stageNum == CLEAR2) {
+		if (input_->TriggerKey(DIK_SPACE)) {
+			hitCount = 0;
+			stageNum = CLEAR2;
+
+			stageNum = TITLE2;
+			player_->Initialize(engine_, dxCommon_);
+			cameraTransform_ = { {1.0f,1.0f,1.0f},{0.5f,0.0f,0.0f},{0.0f,23.0f,-40.0f} };
+		}
+	}
 	for (int i = 0; i < 5; i++) {
 		if (IsCollisionAABB(
 			{ 
@@ -338,19 +349,23 @@ void GameScene::Update()
 		if (IsCollisionAABB(subtract(wallTransform[i].translate, wallTransform[i].scale), Add(wallTransform[i].translate, wallTransform[i].scale), player_->GetRadius(), player_->GetPlayerTranslate())) {
 
 			if (wallTransform[i].translate.z - wallTransform[i].scale.z > player_->GetPlayerTranslate().z) {
-				player_->SetKvelocity({ 0.0f,0.0f,player_->GetkVelo().z * -1 });
+				//player_->SetKvelocity({ 0.0f,0.0f,player_->GetkVelo().z * -1 });
+				player_->SetChengerZ();
 				player_->SetTransform({ player_->GetPlayerTranslate().x,player_->GetPlayerTranslate().y,wallTransform[i].translate.z - wallTransform[i].scale.z - player_->GetRadius() });
 			}
 			else if (wallTransform[i].translate.z + wallTransform[i].scale.z < player_->GetPlayerTranslate().z) {
-				player_->SetKvelocity({ 0.0f,0.0f,player_->GetkVelo().z * -1 });
+				player_->SetChengerZ();
+				//player_->SetKvelocity({ 0.0f,0.0f,player_->GetkVelo().z * -1 });
 				player_->SetTransform({ player_->GetPlayerTranslate().x,player_->GetPlayerTranslate().y,wallTransform[i].translate.z + wallTransform[i].scale.z + player_->GetRadius() });
 			}
 			else if (wallTransform[i].translate.x - wallTransform[i].scale.x > player_->GetPlayerTranslate().x) {
-				player_->SetKvelocity({ player_->GetkVelo().x * -1,0.0f,0.0f });
+				player_->SetChengerX();
+				//player_->SetKvelocity({ player_->GetkVelo().x * -1,0.0f,0.0f });
 				player_->SetTransform({ wallTransform[i].translate.x - wallTransform[i].scale.z - player_->GetRadius(),player_->GetPlayerTranslate().y ,player_->GetPlayerTranslate().z});
 			}
 			else if (wallTransform[i].translate.x + wallTransform[i].scale.x < player_->GetPlayerTranslate().x) {
-				player_->SetKvelocity({ player_->GetkVelo().x * -1,0.0f,0.0f });
+				player_->SetChengerX();
+				//player_->SetKvelocity({ player_->GetkVelo().x * -1,0.0f,0.0f });
 				player_->SetTransform({ wallTransform[i].translate.x + wallTransform[i].scale.x + player_->GetRadius(),player_->GetPlayerTranslate().y,player_->GetPlayerTranslate().z });
 			}
 

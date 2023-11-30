@@ -29,8 +29,12 @@ public:
 	bool GetIsAttack() { return isAttack; }
 	Vector3 GetkVelo() { return kVelocity; }
 	void SetKvelocity(Vector3 velo);
+	void SetChengerX();
+	void SetChengerZ();
+
 	//Vector3 SetTransform { return kVelocity; }
 private:
+	float kCharacterSpeed = 1.0f;
 	Sphere* sphere_;
 	Input* input_ = nullptr;
 	Transform playerTransform;
@@ -42,6 +46,8 @@ private:
 	Vector3 offset;
 	Vector3 velo_;
 
+
+	Vector2 Chenger = {1.0f,1.0f};
 	bool isShotMode;
 	bool isAttack;
 	float gravity_;

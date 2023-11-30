@@ -23,6 +23,7 @@ void Player::Initialize(MyEngine* engine, DirectXCommon* dxCommon)
 	playerMaterial = { 1.0f,1.0f,1.0f,1.0f };
 	playerTransform = { {0.5f,0.5f,0.5f},{0.0f,0.0f,0.0f},{0.0f,0.5f,-9.0f} };
 	gravity_ = 0;
+	Chenger = { 1.0f,1.0f };
 	velo_ = { 1.0f,1.0f,1.0f };
 }
 
@@ -61,14 +62,14 @@ void Player::Update()
 		if (input_->PushKey(DIK_SPACE)) {
 			isAttack = true;
 			// キャラクターの移動速さ
-			float kCharacterSpeed = 1.0f;
+			
 
 			
 		}
 	}
 
 	if (isAttack) {
-		float kCharacterSpeed = 1.0f;
+		//float kCharacterSpeed = 1.0f;
 
 		// キャラの移動
 		kVelocity = { 0,0 ,1 };
@@ -79,9 +80,9 @@ void Player::Update()
 
 		kVelocity = TransformNormal(kVelocity, MakeAffineMatrix(playerTransform.scale, playerTransform.rotate, playerTransform.translate));
 
-		playerTransform.translate.x += kVelocity.x * velo_.x*0.5f;
+		playerTransform.translate.x += (kVelocity.x * velo_.x*0.5f)*Chenger.x ;
 		playerTransform.translate.y = playerTransform.translate.y + kVelocity.y + gravity_;
-		playerTransform.translate.z += kVelocity.z * velo_.z * 0.5f;
+		playerTransform.translate.z += (kVelocity.z * velo_.z * 0.5f) * Chenger.y;
 	}
 
 	/*if (input_->PushKey(DIK_W)) {
@@ -154,4 +155,12 @@ void  Player::SetTransform(Vector3 pos) {
 
 void Player::SetKvelocity(Vector3 velo) {
 	kVelocity = velo;
+}
+
+void Player::SetChengerX() {
+	Chenger.x *= -1;
+}
+
+void Player::SetChengerZ() {
+	Chenger.y *= -1;
 }
